@@ -1,0 +1,23 @@
+.footer{
+    padding: 1rem;
+    .footer-links{
+        @include flexJustifyCenter;
+        flex-wrap: wrap;
+        line-height: 1.3rem;
+        font-size: 0.8rem;
+        .footer-link{
+            margin-right: 0.7rem;
+        }@include for-phone-only{
+            
+            margin-top: 1rem;
+        }
+    }
+    .footer-copyright-text{
+        margin: 0.5rem 0;
+        text-align: center;
+        font-size: 0.8rem;
+    }
+    @include for-phone-only{
+        padding: 0;
+    }
+}

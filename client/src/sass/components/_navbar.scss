@@ -1,0 +1,27 @@
+.main-header{
+    background-color: $color-white;
+}
+
+.navbar{
+    @include flexCenter;
+    padding: 1rem;
+    border-bottom: 1px solid $color-grey-2;
+    .main-heading{
+        color: $color-secondary;
+    }
+    .nav-links{
+        margin-left: auto;
+        @include flexCenter;
+        
+        .nav-link{
+            margin-right:1rem;
+            font-size: 1.2rem;
+            text-decoration: none;
+            color: $color-secondary;
+            
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+    }
+}

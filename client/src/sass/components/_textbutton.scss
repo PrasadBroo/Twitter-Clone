@@ -1,0 +1,30 @@
+.text-button{
+    width: 300px;
+    cursor: pointer;
+    border: 0;
+    font-size: $icon-tiny-size;
+    font-weight: 300;
+    outline: none;
+    padding: 0.5rem 2rem;
+    margin-top: 0.5rem;
+    transition: all 400ms ease-in-out;
+    @include flexJustifyCenter;
+}
+.rounded{
+    border-radius: 20px;
+}
+.bcBlue{
+    background-color: $color-secondary-light;
+    color: $color-white;
+}
+.cBlue{
+    color: $color-secondary-light;
+    background-color: transparent;
+    font-weight: 600;
+    border: 1px solid $color-grey-2;
+
+    &:hover{
+        background-color: rgba(29,155,240,0.1);
+        
+    }
+}

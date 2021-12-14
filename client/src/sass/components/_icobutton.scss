@@ -1,0 +1,25 @@
+.icon-button{
+    width: 300px;
+    transition: all 400ms ease-in-out;
+    cursor: pointer;
+    border: 1px solid $color-grey-2;
+    border-radius: 20px;
+    font-size: $icon-tiny-size;
+    font-weight: 300;
+    background-color: transparent;
+    outline: none;
+    padding: 0.5rem 2rem;
+    margin-top: 0.5rem;
+    @include flexJustifyCenter;
+    .icon-container{
+        margin-right: 0.2rem;
+        font-size: $icon-tiny-size;
+    }
+    img{
+        width: $icon-tiny-size;
+        height: $icon-tiny-size;
+    }
+    &:hover{
+        background-color: $color-grey-2;
+    }
+}

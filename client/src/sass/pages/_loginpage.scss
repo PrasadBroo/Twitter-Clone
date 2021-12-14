@@ -1,0 +1,114 @@
+.login-page{
+    @include flexColumn;
+    @include for-tablet-landscape-up{
+        flex-direction: row;
+        
+    }
+}
+
+.auth-container{
+    margin: 2rem;
+    width: 300px;
+    order: 1;
+
+    .terms-conditions-container{
+        width: 300px;
+    }
+
+    @include for-tablet-portrait-up{
+        width: 50%;
+        margin: auto;
+        .heading-2{
+            font-size: 5rem;
+        }
+
+    }
+    @include for-tablet-landscape-up{
+        margin:1rem auto auto 2rem;
+        order: 3;
+    }
+}
+.image-container{
+    order: 2;
+    width: 100%;
+    position: relative;
+    .twitter-image{
+       @include fullResponsiveImage;
+        
+    }
+    .absolute-center-logo{
+        @include absoluteCenter;
+        top: 33%;
+        color: $color-white;
+        font-size: $icon-larger-size;
+        @include for-tablet-portrait-up{
+            font-size: $icon-huge-size;
+        }
+    }
+
+    @include for-tablet-landscape-up{
+        width: 50%;
+        margin-right: 1rem;
+
+        .twitter-image{
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+}
+
+.heading-container{
+    margin: 3rem 0;
+}
+
+.logo-container{
+    .logo{
+        font-size: 2.5rem;
+        color: $color-secondary-light;
+    }
+    
+}
+
+.join-twitter{
+    margin: 3rem 0;
+
+    @include for-tablet-portrait-up{
+        font-size: 2rem;
+    }
+}
+
+.divider{
+    margin-top: 0.5rem;
+    @include flexCenter;
+
+    .left-divider,.right-divider{
+        width: 45%;
+        height: 1px;
+        background-color: $color-grey-2;
+        @include for-tablet-portrait-up{
+            width: 140px;
+        }
+    }
+    .or-text{
+        width: 10%;
+        text-align: center;
+
+        @include for-tablet-portrait-up{
+            width: 20px;
+        }
+    }
+    
+}
+
+.account-exist-container{
+    margin: 4rem 0;
+    .account-exist-text{
+        font-weight: 700;
+    }
+}
+.terms-conditions-text{
+    margin: 0.5rem 0;
+    font-size: 11px;
+    font-weight: 300;
+}
+
