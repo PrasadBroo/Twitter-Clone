@@ -1,9 +1,11 @@
-.icon-button{
+.icon-button,.link-button{
     width: 300px;
+    text-decoration: none;
     transition: all 400ms ease-in-out;
     cursor: pointer;
     border: 1px solid $color-grey-2;
     border-radius: 20px;
+    color: $color-black;
     font-size: $icon-tiny-size;
     font-weight: 300;
     background-color: transparent;

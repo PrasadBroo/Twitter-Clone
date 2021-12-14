@@ -1,9 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import IconButton from "../../components/Button/IconButton/IconButton";
+import { Link} from "react-router-dom";
+import LinkButton from "../../components/Button/LinkButton/LinkButton";
 import Textbutton from "../../components/Button/TextButton/TextButton";
 import Footer from "../../components/Footer/Footer";
+import { googleAuthentication } from "../../services/authenticationServices";
 import twiImg from "../../static/images/lohp_en_1302x955.png";
+import { googleAuthenticationUrl } from './../../services/authenticationServices';
 
 export default function LoginPage() {
   return (
@@ -20,15 +22,18 @@ export default function LoginPage() {
             <h2 className="join-twitter heading-3">Join Twitter Today</h2>
           </div>
           <div className="signup-links">
-            <IconButton
-              buttonText={"Sign up with Google"}
+            <LinkButton
+              href={googleAuthenticationUrl()}
+              linkText={"Sign up with Goolgle"}
               img={"https://img.icons8.com/color/48/000000/google-logo.png"}
             />
+
             <div className="with-phone-email">
-              <IconButton
-                icon={<i className="fab fa-apple"></i>}
-                buttonText={"Sign up with Apple"}
-                customstyle={{ fontWeight: 700 }}
+              <LinkButton
+                icon={<i className="fab fa-github"></i>}
+                href={googleAuthenticationUrl()}
+                linkText={"Sign up with Github"}
+                customstyle={{ fontWeight: 600 }}
               />
             </div>
             <div className="divider">
@@ -75,7 +80,7 @@ export default function LoginPage() {
           <i className="fab fa-twitter absolute-center-logo"></i>
         </div>
       </main>
-      <Footer/>
+      <Footer />
     </>
   );
 }
