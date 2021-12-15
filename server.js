@@ -1,5 +1,6 @@
 const express = require('express')
 const helmet = require("helmet");
+const mongoose = require('mongoose');
 const cors = require('cors');
 const apiRouter = require('./routes');
 
@@ -10,6 +11,20 @@ app.use(cors());
 app.use(helmet())
 app.use(express.json())
 app.use('/api', apiRouter)
+
+const connectMongoDb = async()=>{
+    try {
+        await mongoose.connect(process.env.MONGO_URI, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+        console.log('Connected to database');
+      } catch (err) {
+        throw new Error(err);
+      }
+}
+connectMongoDb();
+
 
 // global error handeler
 app.use((err, req, res, next) => {
@@ -22,9 +37,6 @@ app.use((err, req, res, next) => {
             error: 'Something Went Wrong'
         })
     }
-})
-app.get('/', (req, res) => {
-    res.send('Hello World!')
 })
 
 app.listen(port, () => {
