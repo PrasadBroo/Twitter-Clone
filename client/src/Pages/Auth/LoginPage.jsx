@@ -3,7 +3,6 @@ import { Link} from "react-router-dom";
 import LinkButton from "../../components/Button/LinkButton/LinkButton";
 import Textbutton from "../../components/Button/TextButton/TextButton";
 import Footer from "../../components/Footer/Footer";
-import { googleAuthentication } from "../../services/authenticationServices";
 import twiImg from "../../static/images/lohp_en_1302x955.png";
 import { googleAuthenticationUrl } from './../../services/authenticationServices';
 

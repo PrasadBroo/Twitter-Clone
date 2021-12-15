@@ -7,15 +7,15 @@ export default function LinkButton({
   href,
   children,
   customstyle,
-  targetBlack,
+  targetBlank,
 }) {
   return (
     <a
       className="link-button"
       href={href}
       style={customstyle}
-      target={targetBlack && "_blank"}
-      rel={targetBlack && "noopener noreferrer"}
+      target={targetBlank && "_blank"}
+      rel={targetBlank && "noopener noreferrer"}
     >
       <span className="icon-container">
         {icon && icon}
