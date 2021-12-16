@@ -25,11 +25,9 @@ module.exports.googleLoginAuthentication = async (req, res, next) => {
         }
         const userAccessToken = await getGoogleAccessTokenFromCode(code)
         const userinfo = await getGoogleUserInfo(userAccessToken);
-        console.log(userinfo);
         const userDocument = await User.findOne({
             googleId: userinfo.id
         });
-        console.log(userDocument)
         if (userDocument) {
             const userDetails = {
                 email: userinfo.email,

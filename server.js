@@ -29,11 +29,11 @@ connectMongoDb();
 // global error handeler
 app.use((err, req, res, next) => {
     if (err.message) {
-        res.status(err.statusCode || 500).json({
+      return  res.status(err.statusCode || 500).json({
             error: err.message
         })
     } else {
-        res.status(500).json({
+     return   res.status(500).json({
             error: 'Something Went Wrong'
         })
     }

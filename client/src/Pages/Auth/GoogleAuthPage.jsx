@@ -1,7 +1,8 @@
 import React from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { googleAuthentication } from "../../services/authenticationServices";
+import { useDispatch } from "react-redux";
+import { googleSignInStart } from "../../store/user/userActions";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -9,22 +10,13 @@ function useQuery() {
 export default function GoogleAuthPage() {
   const query = useQuery();
   const code = query.get("code");
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const user = await googleAuthentication(code);
-        console.log(user);
-        // dispatch user action
-      } catch (error) {
-        console.log(error);
-        // dispatch error action
-      }
-    }
-    fetchData()
+    dispatch(googleSignInStart(code));
 
     console.log(code);
-  }, [code]);
+  }, [code, dispatch]);
   return (
     <div>
       <h1>Redirecting...</h1>

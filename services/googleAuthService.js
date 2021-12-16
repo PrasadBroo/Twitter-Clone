@@ -17,10 +17,9 @@ module.exports.getGoogleAccessTokenFromCode = async (code) => {
                 code,
             },
         });
-        console.log(data); // { access_token, expires_in, token_type, refresh_token }
         return data.access_token;
     } catch (error) {
-        throw new RequestError('Invalid code',401)
+        throw new RequestError('Invalid google  code',401)
     }
 }
 
@@ -35,7 +34,6 @@ module.exports.getGoogleUserInfo = async(access_token) => {
             Authorization: `Bearer ${access_token}`,
         },
     });
-    console.log(data); // { id, email, given_name, family_name }
     return data;
     } catch (error) {
         throw new Error(error.message)

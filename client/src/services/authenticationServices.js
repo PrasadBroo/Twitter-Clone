@@ -28,6 +28,6 @@ export const googleAuthentication = async(code)=>{
           });
           return response.data;
     } catch (error) {
-        throw new Error(error.response)
+        throw new Error(error.response.data.error)
     }
 }

@@ -3,8 +3,11 @@ import {
 } from "@reduxjs/toolkit";
 
 const initialState = {
-    is_sign_fail: null,
-    name: null,
+    signInStart: false,
+    signInFail: false,
+    fetching:false,
+    user: null,
+    token:localStorage.getItem('token')
 }
 
 
@@ -13,10 +16,11 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         SIGN_IN_SUCCESS: (state, action) => {
-            state = action.payload;
+            state.user = action.payload.user;
+            state.token = action.payload.token
         },
         SIGN_IN_FAIL: (state, action) => {
-            state.is_sign_fail = action.payload
+            state.signInFail = action.payload
         },
 
     },
