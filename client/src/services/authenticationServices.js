@@ -21,12 +21,35 @@ export const googleAuthenticationUrl = () => {
 
 }
 
-export const googleAuthentication = async(code)=>{
+export const githubAuthenticationUrl = () => {
+    const params = queryString.stringify({
+        client_id: '219c7536dccdba993577',
+        redirect_uri: 'http://localhost/authenticate/github',
+        scope: ['read:user', 'user:email'].join(' '), // space seperated string
+        allow_signup: true,
+    });
+
+    const githubLoginUrl = `https://github.com/login/oauth/authorize?${params}`;
+    return githubLoginUrl;
+}
+
+export const googleAuthentication = async (code) => {
     try {
         const response = await axios.post('/api/auth/login/google', {
             code,
-          });
-          return response.data;
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error)
+    }
+}
+
+export const githubAuthentication = async (code) => {
+    try {
+        const response = await axios.post('/api/auth/login/github', {
+            code,
+        });
+        return response.data;
     } catch (error) {
         throw new Error(error.response.data.error)
     }

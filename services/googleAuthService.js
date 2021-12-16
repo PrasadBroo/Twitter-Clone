@@ -19,24 +19,25 @@ module.exports.getGoogleAccessTokenFromCode = async (code) => {
         });
         return data.access_token;
     } catch (error) {
-        throw new RequestError('Invalid google  code',401)
+        throw new RequestError('Invalid google  code', 401)
     }
 }
 
-module.exports.getGoogleUserInfo = async(access_token) => {
+module.exports.getGoogleUserInfo = async (access_token) => {
     try {
         const {
-        data
-    } = await axios({
-        url: 'https://www.googleapis.com/oauth2/v2/userinfo',
-        method: 'get',
-        headers: {
-            Authorization: `Bearer ${access_token}`,
-        },
-    });
-    return data;
+            data
+        } = await axios({
+            url: 'https://www.googleapis.com/oauth2/v2/userinfo',
+            method: 'get',
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        });
+        return data;
     } catch (error) {
         throw new Error(error.message)
     }
-    
+
 };
+

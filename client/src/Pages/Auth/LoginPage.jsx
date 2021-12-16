@@ -4,7 +4,7 @@ import LinkButton from "../../components/Button/LinkButton/LinkButton";
 import Textbutton from "../../components/Button/TextButton/TextButton";
 import Footer from "../../components/Footer/Footer";
 import twiImg from "../../static/images/lohp_en_1302x955.png";
-import { googleAuthenticationUrl } from './../../services/authenticationServices';
+import { googleAuthenticationUrl,githubAuthenticationUrl } from './../../services/authenticationServices';
 
 export default function LoginPage() {
   return (
@@ -30,7 +30,7 @@ export default function LoginPage() {
             <div className="with-phone-email">
               <LinkButton
                 icon={<i className="fab fa-github"></i>}
-                href={googleAuthenticationUrl()}
+                href={githubAuthenticationUrl()}
                 linkText={"Sign up with Github"}
                 customstyle={{ fontWeight: 600 }}
               />
