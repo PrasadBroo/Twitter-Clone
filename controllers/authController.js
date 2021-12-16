@@ -93,7 +93,6 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
         }
         const userAccessToken = await getGithubAccessTokenFromCode(code)
         const userinfo = await getGithubUserInfo(userAccessToken);
-        console.log(userinfo)
         const userDocument = await User.findOne({
             githubId: userinfo.id
         });

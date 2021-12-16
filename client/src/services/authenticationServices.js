@@ -24,7 +24,7 @@ export const googleAuthenticationUrl = () => {
 export const githubAuthenticationUrl = () => {
     const params = queryString.stringify({
         client_id: '219c7536dccdba993577',
-        redirect_uri: 'http://localhost/authenticate/github',
+        redirect_uri: 'http://localhost:3000/authenticate/github',
         scope: ['read:user', 'user:email'].join(' '), // space seperated string
         allow_signup: true,
     });
