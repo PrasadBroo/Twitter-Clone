@@ -1,0 +1,40 @@
+.input-wrap{
+    position: relative;
+    margin: 1rem 0;
+
+    .input-label{
+        position: absolute;
+        transition: all 200ms ease-in-out;
+        top: 13px;
+        left: 10px;
+        display: block;
+        color: $color-grey-1;
+        
+    }
+
+    &:focus-within .input-label{
+        top: 5px;
+        left: 9px;
+        font-size: 0.8rem;
+    }
+}
+
+.input{
+    outline: 0;
+    width: 100%;
+    height: 45px;
+    color: $color-grey-2;
+    border: 2px solid #2F3336;
+    border-radius: 5px;
+    padding-top: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    background-color: transparent;
+    &:focus{
+        border-color: $color-secondary-light;
+    }
+    &:focus .input-label{
+        background-color: #fff;
+    }
+    
+}

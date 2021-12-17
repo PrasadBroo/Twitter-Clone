@@ -1,5 +1,5 @@
 import React from "react";
-import { Link} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import LinkButton from "../../components/Button/LinkButton/LinkButton";
 import Textbutton from "../../components/Button/TextButton/TextButton";
 import Footer from "../../components/Footer/Footer";
@@ -7,6 +7,10 @@ import twiImg from "../../static/images/lohp_en_1302x955.png";
 import { googleAuthenticationUrl,githubAuthenticationUrl } from './../../services/authenticationServices';
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+  const handelSignupClick = ()=>{
+    navigate('/flow/signup')
+  }
   return (
     <>
       <main className="main-content login-page">
@@ -41,7 +45,7 @@ export default function LoginPage() {
               <div className="right-divider"></div>
             </div>
             <div className="signup-btn">
-              <Textbutton rounded bcBlue>
+              <Textbutton rounded bcBlue onClick={handelSignupClick}>
                 Sign up with phone or email
               </Textbutton>
             </div>

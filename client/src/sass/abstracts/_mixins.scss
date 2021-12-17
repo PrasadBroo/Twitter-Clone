@@ -12,6 +12,11 @@
     align-items: center;
     justify-content: space-around;
 }
+@mixin flexJustifyBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 @mixin absoluteCenter {
     position: absolute;
     top: 50%;
