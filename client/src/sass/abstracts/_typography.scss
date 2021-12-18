@@ -40,3 +40,12 @@
   .default-logo{
     color: $color-secondary-light;
   }
+
+  .default-btn{
+    background-color: transparent;
+    outline: 0;
+    border: 0;
+    padding: 0.5rem 0.8rem;
+    color: $color-secondary-light;
+    cursor: pointer;
+  }

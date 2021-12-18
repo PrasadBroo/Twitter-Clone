@@ -9,19 +9,22 @@ export default function TextButton({
   bcBlue,
   cBlue,
   style,
+  className,
+  ...otherProps
 }) {
   const textButtonClasses = classNames({
     "text-button": true,
     rounded,
     bcBlue,
     cBlue,
-  });
+  },className);
   return (
     <button
       type={type}
       onClick={onClick}
       className={textButtonClasses}
       style={style}
+      {...otherProps}
     >
       {children}
     </button>

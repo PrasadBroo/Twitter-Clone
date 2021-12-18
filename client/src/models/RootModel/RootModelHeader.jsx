@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "../../static/logo/download.png";
 
 export default function RootModelHeader() {
   return (

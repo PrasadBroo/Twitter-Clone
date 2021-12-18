@@ -1,14 +1,12 @@
 import "../../sass/main.scss";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import LoginPage from "./../../Pages/Auth/LoginPage";
 import GoogleAuthPage from "../../Pages/Auth/GoogleAuthPage";
 import GithubAuthPage from "./../../Pages/Auth/GithubAuthPage";
 import RequireAuth from "../RequireAuth/RequireAuth";
 import SignupFlowPage from "../../Pages/Auth/SignupFlowPage";
 
-
 function App() {
-
   return (
     <div className="App">
       <Routes>
