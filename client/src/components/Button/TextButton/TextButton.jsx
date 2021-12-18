@@ -1,7 +1,9 @@
 import React from "react";
+import SimpleSpinner from "../../Loader/SimpleSpinner";
 const classNames = require("classnames");
 
 export default function TextButton({
+  loading,
   type,
   children,
   onClick,
@@ -26,7 +28,7 @@ export default function TextButton({
       style={style}
       {...otherProps}
     >
-      {children}
+      {loading ? <SimpleSpinner/> : children}
     </button>
   );
 }

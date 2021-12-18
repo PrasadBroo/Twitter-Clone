@@ -49,3 +49,8 @@
     color: $color-secondary-light;
     cursor: pointer;
   }
+  
+  .btn-disabled{
+    opacity: 0.5;
+    pointer-events: none;
+  }

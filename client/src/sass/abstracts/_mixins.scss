@@ -23,6 +23,15 @@
     left: 50%;
     transform: translate(-50%);
 }
+@mixin containCenter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  @include flexJustifyCenter();
+} 
 @mixin flexColumn {
   display: flex;
   flex-direction: column;  

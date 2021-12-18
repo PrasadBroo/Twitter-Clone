@@ -31,7 +31,7 @@ export default function Signup() {
           <Input type="password" placeholder="Password" required/>
           <Input type="password" placeholder="Confirm Password" required/>
           <div className="signup-form-submit-btn">
-            <TextButton type='submit' bcBlue rounded>
+            <TextButton type='submit' bcBlue rounded className='btn-disabled' >
               Signup
             </TextButton>
           </div>

@@ -1,5 +1,7 @@
 .text-button{
+    position: relative;
     width: 300px;
+    min-height: 40px;
     cursor: pointer;
     border: 0;
     font-size: $icon-tiny-size;

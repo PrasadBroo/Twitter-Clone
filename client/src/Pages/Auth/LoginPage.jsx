@@ -1,16 +1,20 @@
 import React from "react";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import LinkButton from "../../components/Button/LinkButton/LinkButton";
 import Textbutton from "../../components/Button/TextButton/TextButton";
 import Footer from "../../components/Footer/Footer";
 import twiImg from "../../static/images/lohp_en_1302x955.png";
-import { googleAuthenticationUrl,githubAuthenticationUrl } from './../../services/authenticationServices';
+import {
+  googleAuthenticationUrl,
+  githubAuthenticationUrl,
+} from "./../../services/authenticationServices";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const handelSignupClick = ()=>{
-    navigate('/flow/signup')
-  }
+  const handelSignupClick = () => {
+    navigate("/flow/signup");
+  };
+
   return (
     <>
       <main className="main-content login-page">
@@ -84,6 +88,7 @@ export default function LoginPage() {
         </div>
       </main>
       <Footer />
+      <Outlet />
     </>
   );
 }

@@ -21,5 +21,6 @@
 
     .signup-form-submit-btn{
         margin-top: 2rem;
+        @include flexJustifyCenter;
     }
 }

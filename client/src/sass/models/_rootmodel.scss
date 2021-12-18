@@ -1,12 +1,27 @@
-.root-model{
-    position: absolute;
+.root-model-wrap{
+    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: $color-black;
     z-index: 100;
-    padding: 0.8rem;
+    width: 100%;
+    background-color: rgba(#333,0.8);
+    @include flexJustifyCenter;
+}
+
+.root-model{
+    background-color: $color-black;
+    padding: 1rem;
+    height: 100%;
+    width: 100%;
+    
+    @include for-tablet-portrait-up{
+        max-width: 700px;
+        max-height: 700px;
+        margin: auto;
+        border-radius: 10px;
+    }
 
     .root-model-header{
         @include flexJustifyBetween;

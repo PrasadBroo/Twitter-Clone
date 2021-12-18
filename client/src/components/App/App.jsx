@@ -10,8 +10,10 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/flow/signup" element={<SignupFlowPage />} />
+        <Route path="/" element={<LoginPage />}>
+          <Route path="flow/signup" element={<SignupFlowPage />} />
+        </Route>
+        
         <Route path="/authenticate/google" element={<GoogleAuthPage />} />
         <Route path="/authenticate/github" element={<GithubAuthPage />} />
         <Route element={<RequireAuth />}>
