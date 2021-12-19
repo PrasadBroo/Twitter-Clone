@@ -9,14 +9,22 @@
         left: 10px;
         display: block;
         color: $color-grey-1;
+        pointer-events: none;
         
     }
-
     &:focus-within .input-label{
         top: 5px;
         left: 9px;
         font-size: 0.8rem;
+        color: $color-secondary-light;
     }
+
+    
+}
+.focused .input-label{
+    top: 5px;
+    left: 9px;
+    font-size: 0.8rem;
 }
 
 .input{
@@ -37,4 +45,8 @@
         background-color: #fff;
     }
     
+}
+
+.input-error{
+    border-color: rgba(red, 0.5);
 }

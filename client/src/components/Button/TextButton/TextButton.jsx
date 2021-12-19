@@ -3,6 +3,7 @@ import SimpleSpinner from "../../Loader/SimpleSpinner";
 const classNames = require("classnames");
 
 export default function TextButton({
+  disabled,
   loading,
   type,
   children,
@@ -19,6 +20,7 @@ export default function TextButton({
     rounded,
     bcBlue,
     cBlue,
+    'btn-disabled':disabled
   },className);
   return (
     <button

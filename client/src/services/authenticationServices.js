@@ -54,3 +54,20 @@ export const githubAuthentication = async (code) => {
         throw new Error(error.response.data.error)
     }
 }
+
+export const signupWithEmail = async (name, email, username, password, confPassword) => {
+    try {
+        const response = await axios.post('/api/auth/signup/email', {
+
+            name,
+            email,
+            username,
+            password,
+            confPassword
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error)
+    }
+
+}

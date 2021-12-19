@@ -1,5 +1,5 @@
 import {
-    googleAuthentication,githubAuthentication
+    googleAuthentication,githubAuthentication,signupWithEmail
 } from "../../services/authenticationServices"
 import { SIGN_IN_SUCCESS, SIGN_IN_FAIL } from "./userSlice";
 
@@ -23,4 +23,13 @@ export const githubSignInStart = (code) => async (dispatch) => {
     } catch (error) {
         dispatch(SIGN_IN_FAIL(error.message))
     }
+}
+
+export const signupUser = (name,email,username,password,confPassword) => async (dispatch)=>{
+try {
+    const user = await signupWithEmail(name,email,username,password,confPassword);
+    // signup success dispatch
+} catch (error) {
+    // signup fail dispatch
+}
 }

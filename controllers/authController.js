@@ -142,3 +142,9 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
         return next(error)
     }
 }
+module.exports.signupUser = async(req,res,next)=>{
+    // validate details
+    // check if user exist
+    // if not create it and send jwt
+
+}
