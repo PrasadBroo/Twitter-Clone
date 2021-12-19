@@ -4,12 +4,14 @@ const {
     getGoogleUserInfo,
 } = require("../services/googleAuthService");
 
+
 const User = require('../models/User')
 const jwt = require('jsonwebtoken');
 const {
     getGithubAccessTokenFromCode,
     getGithubUserInfo
 } = require('../services/githubAuthServices');
+const { verifyAll } = require('../utils/validations');
 
 
 
@@ -142,9 +144,49 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
         return next(error)
     }
 }
-module.exports.signupUser = async(req,res,next)=>{
+module.exports.signupUserWithEmail = async(req,res,next)=>{
+    // get details
+
+    const {name,email,username,password,confPassword} = req.body;
     // validate details
+    try {
+        verifyAll(name,email,username,password,confPassword);
+        const userDocument = await User.findOne({$or: [ { email }, { username } ]});
+        console.log(userDocument)
+        
+        if(userDocument){
+            const whichOne = userDocument.email === email ? 'email' : 'username'
+            throw new Error('User already exist with that ' + whichOne)
+        }
+        else{
+            // create user
+            const userDetails = {
+                email,
+                fullName: name,
+                username: username,
+                password,
+                avatar: 'https://i.ibb.co/LCk6LbN/default-Profile-Pic-7fe14f0a.jpg', 
+            }
+            const user = await User.create(userDetails)
+            const userDetailsClient = {
+                email: user.email,
+                fullName: user.name,
+                username: user.username,
+                avatar: user.avatar_url,
+                id: user._id
+            }
+            return res.send({
+                user: userDetailsClient,
+                token: jwt.sign({
+                    id: user._id
+                }, process.env.JWT_TOKEN_SECRET),
+            });
+        }
+    } catch (error) {
+        next(error)
+    }
     // check if user exist
+    
     // if not create it and send jwt
 
 }

@@ -6,6 +6,7 @@ import GithubAuthPage from "./../../Pages/Auth/GithubAuthPage";
 import RequireAuth from "../RequireAuth/RequireAuth";
 import SignupFlowPage from "../../Pages/Auth/SignupFlowPage";
 
+
 function App() {
   return (
     <div className="App">
@@ -17,7 +18,7 @@ function App() {
         <Route path="/authenticate/google" element={<GoogleAuthPage />} />
         <Route path="/authenticate/github" element={<GithubAuthPage />} />
         <Route element={<RequireAuth />}>
-          <Route path="/home" element={<h1>Homepage</h1>} />
+          <Route path="/home" element={<h1>Homepage</h1>} /> 
         </Route>
       </Routes>
     </div>

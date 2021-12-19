@@ -1,7 +1,20 @@
 import {
-    googleAuthentication,githubAuthentication,signupWithEmail
+    googleAuthentication,
+    githubAuthentication,
+    signupWithEmail
 } from "../../services/authenticationServices"
-import { SIGN_IN_SUCCESS, SIGN_IN_FAIL } from "./userSlice";
+import {
+    verifyEmail,
+    verifyName,
+    verifyPassword,
+    verifyUsername
+} from "../../utils/validations";
+import {
+    SIGN_IN_SUCCESS,
+    SIGN_IN_FAIL,
+    SIGN_UP_SUCCESS,
+    SIGN_UP_FAIL
+} from "./userSlice";
 
 
 
@@ -25,11 +38,19 @@ export const githubSignInStart = (code) => async (dispatch) => {
     }
 }
 
-export const signupUser = (name,email,username,password,confPassword) => async (dispatch)=>{
-try {
-    const user = await signupWithEmail(name,email,username,password,confPassword);
-    // signup success dispatch
-} catch (error) {
-    // signup fail dispatch
-}
+export const signupUser = (name, email, username, password, confPassword) => async (dispatch) => {
+    try {
+        verifyName(name)
+        verifyUsername(username)
+        verifyPassword(password, confPassword);
+        verifyEmail(email);
+        const user = await signupWithEmail(name, email, username, password, confPassword);
+        // signup success dispatch
+        console.log(user)
+        dispatch(SIGN_UP_SUCCESS(user))
+    } catch (error) {
+        // signup fail dispatch
+        console.log(error)
+        dispatch(SIGN_UP_FAIL(error.message))
+    }
 }
