@@ -55,7 +55,7 @@ export const signupUser = (name, email, username, password, confPassword) => asy
         verifyEmail(email);
         const user = await signupWithEmail(name, email, username, password, confPassword);
         // signup success dispatch
-        console.log(user)
+        localStorage.setItem('token',user.token)
         dispatch(SIGN_UP_SUCCESS(user))
     } catch (error) {
         // signup fail dispatch

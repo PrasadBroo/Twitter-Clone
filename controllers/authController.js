@@ -3,7 +3,7 @@ const {
     getGoogleAccessTokenFromCode,
     getGoogleUserInfo,
 } = require("../services/googleAuthService");
-
+const bcrypt = require('bcrypt');
 
 const User = require('../models/User')
 const jwt = require('jsonwebtoken');
@@ -143,6 +143,7 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
     }
 }
 module.exports.signupUserWithEmail = async(req,res,next)=>{
+    const saltRounds = 10;
     // get details
 
     const {name,email,username,password,confPassword} = req.body;
@@ -150,19 +151,19 @@ module.exports.signupUserWithEmail = async(req,res,next)=>{
     try {
         verifyAll(name,email,username,password,confPassword);
         const userDocument = await User.findOne({$or: [ { email }, { username } ]});
-        console.log(userDocument)
         
         if(userDocument){
             const whichOne = userDocument.email === email ? 'email' : 'username'
             throw new Error('User already exist with that ' + whichOne)
         }
         else{
+            const hashPass = await bcrypt.hash(password, saltRounds);
             // create user
             const userDetails = {
                 email,
                 fullName: name,
                 username: username,
-                password,
+                password:hashPass,
                 avatar: 'https://i.ibb.co/LCk6LbN/default-Profile-Pic-7fe14f0a.jpg', 
             }
             const user = await User.create(userDetails)
