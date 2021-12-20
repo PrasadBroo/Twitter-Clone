@@ -9,7 +9,7 @@ export default function IconButton({
   customstyle,
 }) {
   return (
-    <button className="icon-button" onClick={onClick} style={customstyle}>
+    <button className="button icon-button" onClick={onClick} style={customstyle}>
       <span className="icon-container">{icon && icon}{img && <img
         src={img}
         alt="icon"

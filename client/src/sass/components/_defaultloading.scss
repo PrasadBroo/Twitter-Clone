@@ -1,0 +1,11 @@
+.default-loader{
+    @include flexJustifyCenter;
+    width: 100%;
+    height: 100%;
+
+    .default-loading-icon{
+        font-size: 4rem;
+        color: $color-secondary-light;
+        opacity: 0.5;
+    }
+}

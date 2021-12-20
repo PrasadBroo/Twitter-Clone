@@ -71,3 +71,13 @@ export const signupWithEmail = async (name, email, username, password, confPassw
     }
 
 }
+export const signInUserWithToken = async (token) => {
+    try {
+        const response = await axios.post('/api/auth/login/token', {
+            token
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error)
+    }
+}

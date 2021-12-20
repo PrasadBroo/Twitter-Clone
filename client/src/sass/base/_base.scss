@@ -5,9 +5,24 @@
   padding: 0;
   box-sizing: inherit;
 }
-
+html,body,#root{
+  height: 100%;
+  width: 100%;
+}
 body {
     box-sizing: border-box;
+    background-color: #fff;
     color: $color-black;
     font-family: Arial, Helvetica, sans-serif;
   }
+a{
+  color: $color-black;
+}
+  .dark{
+    color: #fff;
+    background-color: #333;
+  }
+ .dark .button{
+   color: $color-black;
+  background-color: #fff;
+ }

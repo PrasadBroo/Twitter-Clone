@@ -1,8 +1,10 @@
 import React from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { googleSignInStart } from "../../store/user/userActions";
+import DefaultLoading from "../../components/DefaultLoading/DefaultLoading";
+
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -14,13 +16,8 @@ export default function GoogleAuthPage() {
 
   useEffect(() => {
     dispatch(googleSignInStart(code));
-
-    console.log(code);
   }, [code, dispatch]);
   return (
-    <div>
-      <h1>Redirecting...</h1>
-      {code}
-    </div>
+    <DefaultLoading/>
   );
 }

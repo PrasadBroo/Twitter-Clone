@@ -7,7 +7,7 @@ const initialState = {
     signInFail: false,
     signUpFail: false,
     signUPStart: false,
-    fetching: false,
+    fetching: true,
     currentUser: null,
     token: localStorage.getItem('token')
 }
@@ -17,6 +17,12 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
+        FETCHING_STARTED:(state)=>{
+            state.fetching  = true;
+        },
+        FETCHING_FINISHED:(state)=>{
+            state.fetching  = false;
+        },
         SIGN_IN_SUCCESS: (state, action) => {
             state.currentUser = action.payload.user;
             state.token = action.payload.token
@@ -42,5 +48,7 @@ export const {
     SIGN_IN_FAIL,
     SIGN_UP_FAIL,
     SIGN_UP_SUCCESS,
+    FETCHING_FINISHED,
+    FETCHING_STARTED,
 } = userSlice.actions
 export default userSlice.reducer;

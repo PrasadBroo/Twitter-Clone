@@ -32,9 +32,7 @@ module.exports.googleLoginAuthentication = async (req, res, next) => {
         }
         const userAccessToken = await getGoogleAccessTokenFromCode(code)
         const userinfo = await getGoogleUserInfo(userAccessToken);
-        const userDocument = await User.findOne({
-            googleId: userinfo.id
-        });
+        const userDocument = await User.findOne({$or: [ { googleId:userinfo.id }, { email:userinfo.email } ]});
         if (userDocument) {
             const userDetails = {
                 email: userinfo.email,
@@ -189,4 +187,39 @@ module.exports.signupUserWithEmail = async(req,res,next)=>{
     
     // if not create it and send jwt
 
+}
+module.exports.loginWithToken = async(req,res,next)=>{
+    const {token} = req.body;
+    try {
+        if(!token){
+          return  res.status(401).send({error:'Please provide token'})
+        }
+        try {
+            var isValidJwt = jwt.verify(token,process.env.JWT_TOKEN_SECRET);
+        
+        } catch (error) {
+            return res.status(401).send({error:'Invalid token provided'})
+        }
+        
+        const {id} = isValidJwt;
+        const userDocument = await User.findById(id);
+        if(userDocument){
+            const userDetails = {
+                email: userDocument.email,
+                fullName: userDocument.fullName,
+                username: userDocument.username,
+                avatar: userDocument.avatar,
+                id: userDocument._id
+            }
+            return res.send({
+                user: userDetails,
+                token: token,
+            });
+        }
+        else{
+            res.status(404).send({error:"User doesn't exist"})
+        }
+    } catch (error) {
+        next(error)
+    }
 }

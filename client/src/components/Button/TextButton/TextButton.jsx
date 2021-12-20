@@ -15,8 +15,7 @@ export default function TextButton({
   className,
   ...otherProps
 }) {
-  const textButtonClasses = classNames({
-    "text-button": true,
+  const textButtonClasses = classNames('button','text-button',{
     rounded,
     bcBlue,
     cBlue,

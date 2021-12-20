@@ -11,7 +11,7 @@ export default function LinkButton({
 }) {
   return (
     <a
-      className="link-button"
+      className=" button link-button"
       href={href}
       style={customstyle}
       target={targetBlank && "_blank"}
