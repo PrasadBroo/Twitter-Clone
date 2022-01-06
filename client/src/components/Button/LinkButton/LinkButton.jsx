@@ -1,4 +1,6 @@
+import classNames from "classnames";
 import React from "react";
+
 
 export default function LinkButton({
   icon,
@@ -8,10 +10,12 @@ export default function LinkButton({
   children,
   customstyle,
   targetBlank,
+  className,
 }) {
+  const linkButtonClass = classNames('button','link-button',className)
   return (
     <a
-      className=" button link-button"
+    className={linkButtonClass}
       href={href}
       style={customstyle}
       target={targetBlank && "_blank"}

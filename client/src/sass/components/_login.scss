@@ -1,0 +1,42 @@
+.login-comp{
+    margin-top: 2rem;
+    .login-form{
+        max-width: 300px;
+        color: #fff;
+        .login-form-link{
+            background-color: $color-white;
+            &:hover{
+                background-color: lightgrey;
+            }
+        }
+
+        @include for-tablet-portrait-up{
+            margin: auto;
+        }
+        .login-form-input{
+            width: 100%;
+        }
+        .login-error-message{
+            color: $color-red;
+            text-align: center;
+        }
+    }
+    .other-login-options{
+        .login-form-google-auth{
+            margin: 1rem 0;
+        }
+    }
+    .login-form-heading{
+        margin-bottom: 2rem;
+    }
+    .signup-option{
+        @include flexCenter;
+        color: $color-grey-1;
+        margin-top: 3rem;
+        .signup-option-text{
+            margin-right: 0.2rem;
+        }
+    }
+    
+    
+}

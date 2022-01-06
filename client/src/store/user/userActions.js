@@ -2,7 +2,8 @@ import {
     googleAuthentication,
     githubAuthentication,
     signupWithEmail,
-    signInUserWithToken
+    signInUserWithToken,
+    loginWithEmail
 } from "../../services/authenticationServices"
 import {
     verifyEmail,
@@ -13,6 +14,8 @@ import {
 import {
     SIGN_IN_SUCCESS,
     SIGN_IN_FAIL,
+    SIGN_IN_START,
+    SIGN_UP_START,
     SIGN_UP_SUCCESS,
     SIGN_UP_FAIL,
     FETCHING_FINISHED,
@@ -49,13 +52,14 @@ export const githubSignInStart = (code) => async (dispatch) => {
 
 export const signupUser = (name, email, username, password, confPassword) => async (dispatch) => {
     try {
+        dispatch(SIGN_UP_START())
         verifyName(name)
         verifyUsername(username)
         verifyPassword(password, confPassword);
         verifyEmail(email);
         const user = await signupWithEmail(name, email, username, password, confPassword);
         // signup success dispatch
-        localStorage.setItem('token',user.token)
+        localStorage.setItem('token', user.token)
         dispatch(SIGN_UP_SUCCESS(user))
     } catch (error) {
         // signup fail dispatch
@@ -63,12 +67,22 @@ export const signupUser = (name, email, username, password, confPassword) => asy
         dispatch(SIGN_UP_FAIL(error.message))
     }
 }
+export const loginUser = (emailOrPhone, password) => async (dispatch) => {
+    try {
+        dispatch(SIGN_IN_START())
+        const user = await loginWithEmail(emailOrPhone, password);
+        localStorage.setItem('token', user.token)
+        dispatch(SIGN_IN_SUCCESS(user))
+    } catch (error) {
+        dispatch(SIGN_IN_FAIL(error.message))
+    }
+}
 
-export const signInStart = ()=>async(dispatch)=>{
+export const signInStart = () => async (dispatch) => {
     try {
         dispatch(FETCHING_STARTED())
         const token = localStorage.getItem('token');
-        if(!token)return dispatch(FETCHING_FINISHED());
+        if (!token) return dispatch(FETCHING_FINISHED());
         const user = await signInUserWithToken(token);
         dispatch(SIGN_IN_SUCCESS(user));
         dispatch(FETCHING_FINISHED())

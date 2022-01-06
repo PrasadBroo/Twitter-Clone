@@ -14,6 +14,9 @@ export default function LoginPage() {
   const handelSignupClick = () => {
     navigate("/flow/signup");
   };
+  const handelLoginClick = () => {
+    navigate("/flow/login");
+  };
 
   return (
     <>
@@ -76,7 +79,7 @@ export default function LoginPage() {
               <p className="account-exist-text">Already have an account?</p>
             </div>
             <div className="sign-in-btn-container">
-              <Textbutton rounded cBlue>
+              <Textbutton rounded cBlue onClick={handelLoginClick}>
                 Sign in
               </Textbutton>
             </div>

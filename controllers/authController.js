@@ -224,3 +224,44 @@ module.exports.loginWithToken = async(req,res,next)=>{
         next(error)
     }
 }
+
+module.exports.loginUserWithEmail = async(req,res,next)=>{
+
+    const {email,password} = req.body;
+    try {
+        if(!email || !password){
+            throw new Error('Email or password not provided');
+        }
+        const userDocument = await User.findOne({email:email});
+        
+        if(!userDocument){
+            throw new Error('User not exist with that email')
+        }
+        else{
+            const userPass = userDocument.password;
+            if(!userPass)throw new Error('Please sign in with other options')
+            const isValidPass = await bcrypt.compare(password, userPass);
+            if(!isValidPass){
+                throw  new Error('Incorrect password provided')
+            }
+            
+            const userDetailsClient = {
+                email: userDocument.email,
+                fullName: userDocument.fullName,
+                username: userDocument.username,
+                avatar: userDocument.avatar_url,
+                id: userDocument._id
+            }
+            return res.send({
+                user: userDetailsClient,
+                token: jwt.sign({
+                    id: userDocument._id
+                }, process.env.JWT_TOKEN_SECRET),
+            });
+        }
+    } catch (error) {
+        next(error)
+    }
+    
+
+}

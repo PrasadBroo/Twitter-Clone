@@ -17,8 +17,8 @@
     width: 100%;
     
     @include for-tablet-portrait-up{
-        max-width: 700px;
-        max-height: 700px;
+        max-width: 600px;
+        max-height: 600px;
         margin: auto;
         border-radius: 10px;
     }

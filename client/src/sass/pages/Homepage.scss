@@ -1,0 +1,32 @@
+.homepage{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 0.5rem 0;
+    .main{
+        width: 75%;
+        height: 100%;
+        background-color: darkgrey;
+        display: flex;
+        align-items: center;
+        .main-wrapper{
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            height: 100%;
+        }
+        .container{
+            background-color: #fff;
+            height: 100%;
+            margin:0 0.2rem;
+        }.wrap-input-tweets{
+            width: 60%;
+        }
+        .with-searchbar-suggetions{
+            width: 40%;
+        }
+    }
+    
+    
+}

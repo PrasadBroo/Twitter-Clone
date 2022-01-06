@@ -1,13 +1,17 @@
 import React from "react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { signupUser } from "../../store/user/userActions";
 import TextButton from "../Button/TextButton/TextButton";
 import Input from "../Input/Input";
 import InputForm from "../InputForm/InputForm";
 import InputFormHeading from "../InputForm/InputFormHeading";
+import {  selectSingupError,selectSingupStart } from "../../store/user/userSelector";
 
 export default function Signup() {
+  const state = useSelector(state=>state)
+  let signupError = selectSingupError(state);
+  let singupStart = selectSingupStart(state);
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -15,18 +19,16 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [confPassword, setconfPassword] = useState("");
-  const [isloading,setIsLoading] = useState(false);
+  const [withEmail, setWithEmail] = useState(true);
 
 
   const handelSignupFormSubmit = (e) => {
-    setIsLoading(true);
     e.preventDefault();
-    console.log(email, name, username, password, confPassword);
     dispatch(signupUser(name,email,username,password,confPassword))
     // signup handel
     // handel error
   };
-  const [withEmail, setWithEmail] = useState(true);
+
   return (
     <div className="signup-comp">
       <div className="user-form signup-form">
@@ -37,7 +39,7 @@ export default function Signup() {
             placeholder="Name"
             value={name}
             required
-            disabled={isloading}
+            disabled={singupStart}
             focused={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -46,7 +48,7 @@ export default function Signup() {
             placeholder="Username"
             value={username}
             required
-            disabled={isloading}
+            disabled={singupStart}
             focused={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -56,7 +58,7 @@ export default function Signup() {
               placeholder="Email"
               value={email}
               required
-              disabled={isloading}
+              disabled={singupStart}
               focused={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -66,14 +68,14 @@ export default function Signup() {
               placeholder="Phone"
               value={phone}
               required
-              disabled={isloading}
+              disabled={singupStart}
               focused={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
           )}
           <div className="singup-option-container">
             <TextButton
-            disabled={isloading}
+            disabled={singupStart}
               type="button"
               className="default-btn signup-option"
               onClick={() => setWithEmail(!withEmail)}
@@ -86,7 +88,7 @@ export default function Signup() {
             placeholder="Password"
             value={password}
             required
-            disabled={isloading}
+            disabled={singupStart}
             focused={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -94,19 +96,20 @@ export default function Signup() {
             type="password"
             placeholder="Confirm Password"
             required
-            disabled={isloading}
+            disabled={singupStart}
             value={confPassword}
             focused={confPassword}
             onChange={(e) => setconfPassword(e.target.value)}
           />
+           {signupError && <p className="singup-error-message">{signupError}</p>}
           <div className="signup-form-submit-btn">
             <TextButton
               type="submit"
               bcBlue
               rounded
-              loading={isloading}
+              loading={singupStart}
               disabled={
-                !name || !email || !username || !password || !confPassword || isloading
+                !name || !email || !username || !password || !confPassword || singupStart
               }
             >
               Signup

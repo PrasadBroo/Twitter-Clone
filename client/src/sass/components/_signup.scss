@@ -1,7 +1,10 @@
 .signup-comp{
     margin-top: 1rem;
 
-
+    .singup-error-message{
+        color: $color-red;
+        text-align: center;
+    }
     .signup-header{
         margin-bottom: 1rem;
     }
