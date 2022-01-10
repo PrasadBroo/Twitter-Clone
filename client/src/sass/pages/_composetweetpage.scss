@@ -1,0 +1,14 @@
+.send-tweet-model-wrap{
+    display: unset;
+    align-items: unset;
+    justify-content: unset;
+    .root-model{
+        margin-top: 2rem;
+    }
+    .send-tweet{
+        border: 0;
+        .send-tweet-heading{
+            display: none;
+        }
+    }
+}

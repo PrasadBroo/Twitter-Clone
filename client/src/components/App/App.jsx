@@ -13,19 +13,19 @@ import { selectFetching } from "../../store/user/userSelector";
 import DefaultLoading from "../DefaultLoading/DefaultLoading";
 import LoginFlowPage from "../../Pages/Auth/LoginFlowPage";
 import Homepage from "../../Pages/Homepage";
+import ComposeTweetPage from "../../Pages/ComposeTweetPage";
 
 function App() {
-  const state = useSelector(state => state)
+  const state = useSelector((state) => state);
   const is_fetching = selectFetching(state);
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    dispatch(signInStart())
-  },[dispatch])
+  useEffect(() => {
+    dispatch(signInStart());
+  }, [dispatch]);
 
-  return (
-    !is_fetching ?
-    (<div className="App">
+  return !is_fetching ? (
+    <div className="App">
       <Routes>
         <Route element={<NotRequireAuth />}>
           <Route path="/" element={<LoginPage />}>
@@ -37,12 +37,14 @@ function App() {
         </Route>
 
         <Route element={<RequireAuth />}>
-          <Route path="/home" element={<Homepage/>} />
+          <Route path="/home/" element={<Homepage />}>
+            <Route path="compose/tweet" element={<ComposeTweetPage />} />
+          </Route>
         </Route>
       </Routes>
-    </div>)
-    :
-    (<DefaultLoading/>)
+    </div>
+  ) : (
+    <DefaultLoading />
   );
 }
 

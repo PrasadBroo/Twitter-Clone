@@ -3,10 +3,17 @@ import MediaIcon from "../../icons/MediaIcon";
 import ShinyIcon from "../../icons/ShinyIcon";
 import profilePic from "../../static/images/profile.jpg";
 import TextButton from "../Button/TextButton/TextButton";
+import GifIcon from "./../../icons/GifIcon";
+import PollIcon from "./../../icons/PollIcon";
+import EmojiIcon from "./../../icons/EmojiIcon";
+import ScheduleIcon from "./../../icons/ScheduleIcon";
+import LocationIcon from "./../../icons/LocationIcon";
+import classNames from "classnames";
 
-export default function SendTweet() {
+export default function SendTweet({ className }) {
+  const sendTweetClassnames = classNames("send-tweet", className);
   return (
-    <section className="send-tweet">
+    <section className={sendTweetClassnames}>
       <div className="send-tweet-wrap">
         <div className="send-tweet-heading">
           <div className="heading-wrap">
@@ -35,23 +42,29 @@ export default function SendTweet() {
                   <MediaIcon />
                 </div>
                 <div className="icon-container">
-                  <MediaIcon />
+                  <GifIcon />
                 </div>
                 <div className="icon-container">
-                  <MediaIcon />
+                  <PollIcon />
                 </div>
                 <div className="icon-container">
-                  <MediaIcon />
+                  <EmojiIcon />
+                </div>
+                <div className="icon-container">
+                  <ScheduleIcon />
+                </div>
+                <div className="icon-container icon-disabled">
+                  <LocationIcon />
                 </div>
               </div>
               <div className="send-tweet-btn-container">
-                <TextButton bcBlue rounded className='send-tweet-btn' disabled>Tweet</TextButton>
+                <TextButton bcBlue rounded className="send-tweet-btn" disabled>
+                  Tweet
+                </TextButton>
               </div>
             </div>
           </div>
         </div>
-
-        <div className="tweet-attachment"></div>
       </div>
     </section>
   );

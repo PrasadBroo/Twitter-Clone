@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import React from "react";
+import { Link } from "react-router-dom";
 
 
 export default function LinkButton({
@@ -14,9 +15,9 @@ export default function LinkButton({
 }) {
   const linkButtonClass = classNames('button','link-button',className)
   return (
-    <a
+    <Link
     className={linkButtonClass}
-      href={href}
+      to={href}
       style={customstyle}
       target={targetBlank && "_blank"}
       rel={targetBlank && "noopener noreferrer"}
@@ -27,6 +28,6 @@ export default function LinkButton({
       </span>
       {linkText}
       {children}
-    </a>
+    </Link>
   );
 }

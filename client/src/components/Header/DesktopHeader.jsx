@@ -12,6 +12,7 @@ import TextButton from "./../Button/TextButton/TextButton";
 import profilePic from "../../static/images/profile.jpg";
 import ThreeDotsIcon from "../../icons/ThreeDotsIcon";
 import RighttickIcon from "./../../icons/RighttickIcon";
+import LinkButton from './../Button/LinkButton/LinkButton';
 
 export default function DesktopHeader() {
   return (
@@ -89,9 +90,10 @@ export default function DesktopHeader() {
           </Link>
         </ul>
         <div className="header-conatiner tweet-btn-container">
-          <TextButton bcBlue rounded className="tweet-btn">
+          <LinkButton linkText='Tweet' href='compose/tweet' className='tweet-btn'/>
+          {/* <TextButton bcBlue rounded className="tweet-btn">
             Tweet
-          </TextButton>
+          </TextButton> */}
         </div>
         <div className="header-profile-wrap">
           <div className="header-container header-profile">
