@@ -52,6 +52,10 @@
             }
         }
 
+        .activeRoute {
+            background-color: #333;
+        }
+
         .header-container {
             margin-bottom: 1rem;
 
@@ -91,18 +95,39 @@
                 box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
 
                 .logout-btn-container {
+                    @include flexJustifyCenter;
+
                     .logout-btn {
                         width: unset;
                         margin: 0;
                         border: 0;
                         min-height: unset;
+
+                        &:hover {
+                            background-color: transparent;
+                        }
                     }
                 }
 
             }
+
+            .show {
+                padding: 0;
+                display: block;
+
+                .header-profile {
+                    pointer-events: none;
+                    border-bottom: 1px solid $color-grey-2;
+                    border-radius: 0;
+                    padding: 1rem;
+                }
+            }
         }
 
         .header-profile {
+            // outline: 0;
+            // background-color: transparent;
+            // border: 0;
             display: flex;
             align-items: center;
             font-size: 14px;

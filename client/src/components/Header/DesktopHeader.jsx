@@ -12,9 +12,19 @@ import TextButton from "./../Button/TextButton/TextButton";
 import profilePic from "../../static/images/profile.jpg";
 import ThreeDotsIcon from "../../icons/ThreeDotsIcon";
 import RighttickIcon from "./../../icons/RighttickIcon";
-import LinkButton from './../Button/LinkButton/LinkButton';
+import LinkButton from "./../Button/LinkButton/LinkButton";
+import classNames from "classnames";
+import useComponentVisible from './../../CustomHooks/useComponentVisible';
 
 export default function DesktopHeader() {
+  const { ref:logoutRef, isVisible:isLogoutVisible,setIsVisible:setLogoutVisible } = useComponentVisible(false);
+
+  const logoutOptionsClassnames = classNames("logout-options", {
+    show: isLogoutVisible,
+  });
+  const showLogoutOptions = () => {
+    setLogoutVisible(true);
+  };
   return (
     <header className=" desktop-header">
       <div className="sidebar wrap-header-links">
@@ -24,15 +34,15 @@ export default function DesktopHeader() {
           </div>
         </div>
         <ul className="header-conatiner header-links">
-          <Link to="home" className="header-link">
+          <Link to="/home" className="header-link">
             <div className="header-link-icon-wrap">
               <span className="link-icon">
-                <HomeIcon />
+                <HomeIcon fill />
               </span>
               <span className="link-text">Home</span>
             </div>
           </Link>
-          <Link to="home" className="header-link">
+          <Link to="explore" className="header-link">
             <div className="header-link-icon-wrap">
               <span className="link-icon">
                 <ExploreIcon />
@@ -90,13 +100,20 @@ export default function DesktopHeader() {
           </Link>
         </ul>
         <div className="header-conatiner tweet-btn-container">
-          <LinkButton linkText='Tweet' href='compose/tweet' className='tweet-btn'/>
+          <LinkButton
+            linkText="Tweet"
+            href="compose/tweet"
+            className="tweet-btn"
+          />
           {/* <TextButton bcBlue rounded className="tweet-btn">
             Tweet
           </TextButton> */}
         </div>
-        <div className="header-profile-wrap">
-          <div className="header-container header-profile">
+        <div className="header-profile-wrap" ref={logoutRef}>
+          <div
+            className="header-container header-profile"
+            onClick={showLogoutOptions}
+          >
             <div className="profile-pic-container">
               <img src={profilePic} alt="profile-pic" className="profile-pic" />
             </div>
@@ -110,7 +127,7 @@ export default function DesktopHeader() {
               </div>
             </div>
           </div>
-          <div className="logout-options ">
+          <div className={logoutOptionsClassnames}>
             <div className="profile-deatils-wrap header-profile">
               <div className="profile-pic-container">
                 <img

@@ -14,6 +14,11 @@
     .terms-conditions-container{
         width: 300px;
     }
+    .signup-links{
+        .signup-btn{
+            max-width: 300px;
+        }
+    }
 
     @include for-tablet-portrait-up{
         width: 50%;
@@ -102,6 +107,9 @@
 
 .account-exist-container{
     margin: 4rem 0;
+    .sign-in-btn-container{
+        max-width: 300px;
+    }
     .account-exist-text{
         font-weight: 700;
     }

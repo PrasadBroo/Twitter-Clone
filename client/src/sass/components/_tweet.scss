@@ -1,0 +1,236 @@
+.tweet {
+    cursor: pointer;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    display: flex;
+    align-items: flex-start;
+    transition: all 500ms ease-in-out;
+    
+    &:hover {
+        background-color: rgba(#dbdbdb, 0.3);
+    }
+
+    .profile-pic-container {
+        .profile-pic {
+            height: 48px;
+            width: 48px;
+            border-radius: 100%;
+        }
+    }
+
+    .tweet-content {
+        flex-grow: 1;
+
+        .tweet-content-image-container {
+            margin-top: 1rem;
+            width: 100%;
+
+            .tweet-content-image {
+                height: auto;
+                width: 100%;
+                object-fit: cover;
+                border-radius: 20px;
+                max-height: 500px;
+            }
+        }
+
+        .tweet-content-child {
+            margin-right: 0.5rem;
+        }
+
+        .tweet-content-header {
+            @include flexCenter;
+
+            .tweet-options-container {
+                position: relative;
+                margin-left: auto;
+                
+                .tweet-options {
+
+                    .tweet-options-icon {
+                        height: 20px;
+                        width: 20px;
+                    }
+                }
+
+                .tweet-options-model {
+                    display: none;
+                    background-color: $color-white;
+                    min-width: 300px;
+                    list-style: none;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
+                    .tweet-options-model-item{
+                        transition: all 500ms ease-in-out;
+                        padding: 0.5rem ;
+                        @include flexCenter;
+                        .tweet-options-model-icon{
+                            font-size: 1.2rem;
+                            color: $color-grey-1;
+                            margin-left: 0.5rem;
+                        }
+                        .icon-4{
+                            transform: rotateY(180deg);
+                        }
+                        &:hover{
+                            background-color: $color-grey-2;
+                        }
+                    }
+                    .tweet-options-model-btn{
+                        background-color: transparent;
+                        justify-content: unset;
+                        color: $color-black-secondary;
+                        align-items: unset;
+                        padding: 0.5rem 0.7rem;
+                    }
+                }
+                .show{
+                    display: block;
+                }
+            }
+
+        }
+
+        .user-full-name {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .tweet-text {
+            font-size: 15px;
+            color: $color-black-grey;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .user-username,
+        .timestamp {
+            color: $color-grey-1;
+            font-size: 14px;
+        }
+
+        .timestamp {
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .useless-dot {
+            height: 5px;
+            width: 5px;
+            border-radius: 100%;
+            background-color: $color-grey-1;
+
+        }
+
+        .tweet-options {
+            cursor: pointer;
+            border-radius: 100%;
+            height: 30px;
+            width: 30px;
+            @include flexJustifyCenter;
+
+            &:hover {
+                background-color: rgba(29, 155, 240, 0.1);
+            }
+        }
+
+        .tweet-actions {
+            margin-top: 0.5rem;
+            @include flexCenter;
+
+            .tweet-retweet {
+                position: relative;
+            }
+
+            .retweet-options {
+                @include flexColumn;
+                align-items: center;
+                position: absolute;
+                top: 10%;
+                left: 0;
+                transform: translate(-50%);
+                height: auto;
+                width: 150px;
+                background-color: rgba(255, 255, 255, 1.00);
+                box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
+                display: none;
+
+                .retweet-btn,
+                .quote-btn {
+                    background-color: transparent;
+                    margin: 0;
+                    padding: 0;
+
+                }
+
+                .quote-btn {
+                    cursor: not-allowed;
+
+                }
+            }
+
+            .show {
+                display: block;
+            }
+
+            .retweet-options-child {
+                @include flexCenter;
+                transition: all 500ms ease-in-out;
+                width: 100%;
+                padding: 0.5rem 1rem;
+
+                &:hover {
+                    background-color: $color-grey-2;
+                }
+
+                .fa-pencil-alt {
+                    font-size: 16px;
+                    color: $color-grey-1;
+                }
+            }
+
+            .tweet-actions-child {
+                cursor: pointer;
+                @include flexCenter;
+                margin-right: 3rem;
+
+                &:hover .tweet-comment-count {
+                    color: $color-secondary;
+                }
+
+                &:last-child {
+                    margin-left: auto;
+                }
+
+                .tweet-icon {
+                    @include flexJustifyCenter;
+                    margin-right: 0.5rem;
+                    height: 25px;
+                    width: 25px;
+                    transition: all 500ms ease-in-out;
+                    border-radius: 100%;
+
+                    &:hover {
+                        background-color: rgba(29, 155, 240, 0.2);
+                    }
+                }
+
+                .tweet-comment-count {
+                    color: #536471;
+                }
+
+                .like-icon {
+                    transition: all 500ms ease-in-out;
+
+                    &:hover {
+                        transform: scale(1.1);
+                    }
+                }
+            }
+        }
+    }
+}
