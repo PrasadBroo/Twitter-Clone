@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function RootModelHeader({ hideHeader }) {
   const navigate = useNavigate();
   const handelModelClose = () => {
-    navigate("/");
+    navigate("/home");
   };
   return (
     <div className="root-model-header">

@@ -38,7 +38,7 @@
             margin-right: 0.5rem;
         }
 
-        .tweet-content-header {
+        .tweet-content-header,.save-tweet-options{
             @include flexCenter;
 
             .tweet-options-container {
@@ -64,7 +64,7 @@
                     box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
                     .tweet-options-model-item{
                         transition: all 500ms ease-in-out;
-                        padding: 0.5rem ;
+                        padding: 0.1rem 0.2rem;
                         @include flexCenter;
                         .tweet-options-model-icon{
                             font-size: 1.2rem;
@@ -224,13 +224,24 @@
                 }
 
                 .like-icon {
+                    font-size: 1.2rem;
                     transition: all 500ms ease-in-out;
-
+                    color: $color-grey-1;
                     &:hover {
                         transform: scale(1.1);
                     }
                 }
             }
+            .save-tweet-options{
+                .save-options{
+                    min-width: 200px;
+                    .tweet-options-model-item{
+                        padding: 0.1rem;
+                    }
+                }
+            }
+            
         }
+        
     }
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { googleSignInStart } from "../../store/user/userActions";
 import DefaultLoading from "../../components/DefaultLoading/DefaultLoading";
 

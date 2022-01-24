@@ -1,0 +1,27 @@
+.retweet {
+
+    .tweet {
+        align-items: stretch;
+
+        .tweet-content {
+            .reaplying-to {
+                margin-top: 1rem;
+                color: $color-grey-1;
+            }
+        }
+
+    }
+
+    .profile-pic-container {
+        position: relative;
+
+        .hr-line {
+            position: absolute;
+            top: 3.4rem;
+            left: 50%;
+            width: 2px;
+            height: 70%;
+            background-color: $color-grey-2;
+        }
+    }
+}

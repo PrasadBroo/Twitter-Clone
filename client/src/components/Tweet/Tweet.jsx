@@ -3,18 +3,27 @@ import ThreeDotsIcon from "../../icons/ThreeDotsIcon";
 import profilePic from "../../static/images/profile.jpg";
 import CommentIcon from "./../../icons/CommentIcon";
 import RetweetIcon from "./../../icons/RetweetIcon";
-import LikeIcon from "./../../icons/LikeIcon";
 import ShareIcon from "./../../icons/ShareIcon";
 import TextButton from "./../Button/TextButton/TextButton";
 import useComponentVisible from "./../../CustomHooks/useComponentVisible";
 import classNames from "classnames";
+import BookmarkIcon from "../../icons/BookmarkIcon";
 
 export default function Tweet() {
-  const { ref:tweetOptionsRef, isVisible:istweetOptions,setIsVisible:settweetOptions } = useComponentVisible(false);
   const {
-    wrapperRef: retweetRef,
-    isComponentVisible: reweetOptonsVisible,
-    setIsComponentVisible: setRewteetComponentVisible,
+    ref: tweetOptionsRef,
+    isVisible: istweetOptions,
+    setIsVisible: settweetOptions,
+  } = useComponentVisible(false);
+  const {
+    ref: retweetRef,
+    isVisible: reweetOptonsVisible,
+    setIsVisible: setRewteetComponentVisible,
+  } = useComponentVisible(false);
+  const {
+    ref: saveOptionsRef,
+    isVisible: saveOptonsVisible,
+    setIsVisible: setsaveOptionsComponentVisible,
   } = useComponentVisible(false);
   const showRetweetOptions = () => {
     setRewteetComponentVisible(true);
@@ -22,11 +31,17 @@ export default function Tweet() {
   const showTweetOptions = () => {
     settweetOptions(true);
   };
+  const showSaveTweetOptions = () => {
+    setsaveOptionsComponentVisible(true);
+  };
   const retweetOptionsClassnames = classNames("retweet-options", {
     show: reweetOptonsVisible,
   });
   const tweetOptionsClassnames = classNames("tweet-options-model", {
     show: istweetOptions,
+  });
+  const savetweetOptionsClassnames = classNames("tweet-options-model",'save-options', {
+    show: saveOptonsVisible,
   });
   return (
     <div className="tweet tweet-container">
@@ -42,7 +57,10 @@ export default function Tweet() {
           <span className="tweet-content-child useless-dot"></span>
           <span className="tweet-content-child timestamp">18h</span>
           <div className="tweet-options-container" ref={tweetOptionsRef}>
-            <span className="tweet-content-child tweet-options" onClick={showTweetOptions}>
+            <span
+              className="tweet-content-child tweet-options"
+              onClick={showTweetOptions}
+            >
               <ThreeDotsIcon className="tweet-options-icon" />
             </span>
             <ul className={tweetOptionsClassnames}>
@@ -125,14 +143,42 @@ export default function Tweet() {
           </div>
           <div className="tweet-actions-child like-tweet">
             <div className="tweet-icon like-icon">
-              <LikeIcon fill={"#536471"} height="18px" width="18px" />
+              <i className="far fa-heart"></i>
+              {/* <LikeIcon fill={"#536471"} height="18px" width="18px"/> */}
             </div>
 
             <span className="tweet-comment-count">5.7k</span>
           </div>
           <div className="tweet-actions-child save-tweet-options">
-            <div className="tweet-icon">
-              <ShareIcon fill={"#536471"} height="18px" width="18px" />
+            <div className="tweet-icon tweet-options-container" ref={saveOptionsRef}>
+              <ShareIcon fill={"#536471"} height="18px" width="18px" onClick={showSaveTweetOptions}/>
+              <ul className={savetweetOptionsClassnames}>
+                <li className="tweet-options-model-item">
+                  <span className="tweet-options-model-icon">
+                    <BookmarkIcon fill={"#536471"} height="18px" width="18px"/>
+                  </span>
+                  <TextButton className="tweet-options-model-btn">
+                    Bookmark
+                  </TextButton>
+                </li>
+                <li className="tweet-options-model-item">
+                  <span className="tweet-options-model-icon">
+                  <i className="fas fa-link"></i>
+                  </span>
+                  <TextButton className="tweet-options-model-btn">
+                    Copy link to tweet
+                  </TextButton>
+                </li>
+                <li className="tweet-options-model-item">
+                  <span className="tweet-options-model-icon">
+                  <ShareIcon fill={"#536471"} height="18px" width="18px" />
+                  </span>
+                  <TextButton className="tweet-options-model-btn">
+                    Sharet tweet via
+                  </TextButton>
+                </li>
+                
+              </ul>
             </div>
           </div>
         </div>
