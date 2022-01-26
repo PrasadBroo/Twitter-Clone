@@ -5,11 +5,9 @@
     width: 100%;
     padding: 0.5rem 0;
     .main{
-        width: 75%;
+        width: 70%;
         height: 100%;
         background-color: darkgrey;
-        display: flex;
-        align-items: center;
         .main-wrapper{
             display: flex;
             align-items: flex-start;
@@ -21,7 +19,7 @@
             height: 100%;
             margin:0 0.2rem;
         }.wrap-input-tweets{
-            width: 50%;
+            width: 55%;
         }
         .with-searchbar-suggetions{
             width: 50%;
