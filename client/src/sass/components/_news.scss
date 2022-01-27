@@ -1,0 +1,45 @@
+.news-section {
+    min-height: 500px;
+    background-color: #EFF3F4;
+    width: 100%;
+    margin-top: 1.5rem;
+    border-radius: 20px;
+    overflow: hidden;
+
+    .news-heading-main {
+        margin-left: 0.5rem;
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
+        padding: 0.5rem;
+    }
+
+    .news-items {
+        padding: 0.5rem;
+
+        .news-item {
+            @include flexCenter;
+            margin-bottom: 1rem;
+            .news-heading {
+                width: 70%;
+
+                .news-item-text {
+                    font-size: 15px;
+                    font-weight: 600;
+                    color: $color-black-grey;
+                }
+            }
+
+            .news-image-container {
+                height: 70px;
+                width: 70px;
+                margin-left: auto;
+
+                .news-image {
+                    @include fullWidthHeightCoverImage;
+                    border-radius: 10px;
+                }
+            }
+        }
+    }
+
+}
