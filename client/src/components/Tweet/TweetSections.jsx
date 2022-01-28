@@ -4,6 +4,7 @@ import News from "../News/News";
 import Searchbar from "../Searchbar/Searchbar";
 import SendTweet from "./SendTweet";
 import Tweets from "./Tweets";
+import WhoToFollow from './../WhoToFollow/WhoToFollow';
 
 export default function TweetSections() {
   return (
@@ -22,6 +23,7 @@ export default function TweetSections() {
           <div className="searchbar-news-sections-wrap">
             <Searchbar />
             <News />
+            <WhoToFollow/>
           </div>
         </div>
       </div>

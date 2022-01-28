@@ -19,7 +19,8 @@ export default function TextButton({
     rounded,
     bcBlue,
     cBlue,
-    'btn-disabled':disabled
+    'btn-disabled':disabled,
+    'btn-loading':loading,
   },className);
   return (
     <button

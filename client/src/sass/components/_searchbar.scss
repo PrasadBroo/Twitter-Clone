@@ -3,7 +3,7 @@
     height: 45px;
     .search-input-label {
         @include flexCenter;
-        background-color: #EFF3F4;
+        background-color: $color-grey-5;
         border-radius: 25px;
         height: 45px;
         position: fixed;

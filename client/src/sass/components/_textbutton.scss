@@ -1,14 +1,13 @@
 .text-button{
     position: relative;
     width: 100%;
-    min-height: 40px;
     cursor: pointer;
     border: 0;
     font-size: $icon-tiny-size;
     font-weight: 300;
     outline: none;
     padding: 0.5rem 2rem;
-    margin-top: 0.5rem;
+    // margin-top: 0.5rem;
     transition: all 400ms ease-in-out;
     @include flexJustifyCenter;
 }
@@ -29,4 +28,7 @@
         background-color: rgba(29,155,240,0.1);
         
     }
+}
+.btn-loading{
+    min-height: 40px;
 }

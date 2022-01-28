@@ -1,0 +1,14 @@
+.who-to-follow-suggestions{
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    background-color: $color-grey-5;
+    border-radius: 20px;
+    margin-top: 1rem;
+    .who-to-follow-heading-container{
+        margin: 1rem 0;
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+        font-weight: 700;
+    }
+}
