@@ -1,6 +1,4 @@
 .tweets-search-news-sections {
-    display: flex;
-    align-items: flex-start;
 
     .tweet-sections {
 
@@ -8,10 +6,6 @@
             border: 1px solid $color-grey-2;
             margin-top: 0.5rem;
         }
-    }
-    .sidebar{
-        margin-left: 1rem;
-        width:45%;
     }
     .searchbar-news-sections-wrap{
         width: 350px;

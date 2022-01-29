@@ -12,10 +12,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectFetching } from "../../store/user/userSelector";
 import DefaultLoading from "../DefaultLoading/DefaultLoading";
 import LoginFlowPage from "../../Pages/Auth/LoginFlowPage";
-import Homepage from "../../Pages/Homepage";
+import HomepageLayout from "../../Pages/HomepageLayout";
 import ComposeTweetPage from "../../Pages/ComposeTweetPage";
 import ExplorePage from "./../../Pages/ExplorePage";
 import TweetSections from "../Tweet/TweetSections";
+import User from "../User/User";
 
 function App() {
   const state = useSelector((state) => state);
@@ -39,12 +40,13 @@ function App() {
         </Route>
 
         <Route element={<RequireAuth />}>
-          <Route path="/home" element={<Homepage />}>
-            <Route path="" element={<TweetSections />}>
+          <Route path="/" element={<HomepageLayout />}>
+            <Route path="/:username" element={<User />} />
+            <Route index element={<TweetSections />} />
+            <Route path="home" element={<TweetSections />}>
               <Route path="compose/tweet" element={<ComposeTweetPage />} />
             </Route>
             <Route path="explore" element={<ExplorePage />} />
-            
           </Route>
         </Route>
       </Routes>

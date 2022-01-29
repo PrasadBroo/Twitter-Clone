@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import ExploreIcon from "../../icons/ExploreIcon";
 import HomeIcon from "../../icons/HomeIcon";
 import NotificationIcon from "./../../icons/NotificationIcon";
@@ -14,10 +14,14 @@ import ThreeDotsIcon from "../../icons/ThreeDotsIcon";
 import RighttickIcon from "./../../icons/RighttickIcon";
 import LinkButton from "./../Button/LinkButton/LinkButton";
 import classNames from "classnames";
-import useComponentVisible from './../../CustomHooks/useComponentVisible';
+import useComponentVisible from "./../../CustomHooks/useComponentVisible";
 
 export default function DesktopHeader() {
-  const { ref:logoutRef, isVisible:isLogoutVisible,setIsVisible:setLogoutVisible } = useComponentVisible(false);
+  const {
+    ref: logoutRef,
+    isVisible: isLogoutVisible,
+    setIsVisible: setLogoutVisible,
+  } = useComponentVisible(false);
 
   const logoutOptionsClassnames = classNames("logout-options", {
     show: isLogoutVisible,
@@ -34,70 +38,110 @@ export default function DesktopHeader() {
           </div>
         </div>
         <ul className="header-conatiner header-links">
-          <Link to="/home" className="header-link">
+          <NavLink
+            to="/home"
+            className={({ isActive }) =>
+              "header-link" + (isActive ? " active-header-link" : "")
+            }
+          >
             <div className="header-link-icon-wrap">
               <span className="link-icon">
                 <HomeIcon fill />
               </span>
               <span className="link-text">Home</span>
             </div>
-          </Link>
-          <Link to="explore" className="header-link">
+          </NavLink>
+          <NavLink
+            to="explore"
+            className={({ isActive }) =>
+              "header-link" + (isActive ? " active-header-link" : "")
+            }
+          >
             <div className="header-link-icon-wrap">
               <span className="link-icon">
                 <ExploreIcon />
               </span>
               <span className="link-text">Explore</span>
             </div>
-          </Link>
-          <Link to="home" className="header-link">
+          </NavLink>
+          <NavLink
+            to="notifications"
+            className={({ isActive }) =>
+              "header-link" + (isActive ? " active-header-link" : "")
+            }
+          >
             <div className="header-link-icon-wrap">
               <span className="link-icon">
                 <NotificationIcon />
               </span>
               <span className="link-text">Notifications</span>
             </div>
-          </Link>
-          <Link to="home" className="header-link">
+          </NavLink>
+          <NavLink
+            to="messages"
+            className={({ isActive }) =>
+              "header-link" + (isActive ? " active-header-link" : "")
+            }
+          >
             <div className="header-link-icon-wrap">
               <span className="link-icon">
                 <MessagesIcon />
               </span>
               <span className="link-text">Messages</span>
             </div>
-          </Link>
-          <Link to="home" className="header-link">
+          </NavLink>
+          <NavLink
+            to="bookmarks"
+            className={({ isActive }) =>
+              "header-link" + (isActive ? " active-header-link" : "")
+            }
+          >
             <div className="header-link-icon-wrap">
               <span className="link-icon">
                 <BookmarkIcon />
               </span>
               <span className="link-text">Bookmark</span>
             </div>
-          </Link>
-          <Link to="home" className="header-link">
+          </NavLink>
+          <NavLink
+            to="lists"
+            className={({ isActive }) =>
+              "header-link" + (isActive ? " active-header-link" : "")
+            }
+          >
             <div className="header-link-icon-wrap">
               <span className="link-icon">
                 <ListsIcon />
               </span>
               <span className="link-text">Lists</span>
             </div>
-          </Link>
-          <Link to="home" className="header-link">
+          </NavLink>
+          <NavLink
+            to="profile"
+            className={({ isActive }) =>
+              "header-link" + (isActive ? " active-header-link" : "")
+            }
+          >
             <div className="header-link-icon-wrap">
               <span className="link-icon">
                 <ProfileIcon />
               </span>
               <span className="link-text">Profile</span>
             </div>
-          </Link>
-          <Link to="home" className="header-link">
+          </NavLink>
+          <NavLink
+            to="more"
+            className={({ isActive }) =>
+              "header-link" + (isActive ? " active-header-link" : "")
+            }
+          >
             <div className="header-link-icon-wrap">
               <span className="link-icon">
                 <MoreIcon />
               </span>
               <span className="link-text">More</span>
             </div>
-          </Link>
+          </NavLink>
         </ul>
         <div className="header-conatiner tweet-btn-container">
           <LinkButton

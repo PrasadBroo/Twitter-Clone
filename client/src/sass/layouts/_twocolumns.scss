@@ -1,0 +1,15 @@
+.two-flex-col-container {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+
+    .col1 {
+        width: 55%;
+
+    }
+
+    .col2 {
+        margin-left: 1rem;
+        width: 45%;
+    }
+}

@@ -5,6 +5,7 @@
 
 @import './base/base';
 
+@import './layouts/twocolumns';
 
 @import './components/app';
 @import './components/navbar';
@@ -27,6 +28,9 @@
 @import './components/news';
 @import './components/tweetsections';
 @import './components/whotofollow';
+@import './components/userheader';
+@import './components/user';
+
 @import './pages/composetweetpage';
 @import './pages/loginpage';
 @import './pages/homepage';

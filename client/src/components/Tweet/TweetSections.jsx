@@ -9,8 +9,8 @@ import WhoToFollow from './../WhoToFollow/WhoToFollow';
 export default function TweetSections() {
   return (
     <>
-      <div className="tweets-search-news-sections">
-        <div className="tweet-sections container wrap-input-tweets">
+      <div className="tweets-search-news-sections two-flex-col-container">
+        <div className="col1 tweet-sections container wrap-input-tweets ">
           <div className="tweet-input-container">
             <SendTweet />
           </div>
@@ -19,7 +19,7 @@ export default function TweetSections() {
             <Tweets />
           </div>
         </div>
-        <div className="sidebar searchbar-news-sections">
+        <div className="col2 sidebar searchbar-news-sections ">
           <div className="searchbar-news-sections-wrap">
             <Searchbar />
             <News />
