@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import ExploreIcon from "../../icons/ExploreIcon";
 import HomeIcon from "../../icons/HomeIcon";
 import NotificationIcon from "./../../icons/NotificationIcon";

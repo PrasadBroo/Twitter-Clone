@@ -24,6 +24,9 @@
         .tweet-content-image-container {
             margin-top: 1rem;
             width: 100%;
+            max-width: 500px;
+            margin: auto;
+            margin-top: 1rem;
 
             .tweet-content-image {
                 height: auto;

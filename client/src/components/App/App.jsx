@@ -17,6 +17,7 @@ import ComposeTweetPage from "../../Pages/ComposeTweetPage";
 import ExplorePage from "./../../Pages/ExplorePage";
 import TweetSections from "../Tweet/TweetSections";
 import User from "../User/User";
+import UserTweets from "../User/UserTweets";
 
 function App() {
   const state = useSelector((state) => state);
@@ -41,7 +42,10 @@ function App() {
 
         <Route element={<RequireAuth />}>
           <Route path="/" element={<HomepageLayout />}>
-            <Route path="/:username" element={<User />} />
+            <Route path="/:username/*" element={<User />}>
+              <Route index element={<UserTweets />} />
+              <Route path="tweets" element={<UserTweets />} />
+            </Route>
             <Route index element={<TweetSections />} />
             <Route path="home" element={<TweetSections />}>
               <Route path="compose/tweet" element={<ComposeTweetPage />} />

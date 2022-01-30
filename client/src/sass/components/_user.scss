@@ -1,8 +1,9 @@
 .userpage {
+    background-color: #fff;
+
     .user-section {
         height: 100%;
-        height: 500px;
-        background-color: red;
+        height: auto;
 
         .bc-image-container {
             width: 100%;
@@ -15,27 +16,29 @@
 
         .user-details {
             position: relative;
-            height: 200px;
-            background-color: #fff;
-            .profile-pic-container{
+
+            .profile-pic-container-two {
                 cursor: pointer;
                 position: absolute;
                 z-index: 10;
                 height: 130px;
                 width: 130px;
-                bottom: 64%;
+                bottom: calc(100% - 70px);
                 left: 15px;
-                .profile-pic{
+
+                .profile-pic {
                     @include fullWidthHeightCoverImage;
                     border-radius: 100%;
                 }
             }
-            .profile-options{
-                
+
+            .profile-options {
+
                 display: flex;
                 align-items: center;
                 justify-content: end;
-                .edit-profile-btn{
+
+                .edit-profile-btn {
                     max-width: 110px;
                     font-size: 15px;
                     padding: 0.5rem;
@@ -46,8 +49,74 @@
                     border: 1px solid $color-grey-2;
                     background-color: transparent;
                     transition: all 500ms ease-in-out;
-                    &:hover{
+
+                    &:hover {
                         background-color: $color-grey-2;
+                    }
+                }
+            }
+
+            .user-other-details {
+                padding: 0.5rem;
+                margin-top: 3rem;
+                color: $color-black-2;
+                .container {
+                    margin-bottom: 0.7rem;
+                }
+                .user-fullname-container {
+                    .user-fullname {
+                        font-weight: 700;
+                        font-size: 20px;
+                    }
+
+                    .user-username {
+                        display: block;
+                        color: $color-grey-1;
+                    }
+                }
+
+                .user-sitelink-joindate-container {
+                    @include flexCenter;
+
+                    .icon-container {
+                        color: $color-grey-1;
+                        margin-right: 0.5rem;
+                    }
+
+                    .user-location,
+                    .sitelink-container {
+                        margin-right: 1.5rem;
+                    }
+                }
+
+                .user-follow-container {
+                    @include flexCenter;
+
+                    .followings-info,
+                    .followers-info {
+                        margin-right: 0.7rem;
+
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+
+            }
+            .user-other-links{
+                .user-links{
+                    @include flexCenter;
+                    .user-link{
+                        padding: 0.8rem;
+                        transition: all 500ms ease-in-out;
+                        flex: 1;
+                        text-align: center;
+                        &:hover{
+                            background-color: $color-grey-2;
+                        }
+                    }
+                    .active-other-link{
+                        border-bottom: 3px solid $color-secondary;
                     }
                 }
             }
