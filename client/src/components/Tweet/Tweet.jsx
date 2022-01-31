@@ -40,9 +40,13 @@ export default function Tweet() {
   const tweetOptionsClassnames = classNames("tweet-options-model", {
     show: istweetOptions,
   });
-  const savetweetOptionsClassnames = classNames("tweet-options-model",'save-options', {
-    show: saveOptonsVisible,
-  });
+  const savetweetOptionsClassnames = classNames(
+    "tweet-options-model",
+    "save-options",
+    {
+      show: saveOptonsVisible,
+    }
+  );
   return (
     <div className="tweet tweet-container">
       <div className="profile-pic-container">
@@ -150,12 +154,20 @@ export default function Tweet() {
             <span className="tweet-comment-count">5.7k</span>
           </div>
           <div className="tweet-actions-child save-tweet-options">
-            <div className="tweet-icon tweet-options-container" ref={saveOptionsRef}>
-              <ShareIcon fill={"#536471"} height="18px" width="18px" onClick={showSaveTweetOptions}/>
+            <div
+              className="tweet-icon tweet-options-container"
+              ref={saveOptionsRef}
+            >
+              <ShareIcon
+                fill={"#536471"}
+                height="18px"
+                width="18px"
+                onClick={showSaveTweetOptions}
+              />
               <ul className={savetweetOptionsClassnames}>
                 <li className="tweet-options-model-item">
                   <span className="tweet-options-model-icon">
-                    <BookmarkIcon fill={"#536471"} height="18px" width="18px"/>
+                    <BookmarkIcon fill={"#536471"} height="18px" width="18px" />
                   </span>
                   <TextButton className="tweet-options-model-btn">
                     Bookmark
@@ -163,7 +175,7 @@ export default function Tweet() {
                 </li>
                 <li className="tweet-options-model-item">
                   <span className="tweet-options-model-icon">
-                  <i className="fas fa-link"></i>
+                    <i className="fas fa-link"></i>
                   </span>
                   <TextButton className="tweet-options-model-btn">
                     Copy link to tweet
@@ -171,13 +183,12 @@ export default function Tweet() {
                 </li>
                 <li className="tweet-options-model-item">
                   <span className="tweet-options-model-icon">
-                  <ShareIcon fill={"#536471"} height="18px" width="18px" />
+                    <ShareIcon fill={"#536471"} height="18px" width="18px" />
                   </span>
                   <TextButton className="tweet-options-model-btn">
                     Sharet tweet via
                   </TextButton>
                 </li>
-                
               </ul>
             </div>
           </div>

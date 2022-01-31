@@ -104,11 +104,12 @@
 
             }
             .user-other-links{
+                border-bottom: 1px solid $color-grey-2;
                 .user-links{
                     @include flexCenter;
                     .user-link{
                         padding: 0.8rem;
-                        transition: all 500ms ease-in-out;
+                        transition: background-color 500ms ease-in-out;
                         flex: 1;
                         text-align: center;
                         &:hover{
@@ -116,7 +117,7 @@
                         }
                     }
                     .active-other-link{
-                        border-bottom: 3px solid $color-secondary;
+                        border-bottom: 4px solid $color-secondary;
                     }
                 }
             }

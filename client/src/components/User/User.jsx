@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, NavLink, Outlet } from "react-router-dom";
+import { useParams, NavLink, Outlet, useLocation } from "react-router-dom";
 import News from "../News/News";
 import Searchbar from "../Searchbar/Searchbar";
 import WhoToFollow from "../WhoToFollow/WhoToFollow";
@@ -8,6 +8,7 @@ import TextButton from "./../Button/TextButton/TextButton";
 
 
 export default function User() {
+  const {pathname} = useLocation();
   const { username } = useParams();
   return (
     <div className="two-flex-col-container userpage">
@@ -91,7 +92,7 @@ export default function User() {
             <ul className="user-links">
               <NavLink
                 className={({ isActive }) =>
-                  "user-link" + (isActive ? " active-other-link" : "")
+                  "user-link " + (isActive ? " active-other-link " : "") + (pathname === '/profile' ? 'active-other-link' : null)
                 }
                 to="tweets"
               >

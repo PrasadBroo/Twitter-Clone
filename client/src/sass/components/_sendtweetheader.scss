@@ -1,0 +1,19 @@
+.send-tweet-heading-wrap {
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+    .send-tweet-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        padding:  0.5rem;
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+
+        .heading-text {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+    }
+}

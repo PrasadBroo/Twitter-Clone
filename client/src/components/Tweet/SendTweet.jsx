@@ -15,14 +15,8 @@ export default function SendTweet({ className }) {
   return (
     <section className={sendTweetClassnames}>
       <div className="send-tweet-wrap">
-        <div className="send-tweet-heading">
-          <div className="heading-wrap">
-            <span className="heading-text">Home</span>
-          </div>
-          <div className="shiny-icon-container">
-            <ShinyIcon />
-          </div>
-        </div>
+        
+
         <div className="wrapper">
           <div className="profile-pic-container">
             <img src={profilePic} alt="userpic" className="user-pic" />
