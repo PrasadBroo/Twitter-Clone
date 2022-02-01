@@ -66,11 +66,11 @@
                     box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
                     .tweet-options-model-item{
                         transition: all 500ms ease-in-out;
-                        padding: 0.1rem 0.2rem;
+                        padding: 0.5rem 0.2rem;
                         @include flexCenter;
                         .tweet-options-model-icon{
                             font-size: 1.2rem;
-                            color: $color-grey-1;
+                            color: $color-black-2;
                             margin-left: 0.5rem;
                         }
                         .icon-4{
@@ -83,7 +83,7 @@
                     .tweet-options-model-btn{
                         background-color: transparent;
                         justify-content: unset;
-                        color: $color-black-secondary;
+                        color: $color-black-2;
                         align-items: unset;
                         padding: 0.5rem 0.7rem;
                     }

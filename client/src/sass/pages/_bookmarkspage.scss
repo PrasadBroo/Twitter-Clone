@@ -1,0 +1,43 @@
+.bookmarkspage{
+    background-color: #fff;
+    .bkc-1{
+        align-self: stretch;
+    }
+    .bookamark-header{
+        position: sticky;
+        top: 0px;
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        padding: 0 0.5rem;
+        cursor: pointer;
+        .bookmarks-text{
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .username-text{
+            display: block;
+            color: $color-grey-1;
+        }
+    }
+    .follow-sugg-news-container{
+        .follow-sugg-news-wrap{
+            max-width: 350px;
+        }
+    }
+    .no-bookmarked-tweets{
+        width: 50%;
+        margin: auto;
+        margin-top: 2rem;
+        .no-tweets-text{
+            font-size: 1.7rem;
+            font-weight: 700;
+            display: block;
+            text-align: left;
+        }
+        .no-tweets-text-two{
+            color: $color-black-2;
+            margin-top: 0.5rem;
+            display: block;
+        }
+    }
+}

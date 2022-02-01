@@ -100,7 +100,7 @@ export default function DesktopHeader() {
               <span className="link-icon">
                 <BookmarkIcon />
               </span>
-              <span className="link-text">Bookmark</span>
+              <span className="link-text">Bookmarks</span>
             </div>
           </NavLink>
           <NavLink

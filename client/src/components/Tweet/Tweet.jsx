@@ -78,7 +78,7 @@ export default function Tweet() {
               </li>
               <li className="tweet-options-model-item">
                 <span className="tweet-options-model-icon">
-                  <i className="fas fa-user-times"></i>
+                <i className="far fa-user-plus"></i>
                 </span>
                 <TextButton className="tweet-options-model-btn">
                   Follow @Prasadbro
@@ -86,7 +86,7 @@ export default function Tweet() {
               </li>
               <li className="tweet-options-model-item">
                 <span className="tweet-options-model-icon">
-                  <i className="fas fa-ban"></i>
+                <i className="far fa-ban"></i>
                 </span>
                 <TextButton className="tweet-options-model-btn">
                   Block @Prasadbro
@@ -147,7 +147,7 @@ export default function Tweet() {
           </div>
           <div className="tweet-actions-child like-tweet">
             <div className="tweet-icon like-icon">
-              <i className="far fa-heart"></i>
+              <i className="fal fa-heart"></i>
               {/* <LikeIcon fill={"#536471"} height="18px" width="18px"/> */}
             </div>
 

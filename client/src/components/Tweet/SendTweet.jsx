@@ -12,6 +12,10 @@ import classNames from "classnames";
 
 export default function SendTweet({ className }) {
   const sendTweetClassnames = classNames("send-tweet", className);
+  function auto_grow(element) {
+    element.target.style.height = "48px";
+    element.target.style.height = (element.target.scrollHeight)+"px";
+}
   return (
     <section className={sendTweetClassnames}>
       <div className="send-tweet-wrap">
@@ -23,11 +27,13 @@ export default function SendTweet({ className }) {
           </div>
           <div className="whats-happening">
             <div className="tweet-input-container">
-              <input
+              <textarea
+              onInput={(e)=>auto_grow(e)}
                 type="text"
                 name="tweet-text"
                 placeholder="What's happening?"
                 className="tweet-input"
+                maxLength={300}
               />
             </div>
             <div className="tweet-attachment">
