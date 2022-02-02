@@ -1,0 +1,55 @@
+.followpage{
+    background-color: #fff;
+    .fpc-1{
+        align-self: stretch;
+    }
+    .followpage-header{
+        position: sticky;
+        top: 0px;
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        padding: 0 0.5rem;
+        cursor: pointer;
+    }
+    .user-follow-links{
+        @include flexCenter;
+        border-bottom: 1px solid $color-grey-2;
+        .user-follow-link{
+            flex: 1;
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 1rem;
+            color: $color-black-2;
+            transition: background-color 500ms ease-in-out;
+            &:hover{
+                background-color: $color-grey-2;
+            }
+        }
+        .active-user-follow-link{
+            font-weight: 700;
+            border-bottom: 3px solid $color-secondary-light;
+        }
+    }
+    .follow-sugg-news-container{
+        .follow-sugg-news-wrap{
+            max-width: 350px;
+        }
+    }
+    .user-followers{
+        .follow-user{
+            padding: 0.5rem;
+            border-radius: 0;
+            transition: background-color 500ms ease-in-out;
+            &:hover{
+                background-color:  rgba($color: $color-grey-2, $alpha: 0.3);
+            }
+            .profile-pic-container,.profile-details{
+                width: unset;
+                margin-right: 0.5rem;
+            }
+            .follow-btn-container{
+                margin-left: auto;
+            }
+        }
+    }
+}

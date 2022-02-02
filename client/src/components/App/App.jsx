@@ -19,7 +19,9 @@ import ExplorePage from "./../../Pages/ExplorePage";
 import TweetSections from "../Tweet/TweetSections";
 import User from "../User/User";
 import UserTweets from "../User/UserTweets";
-
+import FollowPage from "./../../Pages/FollowPage";
+import Following from "../Followings/Following";
+import Followers from "../Followers/Followers";
 
 function App() {
   const state = useSelector((state) => state);
@@ -54,6 +56,10 @@ function App() {
             </Route>
             <Route path="explore" element={<ExplorePage />} />
             <Route path="bookmarks" element={<BookmarksPage />} />
+            <Route path="/:username/*" element={<FollowPage />}>
+              <Route path="following" element={<Following />} />
+              <Route path="followers" element={<Followers />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

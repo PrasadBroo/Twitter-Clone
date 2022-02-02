@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import TextButton from "../Button/TextButton/TextButton";
 
 export default function FollowUser() {
@@ -12,11 +13,13 @@ export default function FollowUser() {
         />
       </div>
       <div className="profile-details">
-        <p className="user-fullname">Prasad Shinde</p>
-        <p className="user-username">@Prasadbro</p>
+        <Link to="/profile" className="user-fullname">
+          Prasad Shinde
+        </Link>
+        <span className="user-username">@Prasadbro</span>
       </div>
       <div className="follow-btn-container">
-        <TextButton className='follow-btn' >Follow</TextButton>
+        <TextButton className="follow-btn">Follow</TextButton>
       </div>
     </div>
   );

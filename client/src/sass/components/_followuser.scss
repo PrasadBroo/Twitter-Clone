@@ -24,9 +24,12 @@
     .profile-details {
         width: 60%;
         margin-right: 1rem;
-
         .user-fullname {
+            display: block;
             font-weight: 700;
+            &:hover{
+                text-decoration: underline;
+            }
         }
 
         .user-username {

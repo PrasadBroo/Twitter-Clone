@@ -1,14 +1,19 @@
 import React from "react";
-import { useParams, NavLink, Outlet, useLocation } from "react-router-dom";
+import {
+  useParams,
+  NavLink,
+  Outlet,
+  useLocation,
+  Link,
+} from "react-router-dom";
 import News from "../News/News";
 import Searchbar from "../Searchbar/Searchbar";
 import WhoToFollow from "../WhoToFollow/WhoToFollow";
 import UserHeader from "./UserHeader";
 import TextButton from "./../Button/TextButton/TextButton";
 
-
 export default function User() {
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
   const { username } = useParams();
   return (
     <div className="two-flex-col-container userpage">
@@ -80,19 +85,21 @@ export default function User() {
               </div>
             </div>
             <div className="user-follow-container container">
-              <a href="dsada.com" className="followings-info ">
+              <Link to="following" className="followings-info ">
                 <b>3</b> Following
-              </a>
-              <a href="dsada.com" className="followers-info">
+              </Link>
+              <Link to="followers" className="followings-info ">
                 <b>3,487</b> Followers
-              </a>
+              </Link>
             </div>
           </div>
           <div className="user-other-links">
             <ul className="user-links">
               <NavLink
                 className={({ isActive }) =>
-                  "user-link " + (isActive ? " active-other-link " : "") + (pathname === '/profile' ? 'active-other-link' : null)
+                  "user-link " +
+                  (isActive ? " active-other-link " : "") +
+                  (pathname === "/profile" ? "active-other-link" : null)
                 }
                 to="tweets"
               >
@@ -125,7 +132,7 @@ export default function User() {
             </ul>
           </div>
           <div className="user-links-content">
-                <Outlet/>
+            <Outlet />
           </div>
         </div>
       </div>
