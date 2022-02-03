@@ -5,7 +5,7 @@ export default function Searchbar() {
     <div className="searchbar">
       <label htmlFor="search-input" className="search-input-label">
         <div className="search-icon-container">
-          <i className="fas fa-search"></i>
+        <i className="far fa-search"></i>
         </div>
         <div className="wrap-search-input">
           <input

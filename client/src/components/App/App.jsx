@@ -22,6 +22,8 @@ import UserTweets from "../User/UserTweets";
 import FollowPage from "./../../Pages/FollowPage";
 import Following from "../Followings/Following";
 import Followers from "../Followers/Followers";
+import NotificationsPage from "./../../Pages/NotificationsPage";
+import SettingsPage from "./../../Pages/SettingsPage";
 
 function App() {
   const state = useSelector((state) => state);
@@ -56,9 +58,19 @@ function App() {
             </Route>
             <Route path="explore" element={<ExplorePage />} />
             <Route path="bookmarks" element={<BookmarksPage />} />
+            <Route path="notifications" element={<NotificationsPage />}>
+              <Route index element={<h1>All</h1>} />
+              <Route path="mentions" element={<h1>Mentions</h1>} />
+            </Route>
             <Route path="/:username/*" element={<FollowPage />}>
               <Route path="following" element={<Following />} />
               <Route path="followers" element={<Followers />} />
+            </Route>
+            <Route path="settings" element={<SettingsPage />}>
+              <Route index element={<h1>Index</h1>} />
+              <Route path='account' element={<h1>Your Acoount</h1>} />
+              <Route path='privacy_and_safety' element={<h1>Privacy and Safety</h1>} />
+              <Route path='notifications' element={<h1>Notifications</h1>} />
             </Route>
           </Route>
         </Route>

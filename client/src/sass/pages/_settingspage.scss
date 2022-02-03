@@ -1,0 +1,48 @@
+.settingspage{
+    background-color: #fff;
+    .spc-1{
+        align-self: stretch;
+        width: 40%;
+    }
+    .settingspage-header{
+        position: sticky;
+        top: 0px;
+        backdrop-filter: blur(12px);
+        padding: 1rem;
+        padding-top: 0;
+        cursor: pointer;
+        .settingspage-text{
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+    }
+    .settings-links-container{
+        .setting-links{
+            .setting-link{
+                color: $color-black-2;
+                font-size: 15px;
+                flex: 1;
+                padding: 1rem 0.8rem;
+                @include flexCenter;
+                transition: background-color 500ms ease-in-out;
+                &:hover{
+                    background-color: rgba($color-grey-2,  0.2);
+                }
+                .link-icon{
+                    margin-left: auto;
+                }
+            }
+            .active-setting-link{
+                border-right: 2px solid $color-secondary-light;
+                background-color: rgba($color-grey-2,  0.2);
+            }
+        }
+    }
+    .user-settings-content-container{
+        .user-settings-content-wrap{
+            max-width: 350px;
+        }
+    }
+    
+}

@@ -40,9 +40,10 @@
             .header-link-icon-wrap {
                 display: inline-flex;
                 align-items: center;
-                transition: all 500ms ease-in-out;
+                transition: background-color 500ms ease-in-out;
                 padding: 0.5rem 0.7rem 0.5rem 0.5rem;
                 border-radius: 20px;
+                cursor: pointer;
 
             }
 
@@ -51,12 +52,42 @@
                 margin-right: 1rem;
             }
         }
-        .active-header-link{
-            .header-link-icon-wrap{
-                font-weight: 700;
-        }
+
+        .more-options-container {
+            position: relative;
+
+            .more-options {
+                display: none;
+                position: absolute;
+                background-color: $color-white;
+                bottom: 0;
+                box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
+
+                .more-options-link {
+                    display: block;
+                    padding: 1rem;
+                    font-size: 15px;
+                    color: $color-black-2;
+                    transition: all 500ms ease-in-out;
+                    &:hover{
+                        background-color: rgb($color-grey-2,0.5);
+                    }
+                    .icon-container{
+                        margin-right: 0.8rem;
+                    }
+                }
             }
-            
+            .show{
+                display: block;
+            }
+        }
+
+        .active-header-link {
+            .header-link-icon-wrap {
+                font-weight: 700;
+            }
+        }
+
 
         .activeRoute {
             background-color: #333;

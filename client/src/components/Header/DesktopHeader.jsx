@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import ExploreIcon from "../../icons/ExploreIcon";
 import HomeIcon from "../../icons/HomeIcon";
 import NotificationIcon from "./../../icons/NotificationIcon";
@@ -22,7 +22,14 @@ export default function DesktopHeader() {
     isVisible: isLogoutVisible,
     setIsVisible: setLogoutVisible,
   } = useComponentVisible(false);
-
+  const {
+    ref: moreOptionsRef,
+    isVisible: isMoreOptionVisible,
+    setIsVisible: setMoreOptionsVisible,
+  } = useComponentVisible(false);
+  const moreOptionsClassnames = classNames("more-options", {
+    show: isMoreOptionVisible,
+  });
   const logoutOptionsClassnames = classNames("logout-options", {
     show: isLogoutVisible,
   });
@@ -129,19 +136,34 @@ export default function DesktopHeader() {
               <span className="link-text">Profile</span>
             </div>
           </NavLink>
-          <NavLink
-            to="more"
-            className={({ isActive }) =>
-              "header-link" + (isActive ? " active-header-link" : "")
-            }
-          >
-            <div className="header-link-icon-wrap">
+          <div className='header-link more-options-container' ref={moreOptionsRef} >
+            <div className="header-link-icon-wrap"  onClick={()=>setMoreOptionsVisible(true)}>
               <span className="link-icon">
                 <MoreIcon />
               </span>
               <span className="link-text">More</span>
             </div>
-          </NavLink>
+            <ul className={moreOptionsClassnames}>
+              <Link to="settings/account" className="more-options-link">
+                <span className="icon-container">
+                  <i className="far fa-cog"></i>
+                </span>
+                <span className="link-text">Settings and privacy</span>
+              </Link>
+              <Link to="home" className="more-options-link">
+                <span className="icon-container">
+                <i className="far fa-edit"></i>
+                </span>
+                <span className="link-text">Display</span>
+              </Link>
+              <Link to="home" className="more-options-link">
+                <span className="icon-container">
+                  <i className="far fa-question-circle"></i>
+                </span>
+                <span className="link-text">Help Center</span>
+              </Link>
+            </ul>
+          </div>
         </ul>
         <div className="header-conatiner tweet-btn-container">
           <LinkButton

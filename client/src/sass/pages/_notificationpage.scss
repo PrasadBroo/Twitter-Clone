@@ -1,0 +1,51 @@
+.notificationspage{
+    background-color: #fff;
+    .npc-1{
+        align-self: stretch;
+    }
+    .notificationspage-header{
+        position: sticky;
+        top: 0px;
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        padding: 0.5rem;
+        padding-top: 0;
+        cursor: pointer;
+        @include flexCenter;
+        .notifications-text{
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .setting-icon-container{
+            display: block;
+            margin-left: auto;
+            color: $color-grey-1;
+        }
+    }
+    .notifications-links{
+        @include flexCenter;
+        border-bottom: 1px solid $color-grey-2;
+        .user-notification-link{
+            flex: 1;
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 1rem;
+            color: $color-black-2;
+            transition: background-color 500ms ease-in-out;
+            &:hover{
+                background-color: $color-grey-2;
+            }
+            
+        }
+        .active-user-notification-link{
+            font-weight: 700;
+            border-bottom: 3px solid $color-secondary-light;
+        }
+    }
+    .follow-sugg-news-container{
+        .follow-sugg-news-wrap{
+            max-width: 350px;
+        }
+    }
+    
+}
