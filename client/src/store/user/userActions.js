@@ -19,6 +19,7 @@ import {
     SIGN_UP_SUCCESS,
     SIGN_UP_FAIL,
     FETCHING_FINISHED,
+    LOGOUT_USER,
     FETCHING_STARTED,
 } from "./userSlice";
 
@@ -90,4 +91,8 @@ export const signInStart = () => async (dispatch) => {
         dispatch(FETCHING_FINISHED())
         dispatch(SIGN_IN_FAIL(error.message))
     }
+}
+export const logout = ()=> dispatch =>{
+    localStorage.removeItem('token')
+    dispatch(LOGOUT_USER())
 }

@@ -4,19 +4,23 @@ import ExploreIcon from "../../icons/ExploreIcon";
 import HomeIcon from "../../icons/HomeIcon";
 import NotificationIcon from "./../../icons/NotificationIcon";
 import MessagesIcon from "./../../icons/MessagesIcon";
-import BookmarkIcon from "./../../icons/BookmarkIcon";
 import MoreIcon from "./../../icons/MoreIcon";
 import ProfileIcon from "./../../icons/ProfileIcon";
 import ListsIcon from "./../../icons/ListsIcon";
 import TextButton from "./../Button/TextButton/TextButton";
-import profilePic from "../../static/images/profile.jpg";
 import ThreeDotsIcon from "../../icons/ThreeDotsIcon";
 import RighttickIcon from "./../../icons/RighttickIcon";
 import LinkButton from "./../Button/LinkButton/LinkButton";
 import classNames from "classnames";
 import useComponentVisible from "./../../CustomHooks/useComponentVisible";
+import { logout } from "../../store/user/userActions";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/user/userSelector";
 
 export default function DesktopHeader() {
+  const state = useSelector(state=>state)
+  let user = selectCurrentUser(state);
+  const dispatch = useDispatch();
   const {
     ref: logoutRef,
     isVisible: isLogoutVisible,
@@ -59,7 +63,7 @@ export default function DesktopHeader() {
             </div>
           </NavLink>
           <NavLink
-            to="explore"
+            to="/explore"
             className={({ isActive }) =>
               "header-link" + (isActive ? " active-header-link" : "")
             }
@@ -72,7 +76,7 @@ export default function DesktopHeader() {
             </div>
           </NavLink>
           <NavLink
-            to="notifications"
+            to="/notifications"
             className={({ isActive }) =>
               "header-link" + (isActive ? " active-header-link" : "")
             }
@@ -85,7 +89,7 @@ export default function DesktopHeader() {
             </div>
           </NavLink>
           <NavLink
-            to="messages"
+            to="/messages"
             className={({ isActive }) =>
               "header-link" + (isActive ? " active-header-link" : "")
             }
@@ -98,20 +102,20 @@ export default function DesktopHeader() {
             </div>
           </NavLink>
           <NavLink
-            to="bookmarks"
+            to="/bookmarks"
             className={({ isActive }) =>
               "header-link" + (isActive ? " active-header-link" : "")
             }
           >
             <div className="header-link-icon-wrap">
               <span className="link-icon">
-                <BookmarkIcon />
+              <i className="far fa-bookmark"></i>
               </span>
               <span className="link-text">Bookmarks</span>
             </div>
           </NavLink>
           <NavLink
-            to="lists"
+            to="/lists"
             className={({ isActive }) =>
               "header-link" + (isActive ? " active-header-link" : "")
             }
@@ -124,7 +128,7 @@ export default function DesktopHeader() {
             </div>
           </NavLink>
           <NavLink
-            to="profile"
+            to={'/'+user.username}
             className={({ isActive }) =>
               "header-link" + (isActive ? " active-header-link" : "")
             }
@@ -144,19 +148,19 @@ export default function DesktopHeader() {
               <span className="link-text">More</span>
             </div>
             <ul className={moreOptionsClassnames}>
-              <Link to="settings/account" className="more-options-link">
+              <Link to="/settings/account" className="more-options-link">
                 <span className="icon-container">
                   <i className="far fa-cog"></i>
                 </span>
                 <span className="link-text">Settings and privacy</span>
               </Link>
-              <Link to="home" className="more-options-link">
+              <Link to="/display" className="more-options-link">
                 <span className="icon-container">
                 <i className="far fa-edit"></i>
                 </span>
                 <span className="link-text">Display</span>
               </Link>
-              <Link to="home" className="more-options-link">
+              <Link to="/help" className="more-options-link">
                 <span className="icon-container">
                   <i className="far fa-question-circle"></i>
                 </span>
@@ -181,11 +185,11 @@ export default function DesktopHeader() {
             onClick={showLogoutOptions}
           >
             <div className="profile-pic-container">
-              <img src={profilePic} alt="profile-pic" className="profile-pic" />
+              <img src={user.avatar} alt="profile-pic" className="profile-pic" />
             </div>
             <div className="profile-details">
-              <p className="user-fullname">Prasad Shinde</p>
-              <p className="user-username">@Prasadbro</p>
+              <p className="user-fullname">{user.fullName}</p>
+              <p className="user-username">@{user.username}</p>
             </div>
             <div className="profile-options">
               <div className="icon-container">
@@ -197,14 +201,14 @@ export default function DesktopHeader() {
             <div className="profile-deatils-wrap header-profile">
               <div className="profile-pic-container">
                 <img
-                  src={profilePic}
+                  src={user.avatar}
                   alt="profile-pic"
                   className="profile-pic"
                 />
               </div>
               <div className="profile-details">
-                <p className="user-fullname">Prasad Shinde</p>
-                <p className="user-username">@Prasadbro</p>
+                <p className="user-fullname">{user.fullName}</p>
+                <p className="user-username">@{user.username}</p>
               </div>
               <div className="profile-options">
                 <div className="icon-container">
@@ -213,8 +217,8 @@ export default function DesktopHeader() {
               </div>
             </div>
             <div className="logout-btn-container">
-              <TextButton cBlue className="logout-btn">
-                Log out @Prasadbro
+              <TextButton cBlue className="logout-btn" onClick={()=>dispatch(logout())}>
+                Log out @{user.username}
               </TextButton>
             </div>
           </div>

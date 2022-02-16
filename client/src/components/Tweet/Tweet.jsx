@@ -7,7 +7,7 @@ import ShareIcon from "./../../icons/ShareIcon";
 import TextButton from "./../Button/TextButton/TextButton";
 import useComponentVisible from "./../../CustomHooks/useComponentVisible";
 import classNames from "classnames";
-import BookmarkIcon from "../../icons/BookmarkIcon";
+
 
 export default function Tweet() {
   const {
@@ -78,7 +78,7 @@ export default function Tweet() {
               </li>
               <li className="tweet-options-model-item">
                 <span className="tweet-options-model-icon">
-                <i className="far fa-user-plus"></i>
+                  <i className="far fa-user-plus"></i>
                 </span>
                 <TextButton className="tweet-options-model-btn">
                   Follow @Prasadbro
@@ -86,7 +86,7 @@ export default function Tweet() {
               </li>
               <li className="tweet-options-model-item">
                 <span className="tweet-options-model-icon">
-                <i className="far fa-ban"></i>
+                  <i className="far fa-ban"></i>
                 </span>
                 <TextButton className="tweet-options-model-btn">
                   Block @Prasadbro
@@ -167,7 +167,7 @@ export default function Tweet() {
               <ul className={savetweetOptionsClassnames}>
                 <li className="tweet-options-model-item">
                   <span className="tweet-options-model-icon">
-                    <BookmarkIcon fill={"#536471"} height="18px" width="18px" />
+                    <i className="far fa-bookmark"></i>
                   </span>
                   <TextButton className="tweet-options-model-btn">
                     Bookmark
@@ -175,7 +175,7 @@ export default function Tweet() {
                 </li>
                 <li className="tweet-options-model-item">
                   <span className="tweet-options-model-icon">
-                    <i className="fas fa-link"></i>
+                    <i className="far fa-link"></i>
                   </span>
                   <TextButton className="tweet-options-model-btn">
                     Copy link to tweet
@@ -183,7 +183,7 @@ export default function Tweet() {
                 </li>
                 <li className="tweet-options-model-item">
                   <span className="tweet-options-model-icon">
-                    <ShareIcon fill={"#536471"} height="18px" width="18px" />
+                    <i className="far fa-share"></i>
                   </span>
                   <TextButton className="tweet-options-model-btn">
                     Sharet tweet via

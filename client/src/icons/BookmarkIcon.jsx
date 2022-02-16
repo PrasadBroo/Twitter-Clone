@@ -1,11 +1,14 @@
 import React from "react";
 
-export default function BookmarkIcon({fill,className,height,width},...addtionalProps) {
+export default function BookmarkIcon(
+  { fill, className, height, width },
+  ...addtionalProps
+) {
   return (
     <svg
       viewBox="0 0 24 24"
       width={width || "26.25px"}
-      height={height ||"26.25px"}
+      height={height || "26.25px"}
       fill={fill || "#333"}
       className={className}
       {...addtionalProps}

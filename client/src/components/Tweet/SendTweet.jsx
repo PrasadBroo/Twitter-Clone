@@ -1,6 +1,5 @@
 import React from "react";
 import MediaIcon from "../../icons/MediaIcon";
-import ShinyIcon from "../../icons/ShinyIcon";
 import profilePic from "../../static/images/profile.jpg";
 import TextButton from "../Button/TextButton/TextButton";
 import GifIcon from "./../../icons/GifIcon";

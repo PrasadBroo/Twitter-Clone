@@ -49,7 +49,11 @@
 
 
             .link-icon {
+                @include flexJustifyCenter;
                 margin-right: 1rem;
+                font-size: 1.5rem;
+                width: 26px;
+                height: 26px;
             }
         }
 
@@ -139,9 +143,9 @@
                         margin: 0;
                         border: 0;
                         min-height: unset;
-
+                        flex: 1;
                         &:hover {
-                            background-color: transparent;
+                            background-color: $color-grey-2;
                         }
                     }
                 }

@@ -15,6 +15,7 @@ import TextButton from "./../Button/TextButton/TextButton";
 export default function User() {
   const { pathname } = useLocation();
   const { username } = useParams();
+  console.log(username)
   return (
     <div className="two-flex-col-container userpage">
       <div className="col1 user-section">

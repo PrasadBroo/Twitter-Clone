@@ -47,6 +47,11 @@ export const userSlice = createSlice({
             state.signUpFail = action.payload;
             state.signUPStart = false
 
+        },
+        LOGOUT_USER: (state) => {
+            state.currentUser = null;
+            state.token = null
+
         }
 
     },
@@ -62,5 +67,6 @@ export const {
     SIGN_UP_SUCCESS,
     FETCHING_FINISHED,
     FETCHING_STARTED,
+    LOGOUT_USER,
 } = userSlice.actions
 export default userSlice.reducer;
