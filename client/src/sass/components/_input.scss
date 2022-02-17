@@ -50,3 +50,7 @@
 .input-error{
     border-color: rgba(red, 0.5);
 }
+.input-textarea{
+    resize: none;
+    height: unset;
+}

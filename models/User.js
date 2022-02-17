@@ -38,6 +38,55 @@ const UserSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    tweets: {
+        type: Array,
+        default: null
+    },
+    backgroundImage: {
+        type: String,
+        default: null,
+    },
+    description: {
+        type: String,
+        default: null
+    },
+    location: {
+        type: String,
+        default: 'Bangalore'
+    },
+    website: {
+        type: String,
+        default: null,
+    },
+    joindate: {
+        type: Date,
+        default: new Date().getUTCMilliseconds()
+    },
+    following: {
+        type: Array,
+        default: null,
+    },
+    followers: {
+        type: Array,
+        default: null,
+    },
+    likedTweets: {
+        type: Array,
+        default: null,
+    },
+    bookmarks: {
+        type: Array,
+        default: null,
+    },
+    notifications: {
+        type: Array,
+        default: null,
+    },
+    isVerified:{
+        type:Boolean,
+        default:false,
+    }
+
 })
 
 const User = mongoose.model('User', UserSchema);

@@ -5,7 +5,7 @@
     backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 99;
     .search-input-label {
         @include flexCenter;
         background-color: $color-grey-5;

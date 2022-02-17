@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function RootModelHeader({ hideHeader }) {
+export default function RootModelHeader({ hideHeader,navigateTo='/home' }) {
   const navigate = useNavigate();
   const handelModelClose = () => {
-    navigate("/home");
+    navigate(navigateTo);
   };
   return (
     <div className="root-model-header">
@@ -12,12 +12,12 @@ export default function RootModelHeader({ hideHeader }) {
         <i className="fas fa-times"></i>
       </div>
       
-      {!hideHeader &&<>
+
         <div className="root-model-header-icon-container default-logo">
           <i className="fab fa-twitter logo"></i>
         </div>
         <div className="root-model-header-useless-div "></div>
-      </>}
+
     </div>
   );
 }

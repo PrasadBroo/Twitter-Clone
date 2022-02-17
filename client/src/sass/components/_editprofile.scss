@@ -1,0 +1,100 @@
+.edit-profile-model{
+    .root-model{
+        background-color: #fff;
+        padding: 0;
+        overflow-y: scroll;
+    }
+    .edit-profile-header{
+        position: sticky;
+        z-index: 10;
+        top: 0;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        @include flexCenter;
+        .model-close-btn{
+            cursor: pointer;
+            height: 30px;
+            width: 30px;
+            border-radius: 100%;
+            @include flexJustifyCenter;
+            font-size: 1.4rem;
+            &:hover{
+                background-color: $color-grey-2;
+            }
+        }
+        .edit-profile-text-container{
+            margin-left: 1rem;
+            .edit-profile-text{
+                font-weight: 600;
+                font-size: 1.2rem;
+            }
+        }
+        .edit-profile-btn-container{
+            margin-left: auto;
+        }
+    }
+    .pic-bc-container{
+        position: relative;
+        .bc-pic{
+            position: relative;
+            width: 100%;
+            height: 200px;
+            .edit-icon{
+                cursor: pointer;
+                height: 40px;
+                width: 40px;
+                border-radius: 100%;
+                background-color: rgba($color: $color-black-grey, $alpha: 0.5);
+                @include absoluteCenter;
+                @include flexJustifyCenter;
+                color: $color-white;
+                font-size: 1.3rem;
+                transition: background-color 700ms ease-in-out;
+                &:hover{
+                    background-color: transparent;
+                }
+            }
+        }
+        .profile-pic{
+            position: absolute;
+            @include flexJustifyCenter;
+            .edit-icon{
+                cursor: pointer;
+                height: 30px;
+                width: 30px;
+                border-radius: 100%;
+                background-color: rgba($color: $color-black-grey, $alpha: 0.5);
+                position: absolute;
+                @include flexJustifyCenter;
+                color: $color-white;
+                font-size: 1.2rem;
+                transition: background-color 700ms ease-in-out;
+                &:hover{
+                    background-color: transparent;
+                }
+            }
+            top: calc(100% - 55px);
+            left: 20px;
+            width: 110px;
+            height: 110px;
+            border-radius: 100%;
+            img{
+                border-radius: 100%;
+            }
+        }
+        img{
+            @include fullWidthHeightCoverImage;
+        }
+    }
+    .user-details-inputs{
+        padding:0 1rem;
+        margin-top: 4rem;
+        .user-input{
+            border: 1px solid $color-grey-2;
+            color: $color-black;
+            font-size: 1.2rem;
+        }
+    }
+}

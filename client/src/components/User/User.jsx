@@ -4,6 +4,7 @@ import {
   NavLink,
   Outlet,
   useLocation,
+  useNavigate,
   Link,
 } from "react-router-dom";
 import News from "../News/News";
@@ -13,6 +14,7 @@ import UserHeader from "./UserHeader";
 import TextButton from "./../Button/TextButton/TextButton";
 
 export default function User() {
+  const navigate = useNavigate()
   const { pathname } = useLocation();
   const { username } = useParams();
   console.log(username)
@@ -36,7 +38,7 @@ export default function User() {
             />
           </div>
           <div className="profile-options">
-            <TextButton rounded className="edit-profile-btn">
+            <TextButton rounded className="edit-profile-btn" onClick={()=>navigate('edit/profile')}>
               Edit profile
             </TextButton>
           </div>
@@ -100,7 +102,7 @@ export default function User() {
                 className={({ isActive }) =>
                   "user-link " +
                   (isActive ? " active-other-link " : "") +
-                  (pathname === "/profile" ? "active-other-link" : null)
+                  (pathname === '/'+ username ? "active-other-link" : null)
                 }
                 to="tweets"
               >

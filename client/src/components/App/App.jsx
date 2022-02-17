@@ -23,6 +23,7 @@ import Following from "../Followings/Following";
 import Followers from "../Followers/Followers";
 import NotificationsPage from "./../../Pages/NotificationsPage";
 import SettingsPage from "./../../Pages/SettingsPage";
+import EditProfile from "../User/EditProfile";
 
 function App() {
   const state = useSelector((state) => state);
@@ -55,6 +56,7 @@ function App() {
               <Route index element={<UserTweets />} />
               <Route path="tweets" element={<UserTweets />} />
               <Route path="with_replies" element={<h1>Coming Soon</h1>} />
+              <Route path="edit/profile" element={<EditProfile />} />
             </Route>
           </Route>
           <Route path="explore" element={<HomepageLayout />}>
