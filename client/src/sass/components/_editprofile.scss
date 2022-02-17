@@ -60,10 +60,11 @@
         .profile-pic{
             position: absolute;
             @include flexJustifyCenter;
+            border: 4px solid $color-white;
             .edit-icon{
                 cursor: pointer;
-                height: 30px;
-                width: 30px;
+                height: 100%;
+                width: 100%;
                 border-radius: 100%;
                 background-color: rgba($color: $color-black-grey, $alpha: 0.5);
                 position: absolute;

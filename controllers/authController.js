@@ -166,16 +166,9 @@ module.exports.signupUserWithEmail = async(req,res,next)=>{
                 password:hashPass,
                 avatar: 'https://i.ibb.co/LCk6LbN/default-Profile-Pic-7fe14f0a.jpg', 
             }
-            const user = await User.create(userDetails)
-            const userDetailsClient = {
-                email: user.email,
-                fullName: user.name,
-                username: user.username,
-                avatar: user.avatar_url,
-                id: user._id
-            }
+            const user = await User.create(userDetails);
             return res.send({
-                user: userDetailsClient,
+                user,
                 token: jwt.sign({
                     id: user._id
                 }, process.env.JWT_TOKEN_SECRET),
@@ -205,15 +198,8 @@ module.exports.loginWithToken = async(req,res,next)=>{
         const {id} = isValidJwt;
         const userDocument = await User.findById(id);
         if(userDocument){
-            const userDetails = {
-                email: userDocument.email,
-                fullName: userDocument.fullName,
-                username: userDocument.username,
-                avatar: userDocument.avatar,
-                id: userDocument._id
-            }
             return res.send({
-                user: userDetails,
+                user: userDocument,
                 token: token,
             });
         }

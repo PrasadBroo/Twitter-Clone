@@ -1,8 +1,10 @@
 import React from 'react'
+import  classNames  from 'classnames';
 
 export default function Textarea({ className,id,placeholder,focused,rows,...otherProps}) {
+  const inputWrapClassNames =  classNames('input-wrap',{focused})
     return (
-        <div className="input-wrap">
+        <div className={inputWrapClassNames}>
           <textarea
             rows={rows || 10}
             name="user_text"

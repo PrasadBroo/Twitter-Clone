@@ -12,8 +12,12 @@ import Searchbar from "../Searchbar/Searchbar";
 import WhoToFollow from "../WhoToFollow/WhoToFollow";
 import UserHeader from "./UserHeader";
 import TextButton from "./../Button/TextButton/TextButton";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/user/userSelector";
 
 export default function User() {
+  const state = useSelector(state=>state)
+  let user = selectCurrentUser(state);
   const navigate = useNavigate()
   const { pathname } = useLocation();
   const { username } = useParams();
@@ -32,7 +36,7 @@ export default function User() {
         <div className="user-details">
           <div className="profile-pic-container-two">
             <img
-              src="https://via.placeholder.com/130/blue"
+              src={user.avatar}
               alt="profile-pic"
               className="profile-pic"
             />
@@ -45,12 +49,12 @@ export default function User() {
           <div className="user-other-details">
             <div className="user-fullname-container container">
               <span className="user-fullname">
-                Prasad Shinde{" "}
+                {user.fullName}{" "}
                 <span className="verfied-icon">
                   <i className="fas fa-badge-check"></i>
                 </span>{" "}
               </span>
-              <span className="user-username">@Prasadbro</span>
+              <span className="user-username">@{user.username}</span>
             </div>
 
             <div className="user-description-container container">
