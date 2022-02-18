@@ -29,10 +29,11 @@ function App() {
   const state = useSelector((state) => state);
   const is_fetching = selectFetching(state);
   const dispatch = useDispatch();
-
+  const token = localStorage.getItem('token');
   useEffect(() => {
-    dispatch(signInStart());
-  }, [dispatch]);
+    if(token)dispatch(signInStart());
+    
+  }, [dispatch,token]);
 
   return !is_fetching ? (
     <div className="App">

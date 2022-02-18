@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 
@@ -34,21 +33,14 @@ const UserSchema = new Schema({
     avatar: String,
     githubId: Number,
     googleId: Number,
-    confirmed: {
-        type: Boolean,
-        default: false,
-    },
-    tweets: {
-        type: Array,
-        default: null
-    },
     backgroundImage: {
         type: String,
         default: null,
     },
     description: {
         type: String,
-        default: null
+        default: null,
+        maxlength:300,
     },
     location: {
         type: String,
@@ -60,27 +52,7 @@ const UserSchema = new Schema({
     },
     joindate: {
         type: Date,
-        default: new Date().getUTCMilliseconds()
-    },
-    following: {
-        type: Array,
-        default: null,
-    },
-    followers: {
-        type: Array,
-        default: null,
-    },
-    likedTweets: {
-        type: Array,
-        default: null,
-    },
-    bookmarks: {
-        type: Array,
-        default: null,
-    },
-    notifications: {
-        type: Array,
-        default: null,
+        default: new Date()
     },
     isVerified:{
         type:Boolean,

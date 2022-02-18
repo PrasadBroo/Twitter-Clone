@@ -7,7 +7,7 @@ const initialState = {
     signInFail: false,
     signUpFail: false,
     signUPStart: false,
-    fetching: true,
+    fetching: false,
     currentUser: null,
     token: localStorage.getItem('token')
 }
