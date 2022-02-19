@@ -196,7 +196,7 @@ module.exports.loginWithToken = async(req,res,next)=>{
         }
         
         const {id} = isValidJwt;
-        const userDocument = await User.findById(id);
+        const userDocument = await User.findById(id,{password:0,__v:0});
         if(userDocument){
             return res.send({
                 user: userDocument,
@@ -218,7 +218,7 @@ module.exports.loginUserWithEmail = async(req,res,next)=>{
         if(!email || !password){
             throw new Error('Email or password not provided');
         }
-        const userDocument = await User.findOne({email:email});
+        const userDocument = await User.findOne({email:email},{__v:0});
         
         if(!userDocument){
             throw new Error('User not exist with that email')
@@ -250,4 +250,29 @@ module.exports.loginUserWithEmail = async(req,res,next)=>{
     }
     
 
+}
+module.exports.requireAuth = async(req,res,next)=>{
+    const { authorization:token } = req.headers;
+    try {
+        if(!token){
+            return  res.status(401).send({error:'Please provide token'})
+          }
+          try {
+              var isValidJwt = jwt.verify(token,process.env.JWT_TOKEN_SECRET);
+          
+          } catch (error) {
+              return res.status(401).send({error:'Invalid token provided'})
+          }
+          const {id} = isValidJwt;
+        const userDocument = await User.findById(id);
+        if(userDocument){
+            res.locals.user = userDocument;
+            return next()
+        }
+        else{
+            res.status(404).send({error:"User doesn't exist"})
+        }
+    } catch (error) {
+        
+    }
 }

@@ -21,14 +21,13 @@ export default function User() {
   const navigate = useNavigate()
   const { pathname } = useLocation();
   const { username } = useParams();
-  console.log(username)
   return (
     <div className="two-flex-col-container userpage">
       <div className="col1 user-section">
         <UserHeader />
         <div className="bc-image-container">
           <img
-            src="https://via.placeholder.com/700"
+            src={user.backgroundImage ?user.backgroundImage : "https://via.placeholder.com/700"}
             alt="bc-pic"
             className="bc-image"
           />
@@ -59,9 +58,7 @@ export default function User() {
 
             <div className="user-description-container container">
               <span className="user-description">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo
-                quas numquam modi nihil aspernatur officia dolore laudantium
-                molestias magni, provident
+                {user.bio}
               </span>
             </div>
             <div className="user-sitelink-joindate-container container">
@@ -69,19 +66,19 @@ export default function User() {
                 <span className="icon-container location-icon">
                   <i className="far fa-map-marker-alt"></i>
                 </span>
-                <span className="location-text">Bangalore</span>
+                <span className="location-text">{user.location}</span>
               </div>
               <div className="sitelink-container ">
                 <span className="icon-container link-icon">
                   <i className="fas fa-link"></i>
                 </span>
                 <a
-                  href="http://any.com"
+                  href={user.website}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="default-link"
                 >
-                  any.com
+                  {user.website}
                 </a>
               </div>
               <div className="joindate-container">

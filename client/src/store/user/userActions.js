@@ -3,7 +3,8 @@ import {
     githubAuthentication,
     signupWithEmail,
     signInUserWithToken,
-    loginWithEmail
+    loginWithEmail,
+    updateUserProfile
 } from "../../services/authenticationServices"
 import {
     verifyEmail,
@@ -95,4 +96,13 @@ export const signInStart = () => async (dispatch) => {
 export const logout = ()=> dispatch =>{
     localStorage.removeItem('token')
     dispatch(LOGOUT_USER())
+}
+export const updateProfile = (bcPic,profilePic,fullName,bio,website,location) => async (dispatch) => {
+    try {
+        // dispatch(FETCHING_STARTED())
+        const response = await updateUserProfile(bcPic,profilePic,fullName,bio,website,location);
+        console.log(response)
+    } catch (error) {
+        console.log(error)
+    }
 }
