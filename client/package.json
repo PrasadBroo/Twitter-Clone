@@ -11,6 +11,7 @@
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
     "cogo-toast": "^4.2.3",
+    "moment": "^2.29.1",
     "query-string": "^7.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

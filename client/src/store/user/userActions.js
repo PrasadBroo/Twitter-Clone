@@ -4,8 +4,8 @@ import {
     signupWithEmail,
     signInUserWithToken,
     loginWithEmail,
-    updateUserProfile
 } from "../../services/authenticationServices"
+import { updateUserProfile } from "../../services/userServices";
 import {
     verifyEmail,
     verifyName,

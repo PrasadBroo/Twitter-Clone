@@ -94,24 +94,3 @@ export const loginWithEmail = async (email, password) => {
     }
 
 }
-export const updateUserProfile = async (bcPic, profilePic, fullName, bio, website, location) => {
-    try {
-        const response = await axios.put('/api/user/update/profile', {
-            bcPic,
-            profilePic,
-            fullName,
-            bio,
-            website,
-            location
-        }, {
-
-            headers: {
-                authorization: localStorage.getItem('token'),
-            },
-
-        });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response.data.error)
-    }
-}

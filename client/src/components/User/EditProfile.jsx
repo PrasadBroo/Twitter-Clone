@@ -55,7 +55,7 @@ export default function EditProfile() {
     <RootModel hideHeader className="edit-profile-model">
       <form method="post" id="profileEditForm" onSubmit={handelFormSubmit}>
         <div className="edit-profile-header">
-          <div className="model-close-btn" onClick={() => navigate("/any")}>
+          <div className="model-close-btn" onClick={() => navigate(-1)}>
             <i className="far fa-times"></i>
           </div>
           <div className="edit-profile-text-container">

@@ -13,7 +13,7 @@ export default function FollowUser() {
         />
       </div>
       <div className="profile-details">
-        <Link to="/profile" className="user-fullname">
+        <Link to="/pawan" className="user-fullname">
           Prasad Shinde
         </Link>
         <span className="user-username">@Prasadbro</span>

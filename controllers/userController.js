@@ -6,7 +6,8 @@ const {
     verifyName,
     verifyLocation,
     verifyBio,
-    verifyWebsite
+    verifyWebsite,
+    verifyUsername
 } = require("../utils/validations");
 
 
@@ -56,6 +57,23 @@ module.exports.updateProfile = async (req, res, next) => {
         })
 
         return res.send('success')
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports.fethUser = async(req,res,next)=>{
+    const {username} = req.body;
+    try {
+        try {
+            verifyUsername(username)
+        } catch (error) {
+            return res.status(500).send({error:'Invalid username provided'})
+        }
+        const user = await User.findOne({username},{password:0,__v:0,email:0})
+        if(!user){
+            return res.status(404).send({error:'Username does not exist'})
+        }
+        return res.status(200).send(user)
     } catch (error) {
         next(error)
     }
