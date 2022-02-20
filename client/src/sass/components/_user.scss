@@ -2,8 +2,8 @@
     background-color: #fff;
 
     .user-section {
-        height: 100%;
-        height: auto;
+        align-self: stretch;
+        position: relative;
 
         .bc-image-container {
             width: 100%;

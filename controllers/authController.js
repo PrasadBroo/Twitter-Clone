@@ -5,7 +5,7 @@ const {
 } = require("../services/googleAuthService");
 const bcrypt = require('bcrypt');
 
-const User = require('../models/User')
+const UserModel = require('../models/User')
 const jwt = require('jsonwebtoken');
 const {
     getGithubAccessTokenFromCode,
@@ -32,7 +32,7 @@ module.exports.googleLoginAuthentication = async (req, res, next) => {
         }
         const userAccessToken = await getGoogleAccessTokenFromCode(code)
         const userinfo = await getGoogleUserInfo(userAccessToken);
-        const userDocument = await User.findOne({$or: [ { googleId:userinfo.id }, { email:userinfo.email } ]});
+        const userDocument = await UserModel.findOne({$or: [ { googleId:userinfo.id }, { email:userinfo.email } ]});
         if (userDocument) {
             const userDetails = {
                 email: userinfo.email,
@@ -58,7 +58,7 @@ module.exports.googleLoginAuthentication = async (req, res, next) => {
                 googleId: userinfo.id
             }
 
-            const createNewUser = await User.create(userDetails)
+            const createNewUser = await UserModel.create(userDetails)
             // now send jwt
             const userDetailsClient = {
                 email: userinfo.email,
@@ -93,7 +93,7 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
         }
         const userAccessToken = await getGithubAccessTokenFromCode(code)
         const userinfo = await getGithubUserInfo(userAccessToken);
-        const userDocument = await User.findOne({
+        const userDocument = await UserModel.findOne({
             githubId: userinfo.id
         });
         if (userDocument) {
@@ -121,7 +121,7 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
                 githubId: userinfo.id
             }
 
-            const createNewUser = await User.create(userDetails)
+            const createNewUser = await UserModel.create(userDetails)
             // now send jwt
             const userDetailsClient = {
                 email: userinfo.email,
@@ -150,7 +150,7 @@ module.exports.signupUserWithEmail = async(req,res,next)=>{
     // validate details
     try {
         verifyAll(name,email,username,password,confPassword);
-        const userDocument = await User.findOne({$or: [ { email }, { username } ]});
+        const userDocument = await UserModel.findOne({$or: [ { email }, { username } ]});
         
         if(userDocument){
             const whichOne = userDocument.email === email ? 'email' : 'username'
@@ -166,7 +166,7 @@ module.exports.signupUserWithEmail = async(req,res,next)=>{
                 password:hashPass,
                 avatar: 'https://i.ibb.co/LCk6LbN/default-Profile-Pic-7fe14f0a.jpg', 
             }
-            const user = await User.create(userDetails);
+            const user = await UserModel.create(userDetails);
             return res.send({
                 user,
                 token: jwt.sign({
@@ -196,7 +196,7 @@ module.exports.loginWithToken = async(req,res,next)=>{
         }
         
         const {id} = isValidJwt;
-        const userDocument = await User.findById(id,{password:0,__v:0});
+        const userDocument = await UserModel.findById(id,{password:0,__v:0});
         if(userDocument){
             return res.send({
                 user: userDocument,
@@ -218,7 +218,7 @@ module.exports.loginUserWithEmail = async(req,res,next)=>{
         if(!email || !password){
             throw new Error('Email or password not provided');
         }
-        const userDocument = await User.findOne({email:email},{__v:0});
+        const userDocument = await UserModel.findOne({email:email},{__v:0});
         
         if(!userDocument){
             throw new Error('User not exist with that email')
@@ -264,7 +264,7 @@ module.exports.requireAuth = async(req,res,next)=>{
               return res.status(401).send({error:'Invalid token provided'})
           }
           const {id} = isValidJwt;
-        const userDocument = await User.findById(id);
+        const userDocument = await UserModel.findById(id);
         if(userDocument){
             res.locals.user = userDocument;
             return next()

@@ -39,3 +39,15 @@ export const fetchUserProfile = async (username) => {
         throw new Error(error.response.data.error)
     }
 }
+export const followUser = async (userId) => {
+    try {
+      const response = await axios.post(`/api/user/${userId}/follow`, null, {
+        headers: {
+            authorization: localStorage.getItem('token'),
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.error);
+    }
+  };

@@ -12,7 +12,9 @@ import {
     verifyPassword,
     verifyUsername
 } from "../../utils/validations";
+import { followUser } from './../../services/userServices';
 import {
+
     SIGN_IN_SUCCESS,
     SIGN_IN_FAIL,
     SIGN_IN_START,
@@ -99,8 +101,18 @@ export const logout = ()=> dispatch =>{
 }
 export const updateProfile = (bcPic,profilePic,fullName,bio,website,location) => async (dispatch) => {
     try {
-        // dispatch(FETCHING_STARTED())
+        // dispatch update profile start
         const response = await updateUserProfile(bcPic,profilePic,fullName,bio,website,location);
+        // dispatch update profile success
+    } catch (error) {
+        console.log(error)
+        // dispatch update profile fail
+    }
+}
+
+export const followTheUser = (userid)=>async(dispatch)=>{
+    try {
+        const response = await followUser(userid);
         console.log(response)
     } catch (error) {
         console.log(error)

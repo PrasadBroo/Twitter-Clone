@@ -21,6 +21,9 @@ import {
   selectGuestFetching,
 } from "./../../store/guest/guestSelector";
 import SimpleSpinner from "../Loader/SimpleSpinner";
+import { followTheUser } from "../../store/user/userActions";
+
+
 
 export default function User() {
   const dispatch = useDispatch();
@@ -78,7 +81,7 @@ export default function User() {
                   <TextButton
                     rounded
                     className="edit-profile-btn"
-                    onClick={() => navigate("edit/profile")}
+                    onClick={() => dispatch(followTheUser(guestUser._id))}
                   >
                     Follow
                   </TextButton>
