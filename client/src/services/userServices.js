@@ -51,3 +51,16 @@ export const followUser = async (userId) => {
       throw new Error(error.response.data.error);
     }
   };
+
+  export const getUserFollowers = async (userId) => {
+    try {
+      const response = await axios.post(`/api/user/${userId}/followers`, null, {
+        headers: {
+            authorization: localStorage.getItem('token'),
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.error);
+    }
+  };

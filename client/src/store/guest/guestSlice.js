@@ -6,6 +6,12 @@ const initialState = {
     fetching: true,
     guestUser: null,
     fetchingError:null,
+    followers:[],
+    followings:[],
+    fetchingFollowers:null,
+    fetchingFollowings:null,
+    fetchingFollowingsError:null,
+    fetchingFollowersError:null,
 }
 
 
@@ -26,6 +32,17 @@ export const guestSlice = createSlice({
         FETCHING_GUEST_FAIL:(state,action)=>{
             state.fetchingError = action.payload;
             state.fetching = false;
+        },
+        FETCHING_FOLLOWERS_START:(state)=>{
+            state.fetchingFollowers = true;
+        },
+        FETCHING_FOLLOWERS_SUCCESS:(state,action)=>{
+            state.followers = action.payload;
+            state.fetchingFollowers = false;
+        },
+        FETCHING_FOLLOWERS_FAIL:(state,action)=>{
+            state.fetchingFollowersError = action.payload;
+            state.fetchingFollowers = false;
         }
 
     },
@@ -37,5 +54,9 @@ export const {
     FETCHING_GUEST_FAIL,
     FETCHING_FINISHED,
     FETCHING_STARTED,
+    FETCHING_FOLLOWERS_FAIL,
+    FETCHING_FOLLOWERS_SUCCESS,
+    FETCHING_FOLLOWERS_START,
+    
 } = guestSlice.actions
 export default guestSlice.reducer;
