@@ -77,14 +77,21 @@ export default function User() {
                   >
                     Edit profile
                   </TextButton>
-                ) : (
-                  <TextButton
+                ) :  ( !guestUser.isFollowing ?
+                  (<TextButton
                     rounded
                     className="edit-profile-btn"
                     onClick={() => dispatch(followTheUser(guestUser._id))}
                   >
                     Follow
-                  </TextButton>
+                  </TextButton>) :
+                  (<TextButton
+                    rounded
+                    className="edit-profile-btn"
+                    onClick={() => null}
+                  >
+                    Following
+                  </TextButton>)
                 )}
               </div>
               <div className="user-other-details">

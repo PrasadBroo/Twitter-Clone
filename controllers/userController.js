@@ -68,6 +68,7 @@ module.exports.fethUser = async (req, res, next) => {
     const {
         username
     } = req.body;
+    const currentUser = res.locals.user;
     try {
         try {
             verifyUsername(username)
@@ -82,7 +83,9 @@ module.exports.fethUser = async (req, res, next) => {
             password: 0,
             __v: 0,
             email: 0
-        })
+        }).lean()
+        const isCurrentUserFollowing = await Followers.findOne({user:user._id,'followers.user':{$in:[currentUser._id]}},{user:1})
+        user.isFollowing = Boolean(isCurrentUserFollowing);
         if (!user) {
             return res.status(404).send({
                 error: 'Username does not exist'
@@ -159,6 +162,9 @@ module.exports.followUser = async (req, res, next) => {
             });
 
         }
+        else{
+            return res.status(200).send({error:'You are already following this user'})
+        }
 
 
         return res.status(200).send('success')
@@ -177,38 +183,52 @@ module.exports.getFollowers = async (req, res, next) => {
                 error: 'Please provide userid'
             })
         }
-        const user = await Followers.aggregate([{
-                $match: {
-                    user: Mongoose.Types.ObjectId(userid)
-                },
+        const pipeline = [{
+            $match: {
+                user: Mongoose.Types.ObjectId(userid)
             },
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'followers.user',
-                    foreignField: '_id',
-                    as: 'users'
-                }
-            }, {
-                $lookup: {
-                    from: 'followers',
-                    localField: 'users._id',
-                    foreignField: 'user',
-                    as: 'userFollowers',
-                },
-
+        },
+        {
+            $lookup: {
+                from: 'users',
+                let: { userId: '$followers.user' },
+                pipeline:[
+                    {
+                        $match: {
+                          // Using the $in operator instead of the $eq
+                          // operator because we can't coerce the types
+                          $expr: { $in: ['$_id', '$$userId'] },
+                        },
+                      },
+                    {$limit:2}
+                ],
+                as: 'users',
+            }
+        }, {
+            $lookup: {
+                from: 'followers',
+                localField: 'users._id',
+                foreignField: 'user',
+                as: 'userFollowers',
             },
-            {
-                $project: {
-                  'users._id': 1,
-                  'users.username': 1,
-                  'users.avatar': 1,
-                  'users.fullName': 1,
-                  userFollowers: 1,
-                },
-              },
-        ])
 
+        },{
+            $addFields :{count:{$size:'$followers'}}
+        },
+        {
+            $project: {
+              'users._id': 1,
+              'users.username': 1,
+              'users.avatar': 1,
+              'users.fullName': 1,
+              userFollowers: 1,
+              count:1,
+            },
+          },
+    ]
+        const user = await Followers.aggregate(pipeline)
+
+        //check if user followers exist 
         // check if current user following any user
         const isUserFollowedAnyOneUser = []
         user[0].userFollowers.forEach(user => {
@@ -225,8 +245,8 @@ module.exports.getFollowers = async (req, res, next) => {
                 user.isFollowing = false;
             }
         })
-
-        return res.status(200).send(user)
+        const result = {count:user[0].count,users:user[0].users}
+        return res.status(200).send(result)
     } catch (error) {
         next(error)
     }
