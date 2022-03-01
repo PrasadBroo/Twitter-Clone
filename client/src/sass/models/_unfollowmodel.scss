@@ -1,0 +1,38 @@
+.unfollow-model {
+
+    color: $color-white;
+
+
+    .root-model {
+        background-color: $color-black;
+        max-width: 320px;
+    }
+
+    .unfollow-model-wrap {
+        .unfollow-model-heading {
+            padding-bottom: 1rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+
+            .unfollow-heading-text {
+                font-size: 1.2rem;
+                color: $color-grey-6;
+            }
+        }
+
+        .unfollow-text-wrap {
+            margin-bottom: 0.7rem;
+
+            .unfollow-text {
+                color: $color-grey-1;
+            }
+        }
+
+        .unfollow-btns-wrap {
+            .unfollowbtn {
+                margin-bottom: 0.5rem;
+            }
+        }
+    }
+
+}

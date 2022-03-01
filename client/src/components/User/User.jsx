@@ -22,6 +22,7 @@ import {
 } from "./../../store/guest/guestSelector";
 import SimpleSpinner from "../Loader/SimpleSpinner";
 import { followTheUser } from "../../store/user/userActions";
+import { SHOW_UNFOLLOW_MODEL } from "../../store/model/modelSlice";
 
 
 
@@ -88,13 +89,13 @@ export default function User() {
                   (<TextButton
                     rounded
                     className="edit-profile-btn"
-                    onClick={() => null}
+                    onClick={() => dispatch(SHOW_UNFOLLOW_MODEL(currentUser))}
                   >
                     Following
                   </TextButton>)
                 )}
               </div>
-              <div className="user-other-details">
+              <div className="user-other-details" >
                 <div className="user-fullname-container container">
                   <span className="user-fullname">
                     {guestUser.fullName}{" "}

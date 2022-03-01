@@ -84,6 +84,9 @@ module.exports.fethUser = async (req, res, next) => {
             __v: 0,
             email: 0
         }).lean()
+        if(!user){
+            return res.status(500).send({error:'User does not exist'})
+        }
         const isCurrentUserFollowing = await Followers.findOne({user:user._id,'followers.user':{$in:[currentUser._id]}},{user:1})
         user.isFollowing = Boolean(isCurrentUserFollowing);
         if (!user) {

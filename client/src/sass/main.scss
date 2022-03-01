@@ -13,7 +13,7 @@
 @import './components/textbutton';
 @import './components/footer';
 @import './components/signup';
-@import './models/rootmodel';
+
 @import './components/input';
 @import './components/inputform';
 @import './components/simplespinner';
@@ -40,3 +40,7 @@
 @import './pages/followpage';
 @import './pages/homepage';
 @import './pages/settingspage';
+
+
+@import './models/rootmodel';
+@import './models/unfollowmodel';
