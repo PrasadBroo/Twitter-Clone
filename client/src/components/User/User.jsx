@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useParams,
   NavLink,
@@ -35,6 +35,7 @@ export default function User() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { username } = useParams();
+  const [followingText,setFollowingText] = useState('Following')
   useEffect(() => {
     const retriveUser = (username) => {
       dispatch(fetchUser(username));
@@ -88,10 +89,12 @@ export default function User() {
                   </TextButton>) :
                   (<TextButton
                     rounded
-                    className="edit-profile-btn"
-                    onClick={() => dispatch(SHOW_UNFOLLOW_MODEL(currentUser))}
+                    onMouseEnter={()=>setFollowingText('Unfollow')}
+                    onMouseLeave={()=>setFollowingText('Following')}
+                    className="edit-profile-btn following-btn"
+                    onClick={() => dispatch(SHOW_UNFOLLOW_MODEL({username:guestUser.username,_id:guestUser._id}))}
                   >
-                    Following
+                    {followingText}
                   </TextButton>)
                 )}
               </div>
@@ -99,7 +102,7 @@ export default function User() {
                 <div className="user-fullname-container container">
                   <span className="user-fullname">
                     {guestUser.fullName}{" "}
-                    <span className="verfied-icon">
+                    <span className="verfied-icon" >
                       <i className="fas fa-badge-check"></i>
                     </span>{" "}
                   </span>

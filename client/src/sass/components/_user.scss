@@ -54,6 +54,12 @@
                         background-color: $color-grey-2;
                     }
                 }
+                .following-btn{
+                    &:hover{
+                        background-color: rgba($color: $color-red, $alpha: 0.1);
+                        color: red;
+                    }
+                }
             }
 
             .user-other-details {

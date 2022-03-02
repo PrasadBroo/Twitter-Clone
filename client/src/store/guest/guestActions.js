@@ -1,5 +1,5 @@
 import {
-    fetchUserProfile, getUserFollowers
+    fetchUserProfile, getUserFollowers,getUserFollowings
 } from "../../services/userServices"
 import {
     FETCHING_GUEST_SUCCESS,
@@ -9,6 +9,9 @@ import {
     FETCHING_FOLLOWERS_FAIL,
     FETCHING_FOLLOWERS_SUCCESS,
     FETCHING_FOLLOWERS_START,
+    FETCHING_FOLLOWINGS_FAIL,
+    FETCHING_FOLLOWINGS_START,
+    FETCHING_FOLLOWINGS_SUCCESS,
 } from "./guestSlice"
 
 
@@ -34,5 +37,16 @@ export const getFollowers = (userid) => async (dispatch) => {
     } catch (error) {
         console.log(error)
         dispatch(FETCHING_FOLLOWERS_FAIL(error.message))
+    }
+}
+export const getFollowings = (userid) => async (dispatch) => {
+    try {
+        dispatch(FETCHING_FOLLOWINGS_START())
+        const followings = await getUserFollowings(userid);
+        console.log(followings)
+        dispatch(FETCHING_FOLLOWINGS_SUCCESS(followings))
+    } catch (error) {
+        console.log(error)
+        dispatch(FETCHING_FOLLOWINGS_FAIL(error.message))
     }
 }

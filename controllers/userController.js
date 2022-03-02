@@ -254,3 +254,82 @@ module.exports.getFollowers = async (req, res, next) => {
         next(error)
     }
 }
+
+
+module.exports.getFollowings = async (req, res, next) => {
+    const userid = req.params.userid;
+    const currentUser = res.locals.user;
+    try {
+        if (!userid) {
+            return res.status(400).send({
+                error: 'Please provide userid'
+            })
+        }
+        const pipeline = [{
+            $match: {
+                user: Mongoose.Types.ObjectId(userid)
+            },
+        },
+        {
+            $lookup: {
+                from: 'users',
+                let: { userId: '$followings.user' },
+                pipeline:[
+                    {
+                        $match: {
+                          // Using the $in operator instead of the $eq
+                          // operator because we can't coerce the types
+                          $expr: { $in: ['$_id', '$$userId'] },
+                        },
+                      },
+                    {$limit:2}
+                ],
+                as: 'users',
+            }
+        }, {
+            $lookup: {
+                from: 'followers',
+                localField: 'users._id',
+                foreignField: 'user',
+                as: 'userFollowers',
+            },
+
+        },{
+            $addFields :{count:{$size:'$followings'}}
+        },
+        {
+            $project: {
+              'users._id': 1,
+              'users.username': 1,
+              'users.avatar': 1,
+              'users.fullName': 1,
+              userFollowers: 1,
+              count:1,
+            },
+          },
+    ]
+        const user = await Followings.aggregate(pipeline)
+        //check if user followers exist 
+        // check if current user following any user
+        // handel deafualt case in pipeline and handel errors
+        const isUserFollowedAnyOneUser = []
+        user[0].userFollowers.forEach(user => {
+            const isFollowed = user.followers.find(e => e.user.equals(currentUser._id)).user.toString();
+            if(isFollowed)isUserFollowedAnyOneUser.push(user.user.toString())
+        })
+        // now add isFollowing property
+        user[0].users.forEach(user =>{
+            if( isUserFollowedAnyOneUser.includes(user._id.toString())){
+                user.isFollowing = true;
+            }
+            else{
+                user.isFollowing = false;
+            }
+        })
+
+        const result = {count:user[0].count,users:user[0].users}
+        return res.status(200).send(result)
+    } catch (error) {
+        next(error)
+    }
+}
