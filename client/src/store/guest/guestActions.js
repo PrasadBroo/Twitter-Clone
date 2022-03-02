@@ -32,10 +32,8 @@ export const getFollowers = (userid) => async (dispatch) => {
     try {
         dispatch(FETCHING_FOLLOWERS_START())
         const followers = await getUserFollowers(userid);
-        console.log(followers)
         dispatch(FETCHING_FOLLOWERS_SUCCESS(followers))
     } catch (error) {
-        console.log(error)
         dispatch(FETCHING_FOLLOWERS_FAIL(error.message))
     }
 }
@@ -43,10 +41,8 @@ export const getFollowings = (userid) => async (dispatch) => {
     try {
         dispatch(FETCHING_FOLLOWINGS_START())
         const followings = await getUserFollowings(userid);
-        console.log(followings)
         dispatch(FETCHING_FOLLOWINGS_SUCCESS(followings))
     } catch (error) {
-        console.log(error)
         dispatch(FETCHING_FOLLOWINGS_FAIL(error.message))
     }
 }

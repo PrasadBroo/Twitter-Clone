@@ -6,9 +6,9 @@ export default function WhoToFollow() {
     <div className="who-to-follow-heading-container">
       <h2>Who to follow</h2>
     </div>
+    <FollowUser user={{username:'pawan',fullName:'Yoyoyyo'}}/>
+    {/* <FollowUser/>
     <FollowUser/>
-    <FollowUser/>
-    <FollowUser/>
-    <FollowUser/>
+    <FollowUser/> */}
   </div>;
 }

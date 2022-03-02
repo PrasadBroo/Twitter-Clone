@@ -8,8 +8,8 @@ const initialState = {
     fetchingError:null,
     followers:[],
     followings:[],
-    fetchingFollowers:null,
-    fetchingFollowings:null,
+    fetchingFollowers:true,
+    fetchingFollowings:true,
     fetchingFollowingsError:null,
     fetchingFollowersError:null,
 }

@@ -45,5 +45,13 @@
             padding: 0.5rem 1.5rem;
             font-size: 0.8rem;
         }
+        .unfollowBtn{
+            background-color: transparent;
+            color: $color-black;
+            &:hover{
+                background-color: rgba($color: $color-red, $alpha: 0.2);
+                color: red;
+            }
+        }
     }
 }
