@@ -147,10 +147,10 @@ export default function User() {
                 </div>
                 <div className="user-follow-container container">
                   <Link to="following" className="followings-info ">
-                    <b>3</b> Following
+                    <b>{guestUser.followingsCount}</b> Following
                   </Link>
                   <Link to="followers" className="followings-info ">
-                    <b>3,487</b> Followers
+                    <b>{guestUser.followersCount}</b> Followers
                   </Link>
                 </div>
               </div>

@@ -84,17 +84,58 @@ module.exports.fethUser = async (req, res, next) => {
             __v: 0,
             email: 0
         }).lean()
+        
         if(!user){
             return res.status(500).send({error:'User does not exist'})
         }
+        const pipeline = [
+            {
+                $match:{_id:Mongoose.Types.ObjectId(user._id)}
+            },
+            {
+                $lookup:{
+                    from:'followers',
+                    localField:'_id',
+                    foreignField:'user',
+                    as:'userFollowers'
+                }
+            },
+            {
+                $lookup:{
+                    from:'followings',
+                    localField:'_id',
+                    foreignField:'user',
+                    as:'userFollowings'
+                }
+            },{
+                $unwind:'$userFollowings'
+            },
+            {
+                $unwind:'$userFollowers'
+            },
+            {
+                $addFields:{
+                    followersCount:{$size:'$userFollowers.followers'},
+                    followingsCount:{$size:'$userFollowings.followings'}
+                }
+            },
+            {
+                $project:{
+                    'password':0,
+                    '__v':0,
+
+                }
+            }
+        ]
+        const userDocument = await UserModel.aggregate(pipeline);
         const isCurrentUserFollowing = await Followers.findOne({user:user._id,'followers.user':{$in:[currentUser._id]}},{user:1})
-        user.isFollowing = Boolean(isCurrentUserFollowing);
+        userDocument[0].isFollowing = Boolean(isCurrentUserFollowing);
         if (!user) {
             return res.status(404).send({
                 error: 'Username does not exist'
             })
         }
-        return res.status(200).send(user)
+        return res.status(200).send(userDocument[0])
     } catch (error) {
         next(error)
     }
@@ -142,7 +183,7 @@ module.exports.followUser = async (req, res, next) => {
                     $in: [useridToFollow]
                 }
             }).count()
-            console.log(isfollowingUser)
+
             if (isfollowingUser) {
                 return res.status(500).send({
                     error: 'You are already following the user somehow!'
@@ -203,7 +244,7 @@ module.exports.getFollowers = async (req, res, next) => {
                           $expr: { $in: ['$_id', '$$userId'] },
                         },
                       },
-                    {$limit:2}
+                    {$limit:5}
                 ],
                 as: 'users',
             }
@@ -282,7 +323,7 @@ module.exports.getFollowings = async (req, res, next) => {
                           $expr: { $in: ['$_id', '$$userId'] },
                         },
                       },
-                    {$limit:2}
+                    {$limit:5}
                 ],
                 as: 'users',
             }

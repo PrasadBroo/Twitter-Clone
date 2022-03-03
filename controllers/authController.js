@@ -4,7 +4,7 @@ const {
     getGoogleUserInfo,
 } = require("../services/googleAuthService");
 const bcrypt = require('bcrypt');
-
+const Mongoose = require("mongoose");
 const UserModel = require('../models/User')
 const jwt = require('jsonwebtoken');
 const {
@@ -12,6 +12,8 @@ const {
     getGithubUserInfo
 } = require('../services/githubAuthServices');
 const { verifyAll } = require('../utils/validations');
+const Followers =  require('../models/Followers')
+const Followings =  require('../models/Followings')
 
 
 
@@ -33,13 +35,18 @@ module.exports.googleLoginAuthentication = async (req, res, next) => {
         const userAccessToken = await getGoogleAccessTokenFromCode(code)
         const userinfo = await getGoogleUserInfo(userAccessToken);
         const userDocument = await UserModel.findOne({$or: [ { googleId:userinfo.id }, { email:userinfo.email } ]});
+        
         if (userDocument) {
+            const followersCount = await Followers.findOne({user:userDocument._id},{followers:1}).size()
+            const followingsCount = await Followings.findOne({user:userDocument._id},{followings:1}).size()
             const userDetails = {
                 email: userinfo.email,
                 fullName: userinfo.name,
                 username: 'test',
                 avatar: userinfo.picture,
-                id: userDocument._id
+                id: userDocument._id,
+                followersCount,
+                followingsCount,
             }
             return res.send({
                 user: userDetails,
@@ -97,12 +104,16 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
             githubId: userinfo.id
         });
         if (userDocument) {
+            const followersCount = await Followers.findOne({user:userDocument._id},{followers:1}).size()
+            const followingsCount = await Followings.findOne({user:userDocument._id},{followings:1}).size()
             const userDetails = {
                 email: userinfo.email,
                 fullName: userinfo.name,
                 username: 'test',
                 avatar: userinfo.picture,
-                id: userDocument._id
+                id: userDocument._id,
+                followersCount,
+                followingsCount,
             }
             return res.send({
                 user: userDetails,
@@ -167,8 +178,44 @@ module.exports.signupUserWithEmail = async(req,res,next)=>{
                 avatar: 'https://i.ibb.co/LCk6LbN/default-Profile-Pic-7fe14f0a.jpg', 
             }
             const user = await UserModel.create(userDetails);
+            const pipeline = [
+                {
+                    $match:{_id:Mongoose.Types.ObjectId(user._id)}
+                },
+                {
+                    $lookup:{
+                        from:'followers',
+                        localField:'_id',
+                        foreignField:'user',
+                        as:'userFollowers'
+                    }
+                },
+                {
+                    $lookup:{
+                        from:'followings',
+                        localField:'_id',
+                        foreignField:'user',
+                        as:'userFollowings'
+                    }
+                },
+                {
+                    $addFields:{
+                        followersCount:{$size:'$userFollowers.followers'},
+                        followingsCount:{$size:'$userFollowings.followings'}
+                    }
+                },
+                {
+                    $project:{
+                        'password':0,
+                        '__v':0,
+                        userFollowers:0,
+                        userFollowings:0,
+                    }
+                }
+            ]
+            const myuser = await UserModel.aggregate(pipeline);
             return res.send({
-                user,
+                user:myuser[0],
                 token: jwt.sign({
                     id: user._id
                 }, process.env.JWT_TOKEN_SECRET),
@@ -196,10 +243,45 @@ module.exports.loginWithToken = async(req,res,next)=>{
         }
         
         const {id} = isValidJwt;
-        const userDocument = await UserModel.findById(id,{password:0,__v:0});
-        if(userDocument){
+        const pipeline = [
+            {
+                $match:{_id:Mongoose.Types.ObjectId(id)}
+            },
+            {
+                $lookup:{
+                    from:'followers',
+                    localField:'_id',
+                    foreignField:'user',
+                    as:'userFollowers'
+                }
+            },
+            {
+                $lookup:{
+                    from:'followings',
+                    localField:'_id',
+                    foreignField:'user',
+                    as:'userFollowings'
+                }
+            },
+            {
+                $addFields:{
+                    followersCount:{$size:'$userFollowers.followers'},
+                    followingsCount:{$size:'$userFollowings.followings'}
+                }
+            },
+            {
+                $project:{
+                    'password':0,
+                    '__v':0,
+                    userFollowers:0,
+                    userFollowings:0,
+                }
+            }
+        ]
+        const userDocument = await UserModel.aggregate(pipeline);
+        if(userDocument.length>=1){
             return res.send({
-                user: userDocument,
+                user: userDocument[0],
                 token: token,
             });
         }
@@ -230,16 +312,45 @@ module.exports.loginUserWithEmail = async(req,res,next)=>{
             if(!isValidPass){
                 throw  new Error('Incorrect password provided')
             }
-            
-            const userDetailsClient = {
-                email: userDocument.email,
-                fullName: userDocument.fullName,
-                username: userDocument.username,
-                avatar: userDocument.avatar_url,
-                id: userDocument._id
-            }
+            const pipeline = [
+                {
+                    $match:{_id:Mongoose.Types.ObjectId(userDocument._id)}
+                },
+                {
+                    $lookup:{
+                        from:'followers',
+                        localField:'_id',
+                        foreignField:'user',
+                        as:'userFollowers'
+                    }
+                },
+                {
+                    $lookup:{
+                        from:'followings',
+                        localField:'_id',
+                        foreignField:'user',
+                        as:'userFollowings'
+                    }
+                },
+                {
+                    $addFields:{
+                        followersCount:{$size:'$userFollowers.followers'},
+                        followingsCount:{$size:'$userFollowings.followings'}
+                    }
+                },
+                {
+                    $project:{
+                        'password':0,
+                        '__v':0,
+                        userFollowers:0,
+                        userFollowings:0,
+                    }
+                }
+            ]
+            const user = await UserModel.aggregate(pipeline);
+
             return res.send({
-                user: userDetailsClient,
+                user: user[0],
                 token: jwt.sign({
                     id: userDocument._id
                 }, process.env.JWT_TOKEN_SECRET),
