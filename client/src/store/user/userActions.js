@@ -10,9 +10,11 @@ import {
     verifyEmail,
     verifyName,
     verifyPassword,
-    verifyUsername
+    verifyUsername,
 } from "../../utils/validations";
-import { followUser } from './../../services/userServices';
+import { UNFOLLOWED_FROM_FOLLOWERS } from "../guest/guestSlice";
+import { HIDE_UNFOLLOW_MODEL } from "../model/modelSlice";
+import { followUser,unfollowUser } from './../../services/userServices';
 import {
 
     SIGN_IN_SUCCESS,
@@ -24,6 +26,9 @@ import {
     FETCHING_FINISHED,
     LOGOUT_USER,
     FETCHING_STARTED,
+    UPDATING_PROFILE_FINISHED,
+    UPDATING_PROFILE_STARTED,
+    UPDATING_PROFILE_ERROR,
 } from "./userSlice";
 
 
@@ -102,11 +107,13 @@ export const logout = ()=> dispatch =>{
 export const updateProfile = (bcPic,profilePic,fullName,bio,website,location) => async (dispatch) => {
     try {
         // dispatch update profile start
-        const response = await updateUserProfile(bcPic,profilePic,fullName,bio,website,location);
+        dispatch(UPDATING_PROFILE_STARTED())
+        await updateUserProfile(bcPic,profilePic,fullName,bio,website,location);
         // dispatch update profile success
+        dispatch(UPDATING_PROFILE_FINISHED())
     } catch (error) {
-        console.log(error)
-        // dispatch update profile fail
+        dispatch(UPDATING_PROFILE_ERROR(error.message))
+        dispatch(UPDATING_PROFILE_FINISHED())
     }
 }
 
@@ -114,6 +121,16 @@ export const followTheUser = (userid)=>async(dispatch)=>{
     try {
         const response = await followUser(userid);
         console.log(response)
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const unfollowTheUser = (userid)=>async(dispatch)=>{
+    try {
+         await unfollowUser(userid);
+        //  dispatch update followers/following 
+        dispatch(UNFOLLOWED_FROM_FOLLOWERS(userid))
+        dispatch(HIDE_UNFOLLOW_MODEL())
     } catch (error) {
         console.log(error)
     }

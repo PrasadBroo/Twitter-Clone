@@ -3,23 +3,24 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateProfile } from "../../store/user/userActions";
-import { selectCurrentUser } from "../../store/user/userSelector";
+import { selectCurrentUser, selectUpdatingProfile } from "../../store/user/userSelector";
 import TextButton from "../Button/TextButton/TextButton";
 import Input from "../Input/Input";
 import Textarea from "../Input/Textarea";
+import SimpleSpinner from "../Loader/SimpleSpinner";
 import RootModel from "./../../models/RootModel/RootModel";
 
 export default function EditProfile() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   let user = selectCurrentUser(state);
+  const updatingProfile = selectUpdatingProfile(state)
   const [fullName, setFullName] = useState(user.fullName ?? "");
   const [website, setWebsite] = useState(user.website ?? "");
   const [bio, setBio] = useState(user.bio ?? "");
   const [location, setLocation] = useState(user.location ?? "");
   const [bcPic, setBcPic] = useState(user.backgroundImage);
   const [profilePic, setProfilePic] = useState(user.avatar);
-
   const navigate = useNavigate();
   const handelProfilePicChange = (e) => {
     try {
@@ -54,6 +55,7 @@ export default function EditProfile() {
   return (
     <RootModel hideHeader className="edit-profile-model">
       <form method="post" id="profileEditForm" onSubmit={handelFormSubmit}>
+      {updatingProfile && <SimpleSpinner/>}
         <div className="edit-profile-header">
           <div className="model-close-btn" onClick={() => navigate(-1)}>
             <i className="far fa-times"></i>

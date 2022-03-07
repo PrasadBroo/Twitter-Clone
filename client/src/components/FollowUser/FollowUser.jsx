@@ -2,10 +2,11 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { SHOW_UNFOLLOW_MODEL } from "../../store/model/modelSlice";
 import { selectCurrentUser } from "../../store/user/userSelector";
 import TextButton from "../Button/TextButton/TextButton";
 
-export default function FollowUser({ user }) {
+export default function FollowUser({ user,type }) {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const currentUser = selectCurrentUser(state);
@@ -32,6 +33,7 @@ export default function FollowUser({ user }) {
             cBlue
             onMouseEnter={() => setFollowingText("Unfollow")}
             onMouseLeave={() => setFollowingText("Following")}
+            onClick={() => dispatch(SHOW_UNFOLLOW_MODEL({username:user.username,_id:user._id,type}))}
           >
             {followingText}
           </TextButton>

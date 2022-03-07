@@ -259,6 +259,76 @@ module.exports.followUser = async (req, res, next) => {
         next(error)
     }
 }
+module.exports.unfollowUser = async (req, res, next) => {
+    const useridToUnFollow = req.params.userid;
+    const currentUser = res.locals.user;
+    try {
+        const userToFollow = await UserModel.findById(useridToUnFollow);
+        if (!userToFollow) {
+            return res
+                .status(400)
+                .send({
+                    error: 'Could not find a user with that id :('
+                });
+        }
+        // check if user already followed user
+        const isUnFollowedUser = await Followers.findOne({
+            user: useridToUnFollow,
+            'followers.user': {
+                $in: [currentUser._id]
+            }
+        }).count()
+
+ 
+        if (isUnFollowedUser) {
+            const followerUpdate = await Followers.updateOne({
+                user: useridToUnFollow,
+            }, {
+                $pull: {
+                    followers: {
+                        user: currentUser._id
+                    }
+                }
+            },);
+            // update curretnt user following
+            // see if user is already following somehow
+            const isfollowingUser = await Followings.findOne({
+                user: currentUser._id,
+                'followings.user': {
+                    $in: [useridToUnFollow]
+                }
+            }).count()
+
+            if (!isfollowingUser) {
+                return res.status(500).send({
+                    error: 'You are already unfollowing the user somehow!'
+                })
+            }
+            // update current user followings
+            const followingsUpdate = await Followings.updateOne({
+                user: currentUser._id,
+     
+            }, {
+                $pull: {
+                    followings: {
+                        user: useridToUnFollow
+                    }
+                }
+            });
+
+        } else {
+            return res.status(200).send({
+                error: 'You are already unfollowing this user'
+            })
+        }
+
+
+        return res.status(200).send('success')
+
+    } catch (error) {
+        next(error)
+    }
+}
 
 module.exports.getFollowers = async (req, res, next) => {
     const userid = req.params.userid;
@@ -274,6 +344,12 @@ module.exports.getFollowers = async (req, res, next) => {
                     user: Mongoose.Types.ObjectId(userid)
                 },
             },
+            {
+                $addFields: {
+                    count: {
+                        $size: '$followers'
+                }
+            },},
             {
                 $lookup: {
                     from: 'users',
@@ -305,12 +381,6 @@ module.exports.getFollowers = async (req, res, next) => {
 
             }, {
                 $addFields: {
-                    count: {
-                        $size: '$followers'
-                    }
-                }
-            }, {
-                $addFields: {
                     userFollowers: {
                         $cond: [{
                                 $eq: ["$userFollowers", []]
@@ -322,6 +392,7 @@ module.exports.getFollowers = async (req, res, next) => {
                     }
                 },
             },
+            
             {
                 $project: {
                     'users._id': 1,
@@ -338,25 +409,30 @@ module.exports.getFollowers = async (req, res, next) => {
         //check if user followers exist 
         // check if current user following any user
         const isUserFollowedAnyOneUser = []
-        user[0].userFollowers.forEach(user => {
-            const isFollowed = user.followers.find(e => e.user.equals(currentUser._id));
-            // user not followed 
-            if(isFollowed === undefined)return
-            // user followed
-            if (isFollowed) isUserFollowedAnyOneUser.push(user.user.toString())
-        })
+        // user followers document exist
+        if (!user.length == 0) {
+            user[0].userFollowers.forEach(user => {
+                const isFollowed = user.followers.find(e => e.user.equals(currentUser._id));
+                // user not followed 
+                if (isFollowed === undefined) return
+                // user followed
+                if (isFollowed) isUserFollowedAnyOneUser.push(user.user.toString())
+            })
 
-        // now add isFollowing property
-        user[0].users.forEach(user => {
-            if (isUserFollowedAnyOneUser.includes(user._id.toString())) {
-                user.isFollowing = true;
-            } else {
-                user.isFollowing = false;
-            }
-        })
+            // now add isFollowing property
+            user[0].users.forEach(user => {
+                if (isUserFollowedAnyOneUser.includes(user._id.toString())) {
+                    user.isFollowing = true;
+                } else {
+                    user.isFollowing = false;
+                }
+            })
+        }
+
+        
         const result = {
-            count: user[0].count,
-            users: user[0].users
+            count: !user.length == 0 ? user[0].count : 0,
+            users: !user.length == 0 ? user[0].users : [],
         }
         return res.status(200).send(result)
     } catch (error) {
@@ -431,8 +507,10 @@ module.exports.getFollowings = async (req, res, next) => {
         // check if current user following any user
         // handel deafualt case in pipeline and handel errors
         const isUserFollowedAnyOneUser = []
-        user[0].userFollowers.forEach(user => {
-            const isFollowed = user.followers.find(e => e.user.equals(currentUser._id)).user.toString();
+        if(!user.length == 0){
+            user[0].userFollowers.forEach(user => {
+            const isFollowed = user.followers.find(e => e.user.equals(currentUser._id));
+            if(isFollowed === undefined)return; //user not followed this user
             if (isFollowed) isUserFollowedAnyOneUser.push(user.user.toString())
         })
         // now add isFollowing property
@@ -443,13 +521,16 @@ module.exports.getFollowings = async (req, res, next) => {
                 user.isFollowing = false;
             }
         })
+        }
+        
 
         const result = {
-            count: user[0].count,
-            users: user[0].users
+            count:!user.length == 0 ? user[0].count : 0,
+            users:!user.length == 0 ? user[0].users:[],
         }
         return res.status(200).send(result)
     } catch (error) {
+        console.log(error)
         next(error)
     }
 }

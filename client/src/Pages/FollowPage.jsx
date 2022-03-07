@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet, NavLink } from "react-router-dom";
 import News from "../components/News/News";
 import Searchbar from "../components/Searchbar/Searchbar";
 import UserHeader from "../components/User/UserHeader";
 import WhoToFollow from "../components/WhoToFollow/WhoToFollow";
+import { getFollowers,getFollowings } from "../store/guest/guestActions";
+import { selectGuestUser } from "../store/guest/guestSelector";
 
 export default function FollowPage() {
+  const state = useSelector((state) => state);
+  let guestUser = selectGuestUser(state);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getFollowers(guestUser._id));
+    dispatch(getFollowings(guestUser._id))
+  }, [dispatch, guestUser._id]);
   return (
     <>
       <div className="followpage two-flex-col-container">

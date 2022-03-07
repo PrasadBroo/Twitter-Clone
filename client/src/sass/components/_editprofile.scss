@@ -1,4 +1,11 @@
 .edit-profile-model{
+    #profileEditForm{
+        position: relative;
+        .loader-wrap{
+            z-index: 99;
+            background-color: rgba($color: #333, $alpha: 0.2);
+        }
+    }
     .root-model{
         background-color: #fff;
         padding: 0;

@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import TextButton from "../../components/Button/TextButton/TextButton";
 import { selectUnfollowModel } from "../../store/model/modelSelector";
 import { HIDE_UNFOLLOW_MODEL } from "../../store/model/modelSlice";
+import { unfollowTheUser } from "../../store/user/userActions";
 import RootModel from "../RootModel/RootModel";
 
-export default function UnfollowModel() {
+export default function UnfollowModel({type}) {
   const state = useSelector((state) => state);
   let model = selectUnfollowModel(state);
-  console.log(model)
   const dispatch = useDispatch();
 
   const closeModel = ()=>{
@@ -27,7 +27,7 @@ export default function UnfollowModel() {
           </span>
         </div>
         <div className="unfollow-btns-wrap">
-          <TextButton rounded className="unfollow-btn unfollowbtn">
+          <TextButton rounded className="unfollow-btn unfollowbtn" onClick={()=>dispatch(unfollowTheUser(model.userToUnfollow._id,type))}>
             Unfollow
           </TextButton>
           <TextButton

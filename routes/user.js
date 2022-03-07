@@ -4,7 +4,8 @@ const {
     fethUser,
     followUser,
     getFollowers,
-    getFollowings
+    getFollowings,
+    unfollowUser
 } = require('../controllers/userController');
 const userRouter = express.Router();
 const {
@@ -15,6 +16,7 @@ userRouter.put('/update/profile', requireAuth, updateProfile)
 
 userRouter.post('/get/profile', requireAuth, fethUser)
 userRouter.post('/:userid/follow', requireAuth, followUser)
+userRouter.post('/:userid/unfollow', requireAuth, unfollowUser)
 userRouter.post('/:userid/followers', requireAuth, getFollowers)
 userRouter.post('/:userid/followings', requireAuth, getFollowings)
 

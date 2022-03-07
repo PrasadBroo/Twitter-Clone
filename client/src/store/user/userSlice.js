@@ -9,6 +9,8 @@ const initialState = {
     signUPStart: false,
     fetching: false,
     currentUser: null,
+    updatingProfile:false,
+    updatingProfileError:null,
     token: localStorage.getItem('token')
 }
 
@@ -52,7 +54,16 @@ export const userSlice = createSlice({
             state.currentUser = null;
             state.token = null
 
-        }
+        },
+        UPDATING_PROFILE_STARTED:(state)=>{
+            state.updatingProfile = true
+        },
+        UPDATING_PROFILE_FINISHED:(state)=>{
+            state.updatingProfile = false
+        },
+        UPDATING_PROFILE_ERROR:(state,action)=>{
+            state.updatingProfileError = action.payload;
+        },
 
     },
 })
@@ -68,5 +79,8 @@ export const {
     FETCHING_FINISHED,
     FETCHING_STARTED,
     LOGOUT_USER,
+    UPDATING_PROFILE_FINISHED,
+    UPDATING_PROFILE_STARTED,
+    UPDATING_PROFILE_ERROR,
 } = userSlice.actions
 export default userSlice.reducer;

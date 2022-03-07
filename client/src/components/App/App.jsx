@@ -51,7 +51,6 @@ function App() {
           <Route path="home" element={<HomepageLayout />}>
             <Route index element={<TweetSections />} />
           </Route>
-
           <Route path="/:username/*" element={<HomepageLayout />}>
             <Route path="*" element={<User />}>
               <Route index element={<UserTweets />} />
