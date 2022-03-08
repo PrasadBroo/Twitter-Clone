@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { SHOW_UNFOLLOW_MODEL } from "../../store/model/modelSlice";
+import { followTheUser } from "../../store/user/userActions";
 import { selectCurrentUser } from "../../store/user/userSelector";
 import TextButton from "../Button/TextButton/TextButton";
 
@@ -25,7 +26,7 @@ export default function FollowUser({ user,type }) {
       <div className="follow-btn-container">
         {!user.isFollowing ? (
           user._id !== currentUser._id && (
-            <TextButton className="follow-btn">Follow</TextButton>
+            <TextButton className="follow-btn" onClick={() => dispatch(followTheUser(user._id,type))}>Follow</TextButton>
           )
         ) : (
           <TextButton
@@ -33,7 +34,7 @@ export default function FollowUser({ user,type }) {
             cBlue
             onMouseEnter={() => setFollowingText("Unfollow")}
             onMouseLeave={() => setFollowingText("Following")}
-            onClick={() => dispatch(SHOW_UNFOLLOW_MODEL({username:user.username,_id:user._id,type}))}
+            onClick={() => dispatch(SHOW_UNFOLLOW_MODEL({user:{username:user.username,_id:user._id},type}))}
           >
             {followingText}
           </TextButton>

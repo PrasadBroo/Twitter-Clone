@@ -10,6 +10,8 @@ const initialState = {
     fetching: false,
     currentUser: null,
     updatingProfile:false,
+    followingError:null,
+    unfollowingError:null,
     updatingProfileError:null,
     token: localStorage.getItem('token')
 }
@@ -64,6 +66,12 @@ export const userSlice = createSlice({
         UPDATING_PROFILE_ERROR:(state,action)=>{
             state.updatingProfileError = action.payload;
         },
+        ERROR_WHILE_FOLLOWING:(state,action)=>{
+            state.followingError = action.payload
+        },
+        ERROR_WHILE_UNFOLLOWING:(state,action)=>{
+            state.unfollowingError = action.payload
+        },
 
     },
 })
@@ -82,5 +90,7 @@ export const {
     UPDATING_PROFILE_FINISHED,
     UPDATING_PROFILE_STARTED,
     UPDATING_PROFILE_ERROR,
+    ERROR_WHILE_FOLLOWING,
+    ERROR_WHILE_UNFOLLOWING
 } = userSlice.actions
 export default userSlice.reducer;

@@ -5,16 +5,30 @@ import {
     signInUserWithToken,
     loginWithEmail,
 } from "../../services/authenticationServices"
-import { updateUserProfile } from "../../services/userServices";
+import {
+    updateUserProfile
+} from "../../services/userServices";
 import {
     verifyEmail,
     verifyName,
     verifyPassword,
     verifyUsername,
 } from "../../utils/validations";
-import { UNFOLLOWED_FROM_FOLLOWERS } from "../guest/guestSlice";
-import { HIDE_UNFOLLOW_MODEL } from "../model/modelSlice";
-import { followUser,unfollowUser } from './../../services/userServices';
+import {
+    FOLLOWED_FROM_FOLLOWERS,
+    FOLLOWED_FROM_FOLLOWINGS,
+    FOLLOWED_FROM_PROFILE,
+    UNFOLLOWED_FROM_FOLLOWERS,
+    UNFOLLOWED_FROM_FOLLOWINGS,
+    UNFOLLOWED_FROM_PROFILE
+} from "../guest/guestSlice";
+import {
+    HIDE_UNFOLLOW_MODEL
+} from "../model/modelSlice";
+import {
+    followUser,
+    unfollowUser
+} from './../../services/userServices';
 import {
 
     SIGN_IN_SUCCESS,
@@ -29,6 +43,8 @@ import {
     UPDATING_PROFILE_FINISHED,
     UPDATING_PROFILE_STARTED,
     UPDATING_PROFILE_ERROR,
+    ERROR_WHILE_FOLLOWING,
+    ERROR_WHILE_UNFOLLOWING,
 } from "./userSlice";
 
 
@@ -100,15 +116,15 @@ export const signInStart = () => async (dispatch) => {
         dispatch(SIGN_IN_FAIL(error.message))
     }
 }
-export const logout = ()=> dispatch =>{
+export const logout = () => dispatch => {
     localStorage.removeItem('token')
     dispatch(LOGOUT_USER())
 }
-export const updateProfile = (bcPic,profilePic,fullName,bio,website,location) => async (dispatch) => {
+export const updateProfile = (bcPic, profilePic, fullName, bio, website, location) => async (dispatch) => {
     try {
         // dispatch update profile start
         dispatch(UPDATING_PROFILE_STARTED())
-        await updateUserProfile(bcPic,profilePic,fullName,bio,website,location);
+        await updateUserProfile(bcPic, profilePic, fullName, bio, website, location);
         // dispatch update profile success
         dispatch(UPDATING_PROFILE_FINISHED())
     } catch (error) {
@@ -117,21 +133,25 @@ export const updateProfile = (bcPic,profilePic,fullName,bio,website,location) =>
     }
 }
 
-export const followTheUser = (userid)=>async(dispatch)=>{
+export const followTheUser = (userid, type) => async (dispatch) => {
     try {
-        const response = await followUser(userid);
-        console.log(response)
+        await followUser(userid);
+        if (String(type) === 'followers') dispatch(FOLLOWED_FROM_FOLLOWERS(userid))
+        if (String(type) === 'followings') dispatch(FOLLOWED_FROM_FOLLOWINGS(userid))
+        if(String(type) === 'profile')dispatch(FOLLOWED_FROM_PROFILE())
     } catch (error) {
-        console.log(error)
+        dispatch(ERROR_WHILE_FOLLOWING(error.message))
     }
 }
-export const unfollowTheUser = (userid)=>async(dispatch)=>{
+export const unfollowTheUser = (userid, type) => async (dispatch) => {
     try {
-         await unfollowUser(userid);
-        //  dispatch update followers/following 
-        dispatch(UNFOLLOWED_FROM_FOLLOWERS(userid))
+        await unfollowUser(userid);
+        if (String(type) === 'followers') dispatch(UNFOLLOWED_FROM_FOLLOWERS(userid))
+        if (String(type) === 'followings') dispatch(UNFOLLOWED_FROM_FOLLOWINGS(userid))
+        if(String(type) === 'profile')dispatch(UNFOLLOWED_FROM_PROFILE())
         dispatch(HIDE_UNFOLLOW_MODEL())
     } catch (error) {
-        console.log(error)
+        dispatch(ERROR_WHILE_UNFOLLOWING(error.message))
+        dispatch(HIDE_UNFOLLOW_MODEL())
     }
 }

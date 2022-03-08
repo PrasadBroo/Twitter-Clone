@@ -63,6 +63,20 @@ export const guestSlice = createSlice({
             const userid = action.payload
             state.followers.users.find(user => user._id === userid).isFollowing = true;
         },
+        UNFOLLOWED_FROM_FOLLOWINGS:(state,action)=>{
+            const userid = action.payload
+            state.followings.users.find(user => user._id === userid).isFollowing = false;
+        },
+        FOLLOWED_FROM_FOLLOWINGS:(state,action)=>{
+            const userid = action.payload
+            state.followings.users.find(user => user._id === userid).isFollowing = true;
+        },
+        UNFOLLOWED_FROM_PROFILE:(state)=>{
+            state.guestUser.isFollowing = false;
+        },
+        FOLLOWED_FROM_PROFILE:(state)=>{
+            state.guestUser.isFollowing = true;
+        },
 
     },
 })
@@ -80,6 +94,10 @@ export const {
     FETCHING_FOLLOWINGS_START,
     FETCHING_FOLLOWINGS_SUCCESS,
     UNFOLLOWED_FROM_FOLLOWERS,
-    
+    FOLLOWED_FROM_FOLLOWERS,
+    FOLLOWED_FROM_FOLLOWINGS,
+    UNFOLLOWED_FROM_FOLLOWINGS,
+    FOLLOWED_FROM_PROFILE,
+    UNFOLLOWED_FROM_PROFILE
 } = guestSlice.actions
 export default guestSlice.reducer;

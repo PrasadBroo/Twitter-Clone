@@ -83,7 +83,7 @@ export default function User() {
                   (<TextButton
                     rounded
                     className="edit-profile-btn"
-                    onClick={() => dispatch(followTheUser(guestUser._id))}
+                    onClick={() => dispatch(followTheUser(guestUser._id,'profile'))}
                   >
                     Follow
                   </TextButton>) :
@@ -92,7 +92,7 @@ export default function User() {
                     onMouseEnter={()=>setFollowingText('Unfollow')}
                     onMouseLeave={()=>setFollowingText('Following')}
                     className="edit-profile-btn following-btn"
-                    onClick={() => dispatch(SHOW_UNFOLLOW_MODEL({username:guestUser.username,_id:guestUser._id}))}
+                    onClick={() => dispatch(SHOW_UNFOLLOW_MODEL({username:guestUser.username,_id:guestUser._id,type:'profile'}))}
                   >
                     {followingText}
                   </TextButton>)
