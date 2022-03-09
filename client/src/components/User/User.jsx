@@ -23,9 +23,26 @@ import {
 import SimpleSpinner from "../Loader/SimpleSpinner";
 import { followTheUser } from "../../store/user/userActions";
 import { SHOW_UNFOLLOW_MODEL } from "../../store/model/modelSlice";
+import Linkify from 'linkify-react';
+import 'linkify-plugin-hashtag';
+import 'linkify-plugin-mention';
 
-
-
+const options = {
+  className:()=> 'default-link',
+  formatHref: {
+    hashtag: (href) => 'https://twitter.com/hashtag/' + href.substr(1),
+    mention:(href)=>'/' + href.substr(1)
+  },
+  format: {
+    url: (value) => value.length > 20 ? value.slice(0, 20) + '…' : value,
+    hashtag: (value) => value.length > 20 ? value.slice(0, 20) + '…' : value,
+    mention: (value) => value.length > 20 ? value.slice(0, 20) + '…' : value,
+  },
+  target: {
+    url: '__blank',
+    email: null
+  }
+}
 export default function User() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
@@ -35,7 +52,9 @@ export default function User() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { username } = useParams();
-  const [followingText,setFollowingText] = useState('Following')
+  const [backgroundImageLoaded, SetBackgroundImageLoaded] = useState(false);
+  const [profileImageLoaded, SetProfileImageLoaded] = useState(false);
+  const [followingText, setFollowingText] = useState("Following");
   useEffect(() => {
     const retriveUser = (username) => {
       dispatch(fetchUser(username));
@@ -59,8 +78,11 @@ export default function User() {
                     : "https://via.placeholder.com/700"
                 }
                 alt="bc-pic"
+                style={{ display: backgroundImageLoaded ? "block" : "none" }}
                 className="bc-image"
+                onLoad={() => SetBackgroundImageLoaded(true)}
               />
+              {!backgroundImageLoaded && <SimpleSpinner />}
             </div>
             <div className="user-details">
               <div className="profile-pic-container-two">
@@ -68,7 +90,10 @@ export default function User() {
                   src={guestUser.avatar}
                   alt="profile-pic"
                   className="profile-pic"
+                  style={{ display: profileImageLoaded ? "block" : "none" }}
+                  onLoad={() => SetProfileImageLoaded(true)}
                 />
+                {!profileImageLoaded && <SimpleSpinner />}
               </div>
               <div className="profile-options">
                 {currentUser._id === guestUser._id ? (
@@ -79,30 +104,41 @@ export default function User() {
                   >
                     Edit profile
                   </TextButton>
-                ) :  ( !guestUser.isFollowing ?
-                  (<TextButton
+                ) : !guestUser.isFollowing ? (
+                  <TextButton
                     rounded
                     className="edit-profile-btn"
-                    onClick={() => dispatch(followTheUser(guestUser._id,'profile'))}
+                    onClick={() =>
+                      dispatch(followTheUser(guestUser._id, "profile"))
+                    }
                   >
                     Follow
-                  </TextButton>) :
-                  (<TextButton
+                  </TextButton>
+                ) : (
+                  <TextButton
                     rounded
-                    onMouseEnter={()=>setFollowingText('Unfollow')}
-                    onMouseLeave={()=>setFollowingText('Following')}
+                    onMouseEnter={() => setFollowingText("Unfollow")}
+                    onMouseLeave={() => setFollowingText("Following")}
                     className="edit-profile-btn following-btn"
-                    onClick={() => dispatch(SHOW_UNFOLLOW_MODEL({username:guestUser.username,_id:guestUser._id,type:'profile'}))}
+                    onClick={() =>
+                      dispatch(
+                        SHOW_UNFOLLOW_MODEL({
+                          username: guestUser.username,
+                          _id: guestUser._id,
+                          type: "profile",
+                        })
+                      )
+                    }
                   >
                     {followingText}
-                  </TextButton>)
+                  </TextButton>
                 )}
               </div>
-              <div className="user-other-details" >
+              <div className="user-other-details">
                 <div className="user-fullname-container container">
                   <span className="user-fullname">
                     {guestUser.fullName}{" "}
-                    <span className="verfied-icon" >
+                    <span className="verfied-icon">
                       <i className="fas fa-badge-check"></i>
                     </span>{" "}
                   </span>
@@ -110,7 +146,7 @@ export default function User() {
                 </div>
 
                 <div className="user-description-container container">
-                  <span className="user-description">{guestUser.bio}</span>
+                  <span className="user-description">{<Linkify options={options}>{guestUser.bio}</Linkify>}</span>
                 </div>
                 <div className="user-sitelink-joindate-container container">
                   <div className="user-location">

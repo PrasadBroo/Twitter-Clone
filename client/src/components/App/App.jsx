@@ -25,6 +25,8 @@ import NotificationsPage from "./../../Pages/NotificationsPage";
 import SettingsPage from "./../../Pages/SettingsPage";
 import EditProfile from "../User/EditProfile";
 
+
+
 function App() {
   const state = useSelector((state) => state);
   const is_fetching = selectFetching(state);
