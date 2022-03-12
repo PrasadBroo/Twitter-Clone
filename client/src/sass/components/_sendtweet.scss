@@ -72,7 +72,6 @@
                         
                     }
                     .icon-disabled{
-                        
                         pointer-events: none;
                         opacity: 0.5;
                     }
@@ -83,6 +82,34 @@
                         padding: 0.4rem 1rem;
                         margin-top: 0;
                         font-weight: 700;
+                    }
+                }
+                .picAdded{
+                    color: $color-red;
+                }
+            }
+            .tweet-pic{
+                position: relative;
+                .tweet-attachment-pic{
+                    width: 100%;
+                    height: auto;
+                    border-radius: 20px;
+                }
+                .close-btn{
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    cursor: pointer;
+                    display: inline-block;
+                    height: 30px;
+                    width: 30px;
+                    color: $color-white;
+                    background-color: rgba($color: $color-black-2, $alpha: 0.5);
+                    border-radius: 100%;
+                    transition: all 500ms ease-in-out;
+                    @include flexJustifyCenter;
+                    &:hover{
+                        background-color: rgba($color: $color-grey-2, $alpha: 0.2);
                     }
                 }
             }

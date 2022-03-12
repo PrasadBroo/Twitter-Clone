@@ -1,13 +1,13 @@
 import React from "react";
 
-export default function MediaIcon({className}) {
+export default function MediaIcon({className,color}) {
   return (
     <svg
       viewBox="0 0 24 24"
       aria-hidden="true"
       width="20.25px"
       height="20.25px"
-      fill="rgb(29, 155, 240)"
+      fill={color || "rgb(29, 155, 240)"}
       className={className}
     >
       <g>
