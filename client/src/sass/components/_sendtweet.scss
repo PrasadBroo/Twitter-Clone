@@ -57,7 +57,13 @@
                 margin-top: 1rem;
                 width: 100%;@include flexJustifyBetween;
                 .icon-containers{
+                    position: relative;
                     @include flexCenter;
+                    .icon-picker-wrap{
+                        z-index: 10;
+                        position: absolute;
+                        top: calc(0% + 40px);
+                    }
                     .icon-container{
                         @include flexJustifyCenter;
                         margin-right: 0.3rem;
@@ -69,11 +75,15 @@
                         &:hover{
                             background-color: rgba(29, 155, 240,0.1);
                         }
+                        .disabled-icon{
+                            pointer-events: none;
+                        }
                         
                     }
                     .icon-disabled{
-                        pointer-events: none;
+                        // pointer-events: none;
                         opacity: 0.5;
+                        cursor: not-allowed;
                     }
                 }
                 .send-tweet-btn-container{

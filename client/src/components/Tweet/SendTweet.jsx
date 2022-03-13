@@ -8,8 +8,11 @@ import EmojiIcon from "./../../icons/EmojiIcon";
 import ScheduleIcon from "./../../icons/ScheduleIcon";
 import LocationIcon from "./../../icons/LocationIcon";
 import classNames from "classnames";
+import Picker from "emoji-picker-react";
 
 export default function SendTweet({ className }) {
+  const [tweetText,setTweetText] = useState('');
+  const [showEmojiBox, setShowEmojiBox] = useState(false);
   const [tweetPic, setTweetPic] = useState(null);
   const sendTweetClassnames = classNames("send-tweet", className);
   function auto_grow(element) {
@@ -28,6 +31,9 @@ export default function SendTweet({ className }) {
       alert(error.message);
     }
   };
+  const onEmojiClick = (event, emojiObject) => {
+    setTweetText(prevState=>prevState+=emojiObject.emoji)
+  };
 
   return (
     <section className={sendTweetClassnames}>
@@ -45,14 +51,17 @@ export default function SendTweet({ className }) {
                 placeholder="What's happening?"
                 className="tweet-input"
                 maxLength={300}
+                value={tweetText}
+                onChange={(e)=>setTweetText(e.target.value)}
               />
             </div>
             <div className="tweet-pic">
               {tweetPic && (
-                <span className="close-btn" onClick={()=>setTweetPic(null)}>
+                <span className="close-btn" onClick={() => setTweetPic(null)}>
                   <i className="fas fa-xmark"></i>
                 </span>
               )}
+
               <input
                 type="file"
                 accept="image/*"
@@ -73,28 +82,38 @@ export default function SendTweet({ className }) {
             </div>
             <div className="tweet-attachment">
               <div className="icon-containers">
+                {showEmojiBox && (
+                  <div className="icon-picker-wrap">
+                    <Picker onEmojiClick={onEmojiClick} preload={true}/>
+                  </div>
+                )}
                 <div
                   className={
                     tweetPic ? "icon-container icon-disabled" : "icon-container"
                   }
-                  onClick={() => document.getElementById("tweetPic").click()}
                 >
-                  <MediaIcon color={tweetPic ? "red" : null} />
+                  <MediaIcon
+                    color={tweetPic ? "red" : null}
+                    className={tweetPic && "disabled-icon"}
+                    onClick={() => document.getElementById("tweetPic").click()}
+                  />
                 </div>
                 <div className="icon-container icon-disabled">
-                  <GifIcon />
+                  <GifIcon className="disabled-icon" />
                 </div>
                 <div className="icon-container icon-disabled">
-                  <PollIcon />
+                  <PollIcon className="disabled-icon" />
+                </div>
+                <div className="icon-container">
+                  <EmojiIcon
+                    onClick={() => setShowEmojiBox((state) => !state)}
+                  />
                 </div>
                 <div className="icon-container icon-disabled">
-                  <EmojiIcon />
+                  <ScheduleIcon className="disabled-icon" />
                 </div>
                 <div className="icon-container icon-disabled">
-                  <ScheduleIcon />
-                </div>
-                <div className="icon-container icon-disabled">
-                  <LocationIcon />
+                  <LocationIcon className="disabled-icon" />
                 </div>
               </div>
               <div className="send-tweet-btn-container">
