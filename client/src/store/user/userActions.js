@@ -5,9 +5,11 @@ import {
     signInUserWithToken,
     loginWithEmail,
 } from "../../services/authenticationServices"
+import { postTheTweet } from "../../services/tweetService";
 import {
     updateUserProfile
 } from "../../services/userServices";
+
 import {
     verifyEmail,
     verifyName,
@@ -153,5 +155,14 @@ export const unfollowTheUser = (userid, type) => async (dispatch) => {
     } catch (error) {
         dispatch(ERROR_WHILE_UNFOLLOWING(error.message))
         dispatch(HIDE_UNFOLLOW_MODEL())
+    }
+}
+export const postTweet = (caption,pic=null)=>async(dispatch)=>{
+    try {
+        // if(!caption) dispatch error
+        const res = await postTheTweet(caption,pic);
+        // dispatch success
+    } catch (error) {
+        console.log(error)
     }
 }

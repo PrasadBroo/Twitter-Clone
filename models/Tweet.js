@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 const TweetSchema = new Schema({
     user: {
         ref: 'User',
-        unique:true,
         type: Schema.Types.ObjectId,
     },
     createdAt:{
@@ -21,11 +20,6 @@ const TweetSchema = new Schema({
         type:String,
         default:null,
     },
-    likedBy:[{user: {
-        ref: 'User',
-        unique:true,
-        type: Schema.Types.ObjectId,
-    }}]
 
 })
 

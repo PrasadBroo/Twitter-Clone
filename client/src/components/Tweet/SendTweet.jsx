@@ -9,8 +9,14 @@ import ScheduleIcon from "./../../icons/ScheduleIcon";
 import LocationIcon from "./../../icons/LocationIcon";
 import classNames from "classnames";
 import Picker from "emoji-picker-react";
+import { useSelector,useDispatch } from "react-redux";
+import { selectCurrentUser } from "../../store/user/userSelector";
+import { postTweet } from "../../store/user/userActions";
 
 export default function SendTweet({ className }) {
+  const dispatch = useDispatch()
+  const state = useSelector((state) => state);
+  const currentUser = selectCurrentUser(state);
   const [tweetText,setTweetText] = useState('');
   const [showEmojiBox, setShowEmojiBox] = useState(false);
   const [tweetPic, setTweetPic] = useState(null);
@@ -34,13 +40,16 @@ export default function SendTweet({ className }) {
   const onEmojiClick = (event, emojiObject) => {
     setTweetText(prevState=>prevState+=emojiObject.emoji)
   };
+  const handelSubmit = ()=>{
+    dispatch(postTweet(tweetText,tweetPic))
+  }
 
   return (
     <section className={sendTweetClassnames}>
       <div className="send-tweet-wrap">
         <div className="wrapper">
           <div className="profile-pic-container">
-            <img src={profilePic} alt="userpic" className="user-pic" />
+            <img src={currentUser.avatar} alt="userpic" className="user-pic" />
           </div>
           <div className="whats-happening">
             <div className="tweet-input-container">
@@ -117,7 +126,7 @@ export default function SendTweet({ className }) {
                 </div>
               </div>
               <div className="send-tweet-btn-container">
-                <TextButton bcBlue rounded className="send-tweet-btn" disabled>
+                <TextButton bcBlue rounded className="send-tweet-btn" disabled={!tweetText} onClick={handelSubmit}>
                   Tweet
                 </TextButton>
               </div>
