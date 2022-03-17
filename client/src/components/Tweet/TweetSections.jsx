@@ -18,7 +18,7 @@ export default function TweetSections() {
           </div>
           {/* all magic happens here */}
           <div className="tweets">
-            <Tweets />
+            {/* <Tweets /> */}
           </div>
         </div>
         <div className="col2 sidebar searchbar-news-sections ">

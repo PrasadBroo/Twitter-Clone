@@ -8,10 +8,13 @@ const initialState = {
     fetchingError:null,
     followers:[],
     followings:[],
+    tweets:null,
     fetchingFollowers:true,
     fetchingFollowings:true,
     fetchingFollowingsError:null,
     fetchingFollowersError:null,
+    tweetsFetching : true,
+    tweetFetchingError:null,
 }
 
 
@@ -77,6 +80,17 @@ export const guestSlice = createSlice({
         FOLLOWED_FROM_PROFILE:(state)=>{
             state.guestUser.isFollowing = true;
         },
+        TWEETS_FETCH_SUCCESS:(state,action)=>{
+            state.tweets = action.payload;;
+            state.tweetsFetching = false;
+        },
+        TWEETS_FETCH_FAILED:(state,action)=>{
+            state.tweetFetchingError = action.payload;
+            state.tweetsFetching = false;
+        },
+        TWEETS_FETCHING_STARTED:(state)=>{
+            state.tweetsFetching = true;
+        }
 
     },
 })
@@ -98,6 +112,9 @@ export const {
     FOLLOWED_FROM_FOLLOWINGS,
     UNFOLLOWED_FROM_FOLLOWINGS,
     FOLLOWED_FROM_PROFILE,
-    UNFOLLOWED_FROM_PROFILE
+    UNFOLLOWED_FROM_PROFILE,
+    TWEETS_FETCHING_STARTED,
+    TWEETS_FETCH_FAILED,
+    TWEETS_FETCH_SUCCESS,
 } = guestSlice.actions
 export default guestSlice.reducer;

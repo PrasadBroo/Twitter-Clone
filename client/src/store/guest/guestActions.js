@@ -1,5 +1,8 @@
 import {
-    fetchUserProfile, getUserFollowers,getUserFollowings
+    fetchTheUserTweets,
+    fetchUserProfile,
+    getUserFollowers,
+    getUserFollowings
 } from "../../services/userServices"
 import {
     FETCHING_GUEST_SUCCESS,
@@ -12,6 +15,9 @@ import {
     FETCHING_FOLLOWINGS_FAIL,
     FETCHING_FOLLOWINGS_START,
     FETCHING_FOLLOWINGS_SUCCESS,
+    TWEETS_FETCHING_STARTED,
+    TWEETS_FETCH_SUCCESS,
+    TWEETS_FETCH_FAILED,
 } from "./guestSlice"
 
 
@@ -44,5 +50,16 @@ export const getFollowings = (userid) => async (dispatch) => {
         dispatch(FETCHING_FOLLOWINGS_SUCCESS(followings))
     } catch (error) {
         dispatch(FETCHING_FOLLOWINGS_FAIL(error.message))
+    }
+}
+
+export const fetchUserTweets = (userid) => async (dispatch) => {
+    try {
+        dispatch(TWEETS_FETCHING_STARTED())
+        const tweets = await fetchTheUserTweets(userid);
+        dispatch(TWEETS_FETCH_SUCCESS(tweets))
+    } catch (error) {
+        dispatch(TWEETS_FETCH_FAILED(error.message))
+
     }
 }

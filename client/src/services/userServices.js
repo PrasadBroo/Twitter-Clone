@@ -89,3 +89,16 @@ export const getUserFollowings = async (userId) => {
     throw new Error(error.response.data.error);
   }
 };
+
+export const fetchTheUserTweets = async (userid) => {
+  try {
+      const response = await axios.post(`/api/user/${userid}/tweets`, null, {
+          headers: {
+              authorization: localStorage.getItem('token'),
+          },
+      });
+      return response.data;
+  } catch (error) {
+      throw new Error(error.response.data.error);
+  }
+}

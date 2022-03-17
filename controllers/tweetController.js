@@ -74,7 +74,7 @@ module.exports.postTweet = async (req, res, next) => {
         }, {
             $push: {
                 mentions: {
-                    $each: [...modifiedMentionedUsers]
+                    $each: [...mentionedUsers]
                 }
             }
         }, {

@@ -1,6 +1,7 @@
 const UserModel = require("../models/User");
 const Followers = require("../models/Followers");
 const Followings = require("../models/Followings");
+const Tweet = require('../models/Tweet')
 const {
     cloudinary
 } = require("../services/cloudinary");
@@ -279,7 +280,7 @@ module.exports.unfollowUser = async (req, res, next) => {
             }
         }).count()
 
- 
+
         if (isUnFollowedUser) {
             const followerUpdate = await Followers.updateOne({
                 user: useridToUnFollow,
@@ -289,7 +290,7 @@ module.exports.unfollowUser = async (req, res, next) => {
                         user: currentUser._id
                     }
                 }
-            },);
+            }, );
             // update curretnt user following
             // see if user is already following somehow
             const isfollowingUser = await Followings.findOne({
@@ -307,7 +308,7 @@ module.exports.unfollowUser = async (req, res, next) => {
             // update current user followings
             const followingsUpdate = await Followings.updateOne({
                 user: currentUser._id,
-     
+
             }, {
                 $pull: {
                     followings: {
@@ -348,8 +349,9 @@ module.exports.getFollowers = async (req, res, next) => {
                 $addFields: {
                     count: {
                         $size: '$followers'
-                }
-            },},
+                    }
+                },
+            },
             {
                 $lookup: {
                     from: 'users',
@@ -392,7 +394,7 @@ module.exports.getFollowers = async (req, res, next) => {
                     }
                 },
             },
-            
+
             {
                 $project: {
                     'users._id': 1,
@@ -429,7 +431,7 @@ module.exports.getFollowers = async (req, res, next) => {
             })
         }
 
-        
+
         const result = {
             count: !user.length == 0 ? user[0].count : 0,
             users: !user.length == 0 ? user[0].users : [],
@@ -507,30 +509,77 @@ module.exports.getFollowings = async (req, res, next) => {
         // check if current user following any user
         // handel deafualt case in pipeline and handel errors
         const isUserFollowedAnyOneUser = []
-        if(!user.length == 0){
+        if (!user.length == 0) {
             user[0].userFollowers.forEach(user => {
-            const isFollowed = user.followers.find(e => e.user.equals(currentUser._id));
-            if(isFollowed === undefined)return; //user not followed this user
-            if (isFollowed) isUserFollowedAnyOneUser.push(user.user.toString())
-        })
-        // now add isFollowing property
-        user[0].users.forEach(user => {
-            if (isUserFollowedAnyOneUser.includes(user._id.toString())) {
-                user.isFollowing = true;
-            } else {
-                user.isFollowing = false;
-            }
-        })
+                const isFollowed = user.followers.find(e => e.user.equals(currentUser._id));
+                if (isFollowed === undefined) return; //user not followed this user
+                if (isFollowed) isUserFollowedAnyOneUser.push(user.user.toString())
+            })
+            // now add isFollowing property
+            user[0].users.forEach(user => {
+                if (isUserFollowedAnyOneUser.includes(user._id.toString())) {
+                    user.isFollowing = true;
+                } else {
+                    user.isFollowing = false;
+                }
+            })
         }
-        
+
 
         const result = {
-            count:!user.length == 0 ? user[0].count : 0,
-            users:!user.length == 0 ? user[0].users:[],
+            count: !user.length == 0 ? user[0].count : 0,
+            users: !user.length == 0 ? user[0].users : [],
         }
         return res.status(200).send(result)
     } catch (error) {
         console.log(error)
         next(error)
+    }
+}
+
+module.exports.getUserTweets = async (req, res, next) => {
+    const currentUser = res.locals.user;
+    const userid = req.params.userid;
+    try {
+        const pipeline = [{
+                $match: {
+                    user: Mongoose.Types.ObjectId(userid)
+                },
+
+            },
+            {
+                $lookup:{
+                    from: 'users',
+                    localField: 'user',
+                    foreignField: '_id',
+                    as: 'user',
+
+                }
+            },
+            {
+                $unwind:'$user'
+            },
+            {
+                $limit: 10,
+            },
+            {
+                $project:{
+                    __v:0,
+                    'user.password':0,
+                    'user.bio':0,
+                    'user.email':0,
+                    'user.website':0,
+                    'user.location':0,
+                    'user.backgroundImage':0,
+                    'user,__v':0
+
+                }
+            }
+        ];
+        const tweets = await Tweet.aggregate(pipeline)
+        res.status(200).send(tweets)
+    } catch (error) {
+        next(error)
+        console.log(error)
     }
 }

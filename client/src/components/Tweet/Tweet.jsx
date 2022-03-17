@@ -1,15 +1,33 @@
 import React from "react";
 import ThreeDotsIcon from "../../icons/ThreeDotsIcon";
-import profilePic from "../../static/images/profile.jpg";
 import CommentIcon from "./../../icons/CommentIcon";
 import RetweetIcon from "./../../icons/RetweetIcon";
 import ShareIcon from "./../../icons/ShareIcon";
 import TextButton from "./../Button/TextButton/TextButton";
 import useComponentVisible from "./../../CustomHooks/useComponentVisible";
 import classNames from "classnames";
+import Linkify from "linkify-react";
+import "linkify-plugin-hashtag";
+import "linkify-plugin-mention";
 
+const options = {
+  className: () => "default-link",
+  formatHref: {
+    hashtag: (href) => "https://twitter.com/hashtag/" + href.substr(1),
+    mention: (href) => "/" + href.substr(1),
+  },
+  format: {
+    url: (value) => (value.length > 20 ? value.slice(0, 20) + "…" : value),
+    hashtag: (value) => (value.length > 20 ? value.slice(0, 20) + "…" : value),
+    mention: (value) => (value.length > 20 ? value.slice(0, 20) + "…" : value),
+  },
+  target: {
+    url: "__blank",
+    email: null,
+  },
+};
 
-export default function Tweet() {
+export default function Tweet({tweet}) {
   const {
     ref: tweetOptionsRef,
     isVisible: istweetOptions,
@@ -50,12 +68,12 @@ export default function Tweet() {
   return (
     <div className="tweet tweet-container">
       <div className="profile-pic-container">
-        <img src={profilePic} alt="user-pic" className="profile-pic" />
+        <img src={tweet.user.avatar} alt="user-pic" className="profile-pic" />
       </div>
       <div className="tweet-content">
         <div className="tweet-content-header">
           <span className="tweet-content-child user-full-name">
-            Prasad Shinde
+            {tweet.user.fullName}
           </span>
           <span className="tweet-content-child user-username">@Prasadbro</span>
           <span className="tweet-content-child useless-dot"></span>
@@ -105,20 +123,15 @@ export default function Tweet() {
         </div>
         <div className="tweet-content-text">
           <p className="tweet-text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis
-            quidem eaque nemo, excepturi similique ex minus natus nam sapiente
-            aspernatur. Exercitationem, dignissimos dolorem temporibus delectus
-            aliquam vitae, modi, veritatis molestiae nam ipsa nulla dolore
-            ipsam. Fuga, velit. Officiis vel debitis labore velit eaque.
-            Quisquam, eligendi! Nemo ducimus atque ullam tenetur?
+          {<Linkify options={options}>{tweet.caption}</Linkify>}
           </p>
         </div>
         <div className="tweet-content-image-container">
-          <img
-            src="https://pbs.twimg.com/media/FJE0UX-VQAEg34W?format=jpg&name=small"
+          {tweet.pic &&<img
+            src={tweet.pic}
             alt="tweet-pic"
             className="tweet-content-image"
-          />
+          />}
         </div>
         <div className="tweet-actions">
           <div className=" tweet-actions-child tweet-comment">

@@ -15,3 +15,5 @@ export const postTheTweet = async (caption, pic) => {
         throw new Error(error.response.data.error);
     }
 }
+
+
