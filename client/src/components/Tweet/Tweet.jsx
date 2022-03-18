@@ -9,6 +9,10 @@ import classNames from "classnames";
 import Linkify from "linkify-react";
 import "linkify-plugin-hashtag";
 import "linkify-plugin-mention";
+import moment from "moment";
+import { likeTweet, unlikeTweet } from "../../store/guest/guestActions";
+import { useDispatch } from "react-redux";
+
 
 const options = {
   className: () => "default-link",
@@ -28,6 +32,7 @@ const options = {
 };
 
 export default function Tweet({tweet}) {
+  const dispatch = useDispatch()
   const {
     ref: tweetOptionsRef,
     isVisible: istweetOptions,
@@ -65,6 +70,13 @@ export default function Tweet({tweet}) {
       show: saveOptonsVisible,
     }
   );
+
+  const handelTweetLike = ()=>{
+    if(!tweet.isLiked)dispatch(likeTweet(tweet._id))
+    else{
+      dispatch(unlikeTweet(tweet._id))
+    }
+  }
   return (
     <div className="tweet tweet-container">
       <div className="profile-pic-container">
@@ -75,9 +87,9 @@ export default function Tweet({tweet}) {
           <span className="tweet-content-child user-full-name">
             {tweet.user.fullName}
           </span>
-          <span className="tweet-content-child user-username">@Prasadbro</span>
+          <span className="tweet-content-child user-username">@{tweet.user.username}</span>
           <span className="tweet-content-child useless-dot"></span>
-          <span className="tweet-content-child timestamp">18h</span>
+          <span className="tweet-content-child timestamp">{moment(tweet.createdAt).fromNow()}</span>
           <div className="tweet-options-container" ref={tweetOptionsRef}>
             <span
               className="tweet-content-child tweet-options"
@@ -143,7 +155,7 @@ export default function Tweet({tweet}) {
           </div>
           <div className="tweet-actions-child tweet-retweet" ref={retweetRef}>
             <div className="tweet-icon" onClick={showRetweetOptions}>
-              <RetweetIcon fill={"#536471"} height="18px" width="18px" />
+            <i className="far fa-arrows-retweet"></i>
             </div>
             <div className={retweetOptionsClassnames}>
               <div className="retweet-options-child retweet-btn-container">
@@ -159,8 +171,8 @@ export default function Tweet({tweet}) {
             <span className="tweet-comment-count">9.7k</span>
           </div>
           <div className="tweet-actions-child like-tweet">
-            <div className="tweet-icon like-icon">
-              <i className="fal fa-heart"></i>
+            <div className="tweet-icon like-icon" onClick={handelTweetLike}>
+              <i className={tweet.isLiked?"fas fa-heart liked":"far fa-heart"}></i>
               {/* <LikeIcon fill={"#536471"} height="18px" width="18px"/> */}
             </div>
 

@@ -1,4 +1,7 @@
 import {
+    likeTheTweet, unlikeTheTweet
+} from "../../services/tweetService";
+import {
     fetchTheUserTweets,
     fetchUserProfile,
     getUserFollowers,
@@ -18,6 +21,10 @@ import {
     TWEETS_FETCHING_STARTED,
     TWEETS_FETCH_SUCCESS,
     TWEETS_FETCH_FAILED,
+    TWEET_LIKED_SUCCESS,
+    TWEET_LIKED_FAILED,
+    TWEET_UNLIKED_SUCCESS,
+    TWEET_UNLIKED_FAILED,
 } from "./guestSlice"
 
 
@@ -61,5 +68,23 @@ export const fetchUserTweets = (userid) => async (dispatch) => {
     } catch (error) {
         dispatch(TWEETS_FETCH_FAILED(error.message))
 
+    }
+}
+export const likeTweet = (tweetid) => async (dispatch) => {
+    try {
+        dispatch(TWEET_LIKED_SUCCESS(tweetid))
+        await likeTheTweet(tweetid);
+        
+    } catch (error) {
+        dispatch(TWEET_LIKED_FAILED(error.message))
+    }
+}
+export const unlikeTweet = (tweetid) => async (dispatch) => {
+    try {
+        dispatch(TWEET_UNLIKED_SUCCESS(tweetid))
+        await unlikeTheTweet(tweetid);
+        
+    } catch (error) {
+        dispatch(TWEET_UNLIKED_FAILED(error.message))
     }
 }

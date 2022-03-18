@@ -21,6 +21,6 @@ export default function Followers() {
       ))}
     </div>
   ) : (
-    <SimpleSpinner />
+    <SimpleSpinner topCenter/>
   );
 }

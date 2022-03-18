@@ -538,8 +538,8 @@ module.exports.getFollowings = async (req, res, next) => {
 }
 
 module.exports.getUserTweets = async (req, res, next) => {
-    const currentUser = res.locals.user;
     const userid = req.params.userid;
+    const currentUser = res.locals.user;
     try {
         const pipeline = [{
                 $match: {
@@ -548,7 +548,7 @@ module.exports.getUserTweets = async (req, res, next) => {
 
             },
             {
-                $lookup:{
+                $lookup: {
                     from: 'users',
                     localField: 'user',
                     foreignField: '_id',
@@ -557,21 +557,60 @@ module.exports.getUserTweets = async (req, res, next) => {
                 }
             },
             {
-                $unwind:'$user'
+                $unwind: '$user'
             },
             {
                 $limit: 10,
             },
             {
-                $project:{
-                    __v:0,
-                    'user.password':0,
-                    'user.bio':0,
-                    'user.email':0,
-                    'user.website':0,
-                    'user.location':0,
-                    'user.backgroundImage':0,
-                    'user,__v':0
+                $lookup: {
+                    from: 'tweetlikes',
+                    localField: '_id',
+                    foreignField: 'tweet',
+                    as: 'likes'
+                }
+            },
+            {
+                $addFields: {
+                    likes: {
+                        $cond: [{
+                                $eq: ["$likes", []]
+                            },
+                            [{
+                                likedBy: []
+                            }], '$likes'
+                        ]
+                    }
+                }
+            },
+
+            {
+                $unwind: '$likes'
+            },
+            {
+                $addFields: {
+                    isLiked: {
+                        $in: [Mongoose.Types.ObjectId(currentUser._id), '$likes.likedBy.user']
+                    }
+                }
+            },
+            {
+                $addFields:{
+                    count:0
+                }
+            },
+
+            {
+                $project: {
+                    __v: 0,
+                    'user.password': 0,
+                    'user.bio': 0,
+                    'user.email': 0,
+                    'user.website': 0,
+                    'user.location': 0,
+                    'user.backgroundImage': 0,
+                    'user,__v': 0,
+                    likes: 0,
 
                 }
             }
@@ -580,6 +619,5 @@ module.exports.getUserTweets = async (req, res, next) => {
         res.status(200).send(tweets)
     } catch (error) {
         next(error)
-        console.log(error)
     }
 }

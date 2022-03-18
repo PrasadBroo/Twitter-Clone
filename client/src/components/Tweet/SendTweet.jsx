@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import MediaIcon from "../../icons/MediaIcon";
-import profilePic from "../../static/images/profile.jpg";
 import TextButton from "../Button/TextButton/TextButton";
 import GifIcon from "./../../icons/GifIcon";
 import PollIcon from "./../../icons/PollIcon";

@@ -21,6 +21,6 @@ export default function Following() {
       ))}
     </div>
   ) : (
-    <SimpleSpinner />
+    <SimpleSpinner topCenter/>
   );
 }

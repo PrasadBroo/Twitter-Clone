@@ -1,6 +1,7 @@
 const Tweet = require('../models/Tweet');
-const Hashtags = require('../models/hashtags');
-const Mentions = require('../models/mentions');
+const Hashtags = require('../models/Hashtags');
+const Mentions = require('../models/Mentions');
+const TweetLike = require('../models/TweetLikes');
 const User = require('../models/User')
 const linkify = require('linkifyjs');
 require('linkify-plugin-hashtag');
@@ -56,15 +57,17 @@ module.exports.postTweet = async (req, res, next) => {
 
         let temp = [...tweetMentions]
         let mentionedUsers = await Promise.all(temp.map(async e => {
-          let user =   await User.findOne({
+            let user = await User.findOne({
                 username: e
             }, {
                 _id: 1
             });
-            if(!user)return
-            return ({user:user._id})
+            if (!user) return
+            return ({
+                user: user._id
+            })
         }))
-        
+
         mentionedUsers = mentionedUsers.filter(e => e)
 
 
@@ -97,5 +100,61 @@ module.exports.postTweet = async (req, res, next) => {
     } catch (error) {
         next(error)
         console.log(error)
+    }
+}
+
+module.exports.likeTweet = async (req, res, next) => {
+    const tweetid = req.params.tweetid;
+    const currentUser = res.locals.user;
+    try {
+        if (!tweetid) {
+            return res.status(400).send({
+                error: 'please provide tweetid to like!'
+            })
+        }
+        const tweetLikeUpdate = await TweetLike.updateOne({
+            tweet: tweetid,
+            'likedBy.user': {
+                $ne: currentUser._id
+            }
+        }, {
+            $push: {
+                likedBy: {
+                    user: currentUser._id
+                }
+            }
+        }, {
+            upsert: true
+        });
+        res.status(200).send('success');
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.unlikeTweet = async (req, res, next) => {
+    const tweetid = req.params.tweetid;
+    const currentUser = res.locals.user;
+    try {
+        if (!tweetid) {
+            return res.status(400).send({
+                error: 'please provide tweetid to UNlike!'
+            })
+        }
+        const tweetLikeUpdate = await TweetLike.updateOne({
+            tweet: tweetid,
+            'likedBy.user': {
+                $eq: currentUser._id
+            }
+        }, {
+            $pull: {
+                likedBy: {
+                    user: currentUser._id
+                }
+            }
+        });
+        res.status(200).send('success');
+    } catch (error) {
+        next(error)
     }
 }

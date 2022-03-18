@@ -90,6 +90,18 @@ export const guestSlice = createSlice({
         },
         TWEETS_FETCHING_STARTED:(state)=>{
             state.tweetsFetching = true;
+        },
+        TWEET_LIKED_SUCCESS:(state,action)=>{
+            state.tweets.find(tweet => tweet._id === action.payload).isLiked=true
+        },
+        TWEET_LIKED_FAILED:(state,action)=>{
+            state.tweets.find(tweet => tweet._id === action.payload).isLiked=false
+        },
+        TWEET_UNLIKED_SUCCESS:(state,action)=>{
+            state.tweets.find(tweet => tweet._id === action.payload).isLiked=false
+        },
+        TWEET_UNLIKED_FAILED:(state,action)=>{
+            state.tweets.find(tweet => tweet._id === action.payload).isLiked=true
         }
 
     },
@@ -116,5 +128,9 @@ export const {
     TWEETS_FETCHING_STARTED,
     TWEETS_FETCH_FAILED,
     TWEETS_FETCH_SUCCESS,
+    TWEET_LIKED_FAILED,
+    TWEET_LIKED_SUCCESS,
+    TWEET_UNLIKED_FAILED,
+    TWEET_UNLIKED_SUCCESS
 } = guestSlice.actions
 export default guestSlice.reducer;
