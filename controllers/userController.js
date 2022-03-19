@@ -597,7 +597,7 @@ module.exports.getUserTweets = async (req, res, next) => {
             },
             {
                 $addFields:{
-                    count:0
+                    likesCount:{$size:'$likes.likedBy'}
                 }
             },
 
@@ -664,8 +664,15 @@ module.exports.getUserLikedTweets = async (req, res, next) => {
               }
             },
             {
+                $addFields:{
+                    'tweet.likesCount':{$size:'$likedBy'}
+                }
+            },
+            {
                 $addFields: {
-                  'tweet.isLiked': true,
+                  'tweet.isLiked': {
+                    $in: [Mongoose.Types.ObjectId(currentUser._id), '$likedBy.user']
+                },
                 }
               },{
                 $replaceRoot: {newRoot: "$tweet"}
