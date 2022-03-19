@@ -1,10 +1,11 @@
 import {
-    createSlice,current
+    createSlice
 } from "@reduxjs/toolkit";
 
 const initialState = {
     likedTweets:null,
     tweets:null,
+    tweetsCount:null,
     tweetsFetching:true,
     likedTweetFetching:true,
     tweetFetchingError:null,
@@ -17,7 +18,8 @@ export const feedSlice = createSlice({
     initialState,
     reducers: {
         TWEETS_FETCH_SUCCESS:(state,action)=>{
-            state.tweets = action.payload;;
+            state.tweets = action.payload.tweets;
+            state.tweetsCount=action.payload.count;
             state.tweetsFetching = false;
         },
         TWEETS_FETCH_FAILED:(state,action)=>{

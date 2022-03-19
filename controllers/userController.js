@@ -543,81 +543,102 @@ module.exports.getUserTweets = async (req, res, next) => {
     const currentUser = res.locals.user;
     try {
         const pipeline = [{
-                $match: {
-                    user: Mongoose.Types.ObjectId(userid)
-                },
+            $facet: {
+                tweets: [{
+                        $match: {
+                            user: Mongoose.Types.ObjectId(userid)
+                        },
 
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'user',
-                    foreignField: '_id',
-                    as: 'user',
+                    },
+                    {
+                        $lookup: {
+                            from: 'users',
+                            localField: 'user',
+                            foreignField: '_id',
+                            as: 'user',
 
-                }
-            },
-            {
-                $unwind: '$user'
-            },
-            {
-                $limit: 10,
-            },
-            {
-                $lookup: {
-                    from: 'tweetlikes',
-                    localField: '_id',
-                    foreignField: 'tweet',
-                    as: 'likes'
-                }
-            },
-            {
-                $addFields: {
-                    likes: {
-                        $cond: [{
-                                $eq: ["$likes", []]
-                            },
-                            [{
-                                likedBy: []
-                            }], '$likes'
-                        ]
+                        }
+                    },
+                    {
+                        $unwind: '$user'
+                    },
+                    {
+                        $limit: 10,
+                    },
+                    {
+                        $lookup: {
+                            from: 'tweetlikes',
+                            localField: '_id',
+                            foreignField: 'tweet',
+                            as: 'likes'
+                        }
+                    },
+                    {
+                        $addFields: {
+                            likes: {
+                                $cond: [{
+                                        $eq: ["$likes", []]
+                                    },
+                                    [{
+                                        likedBy: []
+                                    }], '$likes'
+                                ]
+                            }
+                        }
+                    },
+
+                    {
+                        $unwind: '$likes'
+                    },
+                    {
+                        $addFields: {
+                            isLiked: {
+                                $in: [Mongoose.Types.ObjectId(currentUser._id), '$likes.likedBy.user']
+                            }
+                        }
+                    },
+                    {
+                        $addFields: {
+                            likesCount: {
+                                $size: '$likes.likedBy'
+                            }
+                        }
+                    },
+
+                    {
+                        $project: {
+                            __v: 0,
+                            'user.password': 0,
+                            'user.bio': 0,
+                            'user.email': 0,
+                            'user.website': 0,
+                            'user.location': 0,
+                            'user.backgroundImage': 0,
+                            'user,__v': 0,
+                            likes: 0,
+
+                        }
                     }
-                }
-            },
-
-            {
-                $unwind: '$likes'
-            },
-            {
-                $addFields: {
-                    isLiked: {
-                        $in: [Mongoose.Types.ObjectId(currentUser._id), '$likes.likedBy.user']
+                ],
+                tweetsCount: [{
+                    $match: {
+                        user: Mongoose.Types.ObjectId(userid)
                     }
-                }
-            },
-            {
-                $addFields:{
-                    likesCount:{$size:'$likes.likedBy'}
-                }
-            },
+                }, {
+                    $count: 'count'
+                }, ],
 
-            {
-                $project: {
-                    __v: 0,
-                    'user.password': 0,
-                    'user.bio': 0,
-                    'user.email': 0,
-                    'user.website': 0,
-                    'user.location': 0,
-                    'user.backgroundImage': 0,
-                    'user,__v': 0,
-                    likes: 0,
-
-                }
             }
-        ];
-        const tweets = await Tweet.aggregate(pipeline)
-        res.status(200).send(tweets)
+        }, {
+            $unwind: '$tweetsCount'
+        }, {
+            $project: {
+                tweets: 1,
+                count: '$tweetsCount.count'
+            }
+        }];
+        const data = await Tweet.aggregate(pipeline)
+        res.status(200).send(data[0])
     } catch (error) {
         next(error)
     }
@@ -627,70 +648,74 @@ module.exports.getUserLikedTweets = async (req, res, next) => {
     const userid = req.params.userid;
     const currentUser = res.locals.user;
     try {
-        const pipeline = [[
-            {
-              $match: {
-                $expr: {
-                  $in: [
-                    Mongoose.Types.ObjectId(userid), '$likedBy.user'
-                  ]
-                }
-              }
-            }, {
-              $lookup: {
-                from: 'tweets', 
-                localField: 'tweet', 
-                foreignField: '_id', 
-                as: 'tweet'
-              }
-            }, {
-              $unwind: {
-                path: '$tweet'
-              }
-            }, {
-              $lookup: {
-                from: 'users', 
-                localField: 'tweet.user', 
-                foreignField: '_id', 
-                as: 'user'
-              }
-            }, {
-              $unwind: {
-                path: '$user'
-              }
-            }, {
-              $addFields: {
-                'tweet.user': '$user'
-              }
-            },
-            {
-                $addFields:{
-                    'tweet.likesCount':{$size:'$likedBy'}
-                }
-            },
-            {
-                $addFields: {
-                  'tweet.isLiked': {
-                    $in: [Mongoose.Types.ObjectId(currentUser._id), '$likedBy.user']
+        const pipeline = [
+            [{
+                    $match: {
+                        $expr: {
+                            $in: [
+                                Mongoose.Types.ObjectId(userid), '$likedBy.user'
+                            ]
+                        }
+                    }
+                }, {
+                    $lookup: {
+                        from: 'tweets',
+                        localField: 'tweet',
+                        foreignField: '_id',
+                        as: 'tweet'
+                    }
+                }, {
+                    $unwind: {
+                        path: '$tweet'
+                    }
+                }, {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'tweet.user',
+                        foreignField: '_id',
+                        as: 'user'
+                    }
+                }, {
+                    $unwind: {
+                        path: '$user'
+                    }
+                }, {
+                    $addFields: {
+                        'tweet.user': '$user'
+                    }
                 },
-                }
-              },{
-                $replaceRoot: {newRoot: "$tweet"}
-              },
-              {
-                $project: {
-                    __v: 0,
-                    'user.password': 0,
-                    'user.bio': 0,
-                    'user.email': 0,
-                    'user.website': 0,
-                    'user.location': 0,
-                    'user.backgroundImage': 0,
-                    'user.__v': 0,
+                {
+                    $addFields: {
+                        'tweet.likesCount': {
+                            $size: '$likedBy'
+                        }
+                    }
+                },
+                {
+                    $addFields: {
+                        'tweet.isLiked': {
+                            $in: [Mongoose.Types.ObjectId(currentUser._id), '$likedBy.user']
+                        },
+                    }
+                }, {
+                    $replaceRoot: {
+                        newRoot: "$tweet"
+                    }
+                },
+                {
+                    $project: {
+                        __v: 0,
+                        'user.password': 0,
+                        'user.bio': 0,
+                        'user.email': 0,
+                        'user.website': 0,
+                        'user.location': 0,
+                        'user.backgroundImage': 0,
+                        'user.__v': 0,
 
+                    }
                 }
-              }
-          ]
+            ]
         ];
         const likedTweets = await TweetLike.aggregate(pipeline)
         res.status(200).send(likedTweets)
