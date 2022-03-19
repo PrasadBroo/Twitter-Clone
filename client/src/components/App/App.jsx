@@ -24,6 +24,7 @@ import Followers from "../Followers/Followers";
 import NotificationsPage from "./../../Pages/NotificationsPage";
 import SettingsPage from "./../../Pages/SettingsPage";
 import EditProfile from "../User/EditProfile";
+import LikedTweets from "../Tweet/LikedTweets";
 
 
 
@@ -57,6 +58,7 @@ function App() {
             <Route path="*" element={<User />}>
               <Route index element={<UserTweets />} />
               <Route path="tweets" element={<UserTweets />} />
+              <Route path="likes" element={<LikedTweets />} />
               <Route path="with_replies" element={<h1>Coming Soon</h1>} />
               <Route path="edit/profile" element={<EditProfile />} />
             </Route>

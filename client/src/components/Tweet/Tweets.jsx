@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import Tweet from "./Tweet";
-import { fetchUserTweets } from "../../store/guest/guestActions";
+import { fetchUserTweets } from "../../store/feed/feedActions";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectGuestUser,
-  selectIsTweetsFetching,
-  selectUserTweets,
-} from "../../store/guest/guestSelector";
+import { selectGuestUser } from "../../store/guest/guestSelector";
+
 import SimpleSpinner from "../Loader/SimpleSpinner";
+import {
+  selectUserTweets,
+  selectIsTweetsFetching,
+} from "../../store/feed/feedSelector";
 
 export default function Tweets() {
   const state = useSelector((state) => state);
@@ -21,11 +22,12 @@ export default function Tweets() {
   }, [dispatch, guestUser._id]);
   return (
     <>
-      <div className="tweets-wrap" style={{position:'relative'}}>
+      <div className="tweets-wrap" style={{ position: "relative" }}>
         {!fetching ? (
-          tweets && tweets.map((tweet) => <Tweet tweet={tweet} key={tweet._id}/>)
+          tweets &&
+          tweets.map((tweet) => <Tweet tweet={tweet} key={tweet._id} from='tweets'/>)
         ) : (
-          <SimpleSpinner topCenter/>
+          <SimpleSpinner topCenter />
         )}
       </div>
     </>

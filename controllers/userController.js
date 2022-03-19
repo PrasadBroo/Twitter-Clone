@@ -2,6 +2,7 @@ const UserModel = require("../models/User");
 const Followers = require("../models/Followers");
 const Followings = require("../models/Followings");
 const Tweet = require('../models/Tweet')
+const TweetLike = require('../models/TweetLikes');
 const {
     cloudinary
 } = require("../services/cloudinary");
@@ -617,6 +618,75 @@ module.exports.getUserTweets = async (req, res, next) => {
         ];
         const tweets = await Tweet.aggregate(pipeline)
         res.status(200).send(tweets)
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.getUserLikedTweets = async (req, res, next) => {
+    const userid = req.params.userid;
+    const currentUser = res.locals.user;
+    try {
+        const pipeline = [[
+            {
+              $match: {
+                $expr: {
+                  $in: [
+                    Mongoose.Types.ObjectId(userid), '$likedBy.user'
+                  ]
+                }
+              }
+            }, {
+              $lookup: {
+                from: 'tweets', 
+                localField: 'tweet', 
+                foreignField: '_id', 
+                as: 'tweet'
+              }
+            }, {
+              $unwind: {
+                path: '$tweet'
+              }
+            }, {
+              $lookup: {
+                from: 'users', 
+                localField: 'tweet.user', 
+                foreignField: '_id', 
+                as: 'user'
+              }
+            }, {
+              $unwind: {
+                path: '$user'
+              }
+            }, {
+              $addFields: {
+                'tweet.user': '$user'
+              }
+            },
+            {
+                $addFields: {
+                  'tweet.isLiked': true,
+                }
+              },{
+                $replaceRoot: {newRoot: "$tweet"}
+              },
+              {
+                $project: {
+                    __v: 0,
+                    'user.password': 0,
+                    'user.bio': 0,
+                    'user.email': 0,
+                    'user.website': 0,
+                    'user.location': 0,
+                    'user.backgroundImage': 0,
+                    'user.__v': 0,
+
+                }
+              }
+          ]
+        ];
+        const likedTweets = await TweetLike.aggregate(pipeline)
+        res.status(200).send(likedTweets)
     } catch (error) {
         next(error)
     }

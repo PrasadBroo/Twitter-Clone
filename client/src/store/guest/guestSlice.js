@@ -8,13 +8,11 @@ const initialState = {
     fetchingError:null,
     followers:[],
     followings:[],
-    tweets:null,
     fetchingFollowers:true,
     fetchingFollowings:true,
     fetchingFollowingsError:null,
     fetchingFollowersError:null,
-    tweetsFetching : true,
-    tweetFetchingError:null,
+
 }
 
 
@@ -80,29 +78,7 @@ export const guestSlice = createSlice({
         FOLLOWED_FROM_PROFILE:(state)=>{
             state.guestUser.isFollowing = true;
         },
-        TWEETS_FETCH_SUCCESS:(state,action)=>{
-            state.tweets = action.payload;;
-            state.tweetsFetching = false;
-        },
-        TWEETS_FETCH_FAILED:(state,action)=>{
-            state.tweetFetchingError = action.payload;
-            state.tweetsFetching = false;
-        },
-        TWEETS_FETCHING_STARTED:(state)=>{
-            state.tweetsFetching = true;
-        },
-        TWEET_LIKED_SUCCESS:(state,action)=>{
-            state.tweets.find(tweet => tweet._id === action.payload).isLiked=true
-        },
-        TWEET_LIKED_FAILED:(state,action)=>{
-            state.tweets.find(tweet => tweet._id === action.payload).isLiked=false
-        },
-        TWEET_UNLIKED_SUCCESS:(state,action)=>{
-            state.tweets.find(tweet => tweet._id === action.payload).isLiked=false
-        },
-        TWEET_UNLIKED_FAILED:(state,action)=>{
-            state.tweets.find(tweet => tweet._id === action.payload).isLiked=true
-        }
+        
 
     },
 })

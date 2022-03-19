@@ -102,3 +102,16 @@ export const fetchTheUserTweets = async (userid) => {
       throw new Error(error.response.data.error);
   }
 }
+
+export const fetchTheUserLikedTweets = async (userid) => {
+  try {
+      const response = await axios.post(`/api/user/${userid}/tweets/liked`, null, {
+          headers: {
+              authorization: localStorage.getItem('token'),
+          },
+      });
+      return response.data;
+  } catch (error) {
+      throw new Error(error.response.data.error);
+  }
+}

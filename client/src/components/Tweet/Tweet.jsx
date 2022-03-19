@@ -10,7 +10,7 @@ import Linkify from "linkify-react";
 import "linkify-plugin-hashtag";
 import "linkify-plugin-mention";
 import moment from "moment";
-import { likeTweet, unlikeTweet } from "../../store/guest/guestActions";
+import { likeTweet, unlikeTweet } from "../../store/feed/feedActions";
 import { useDispatch } from "react-redux";
 
 
@@ -31,7 +31,7 @@ const options = {
   },
 };
 
-export default function Tweet({tweet}) {
+export default function Tweet({tweet,from}) {
   const dispatch = useDispatch()
   const {
     ref: tweetOptionsRef,
@@ -72,9 +72,9 @@ export default function Tweet({tweet}) {
   );
 
   const handelTweetLike = ()=>{
-    if(!tweet.isLiked)dispatch(likeTweet(tweet._id))
+    if(!tweet.isLiked)dispatch(likeTweet(tweet._id,from))
     else{
-      dispatch(unlikeTweet(tweet._id))
+      dispatch(unlikeTweet(tweet._id,from))
     }
   }
   return (
