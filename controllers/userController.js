@@ -638,7 +638,8 @@ module.exports.getUserTweets = async (req, res, next) => {
             }
         }];
         const data = await Tweet.aggregate(pipeline)
-        res.status(200).send(data[0])
+        const result = data.length === 0 ? {tweets:[],count:0}:data[0]
+        res.status(200).send(result)
     } catch (error) {
         next(error)
     }

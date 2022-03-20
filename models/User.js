@@ -35,7 +35,7 @@ const UserSchema = new Schema({
     googleId: Number,
     backgroundImage: {
         type: String,
-        default: null,
+        default: 'https://i.ibb.co/RvWK1Nf/giphy-1.gif',
     },
     bio: {
         type: String,

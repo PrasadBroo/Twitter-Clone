@@ -2,7 +2,6 @@
     border: 1px solid $color-grey-2;
     padding-bottom: 0.5rem;
     border-top: 0;
-    
     .send-tweet-wrap{
         padding: 0 0.5rem;
         .send-tweet-heading{
@@ -128,4 +127,8 @@
         }
         
     }
+}
+.disabled{
+    opacity: 0.5;
+    pointer-events: none;
 }

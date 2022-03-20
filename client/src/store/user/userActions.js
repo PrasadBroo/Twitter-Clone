@@ -5,7 +5,9 @@ import {
     signInUserWithToken,
     loginWithEmail,
 } from "../../services/authenticationServices"
-import { postTheTweet } from "../../services/tweetService";
+import {
+    postTheTweet
+} from "../../services/tweetService";
 import {
     updateUserProfile
 } from "../../services/userServices";
@@ -47,6 +49,9 @@ import {
     UPDATING_PROFILE_ERROR,
     ERROR_WHILE_FOLLOWING,
     ERROR_WHILE_UNFOLLOWING,
+    POSTING_TWEET_STARTED,
+    POSTING_TWEET_FINISED,
+    POSTING_TWEET_FAILED,
 } from "./userSlice";
 
 
@@ -114,6 +119,7 @@ export const signInStart = () => async (dispatch) => {
         dispatch(SIGN_IN_SUCCESS(user));
         dispatch(FETCHING_FINISHED())
     } catch (error) {
+        localStorage.removeItem('token')
         dispatch(FETCHING_FINISHED())
         dispatch(SIGN_IN_FAIL(error.message))
     }
@@ -140,7 +146,7 @@ export const followTheUser = (userid, type) => async (dispatch) => {
         await followUser(userid);
         if (String(type) === 'followers') dispatch(FOLLOWED_FROM_FOLLOWERS(userid))
         if (String(type) === 'followings') dispatch(FOLLOWED_FROM_FOLLOWINGS(userid))
-        if(String(type) === 'profile')dispatch(FOLLOWED_FROM_PROFILE())
+        if (String(type) === 'profile') dispatch(FOLLOWED_FROM_PROFILE())
     } catch (error) {
         dispatch(ERROR_WHILE_FOLLOWING(error.message))
     }
@@ -150,19 +156,24 @@ export const unfollowTheUser = (userid, type) => async (dispatch) => {
         await unfollowUser(userid);
         if (String(type) === 'followers') dispatch(UNFOLLOWED_FROM_FOLLOWERS(userid))
         if (String(type) === 'followings') dispatch(UNFOLLOWED_FROM_FOLLOWINGS(userid))
-        if(String(type) === 'profile')dispatch(UNFOLLOWED_FROM_PROFILE())
+        if (String(type) === 'profile') dispatch(UNFOLLOWED_FROM_PROFILE())
         dispatch(HIDE_UNFOLLOW_MODEL())
     } catch (error) {
         dispatch(ERROR_WHILE_UNFOLLOWING(error.message))
         dispatch(HIDE_UNFOLLOW_MODEL())
     }
 }
-export const postTweet = (caption,pic=null)=>async(dispatch)=>{
+export const postTweet = (caption, pic = null) => async (dispatch) => {
     try {
         // if(!caption) dispatch error
-        const res = await postTheTweet(caption,pic);
+        if(!caption){
+           return dispatch(POSTING_TWEET_FAILED('No caption provided'))
+        }
+        dispatch(POSTING_TWEET_STARTED())
+        await postTheTweet(caption, pic);
         // dispatch success
+        dispatch(POSTING_TWEET_FINISED())
     } catch (error) {
-        console.log(error)
+        dispatch(POSTING_TWEET_FAILED(error.message))
     }
 }

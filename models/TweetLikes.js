@@ -10,7 +10,6 @@ const TweetLikesSchema = new Schema({
     likedBy: [{
         user: {
             type: Schema.Types.ObjectId,
-            unique: true,
             ref: 'User'
         }
 

@@ -169,7 +169,9 @@ export default function User() {
                           rel="noopener noreferrer"
                           className="default-link"
                         >
-                          {guestUser.website}
+                          {guestUser.website.length > 20
+                            ? guestUser.website.slice(0, 20) + "..."
+                            : guestUser.website}
                         </a>
                       </>
                     )}

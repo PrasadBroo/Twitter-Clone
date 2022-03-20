@@ -15,6 +15,7 @@ import { postTweet } from "../../store/user/userActions";
 export default function SendTweet({ className }) {
   const dispatch = useDispatch()
   const state = useSelector((state) => state);
+  const postingTweet = useSelector(state=>state.user.isPostingTweet)
   const currentUser = selectCurrentUser(state);
   const [tweetText,setTweetText] = useState('');
   const [showEmojiBox, setShowEmojiBox] = useState(false);
@@ -45,7 +46,7 @@ export default function SendTweet({ className }) {
 
   return (
     <section className={sendTweetClassnames}>
-      <div className="send-tweet-wrap">
+      <div className={postingTweet ?"send-tweet-wrap disabled" :"send-tweet-wrap"} >
         <div className="wrapper">
           <div className="profile-pic-container">
             <img src={currentUser.avatar} alt="userpic" className="user-pic" />

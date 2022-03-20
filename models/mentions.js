@@ -10,7 +10,6 @@ const MentionsSchema = new Schema({
     mentions: [{
         user: {
             type: Schema.Types.ObjectId,
-            unique: true,
             ref: 'User'
         }
 

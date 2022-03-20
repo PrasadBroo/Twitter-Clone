@@ -54,7 +54,6 @@ module.exports.postTweet = async (req, res, next) => {
                 tweetMentions.add(e.value.slice(1))
             }
         })
-
         let temp = [...tweetMentions]
         let mentionedUsers = await Promise.all(temp.map(async e => {
             let user = await User.findOne({
