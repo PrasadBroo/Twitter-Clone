@@ -1,4 +1,4 @@
-const UserModel = require("../models/User");
+const User = require("../models/User");
 const Followers = require("../models/Followers");
 const Followings = require("../models/Followings");
 const Tweet = require('../models/Tweet')
@@ -11,9 +11,11 @@ const {
     verifyLocation,
     verifyBio,
     verifyWebsite,
-    verifyUsername
+    verifyUsername,
+    isEmpty
 } = require("../utils/validations");
 const Mongoose = require("mongoose");
+
 
 
 module.exports.updateProfile = async (req, res, next) => {
@@ -47,7 +49,7 @@ module.exports.updateProfile = async (req, res, next) => {
             folder: 'profilePics',
             public_id: user._id
         })
-        const userUpdated = await UserModel.updateOne({
+        const userUpdated = await User.updateOne({
             _id: user._id
         }, {
             $set: {
@@ -79,7 +81,7 @@ module.exports.fethUser = async (req, res, next) => {
                 error: 'Invalid username provided'
             })
         }
-        const user = await UserModel.findOne({
+        const user = await User.findOne({
             username
         }, {
             password: 0,
@@ -163,7 +165,7 @@ module.exports.fethUser = async (req, res, next) => {
                 }
             }
         ]
-        const userDocument = await UserModel.aggregate(pipeline);
+        const userDocument = await User.aggregate(pipeline);
         const isCurrentUserFollowing = await Followers.findOne({
             user: user._id,
             'followers.user': {
@@ -187,7 +189,7 @@ module.exports.followUser = async (req, res, next) => {
     const useridToFollow = req.params.userid;
     const currentUser = res.locals.user;
     try {
-        const userToFollow = await UserModel.findById(useridToFollow);
+        const userToFollow = await User.findById(useridToFollow);
         if (!userToFollow) {
             return res
                 .status(400)
@@ -265,7 +267,7 @@ module.exports.unfollowUser = async (req, res, next) => {
     const useridToUnFollow = req.params.userid;
     const currentUser = res.locals.user;
     try {
-        const userToFollow = await UserModel.findById(useridToUnFollow);
+        const userToFollow = await User.findById(useridToUnFollow);
         if (!userToFollow) {
             return res
                 .status(400)
@@ -342,102 +344,112 @@ module.exports.getFollowers = async (req, res, next) => {
             })
         }
         const pipeline = [{
-                $match: {
-                    user: Mongoose.Types.ObjectId(userid)
-                },
-            },
-            {
-                $addFields: {
-                    count: {
-                        $size: '$followers'
-                    }
-                },
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    let: {
-                        userId: '$followers.user'
-                    },
-                    pipeline: [{
+                $facet: {
+                    users: [{
                             $match: {
-                                // Using the $in operator instead of the $eq
-                                // operator because we can't coerce the types
-                                $expr: {
-                                    $in: ['$_id', '$$userId']
-                                },
+                                user: Mongoose.Types.ObjectId(userid)
                             },
                         },
                         {
-                            $limit: 5
-                        }
-                    ],
-                    as: 'users',
-                }
-            }, {
-                $lookup: {
-                    from: 'followers',
-                    localField: 'users._id',
-                    foreignField: 'user',
-                    as: 'userFollowers',
-                },
-
-            }, {
-                $addFields: {
-                    userFollowers: {
-                        $cond: [{
-                                $eq: ["$userFollowers", []]
+                            $lookup: {
+                                from: 'users',
+                                let: {
+                                    userId: '$followers.user'
+                                },
+                                pipeline: [{
+                                        $match: {
+                                            // Using the $in operator instead of the $eq
+                                            // operator because we can't coerce the types
+                                            $expr: {
+                                                $in: ['$_id', '$$userId']
+                                            },
+                                        },
+                                    },
+                                    {
+                                        $limit: 5
+                                    }
+                                ],
+                                as: 'users',
+                            }
+                        }, {
+                            $addFields: {
+                                userFollowers: {
+                                    $cond: [{
+                                            $eq: ["$userFollowers", []]
+                                        },
+                                        [
+                                            []
+                                        ], '$userFollowers'
+                                    ]
+                                }
                             },
-                            [
-                                []
-                            ], '$userFollowers'
-                        ]
-                    }
-                },
-            },
+                        },
 
+                        {
+                            $project: {
+                                'users._id': 1,
+                                'users.username': 1,
+                                'users.avatar': 1,
+                                'users.fullName': 1,
+                            },
+                        },
+
+                    ],
+                    count: [{
+                            $match: {
+                                user: Mongoose.Types.ObjectId(userid)
+                            },
+                        },
+                        {
+                            $addFields: {
+                                count: {
+                                    $size: '$followers'
+                                }
+                            },
+                        },
+                        {
+                            $project: {
+                                count: 1,
+                            }
+                        },
+
+                    ]
+                },
+
+            },
             {
                 $project: {
-                    'users._id': 1,
-                    'users.username': 1,
-                    'users.avatar': 1,
-                    'users.fullName': 1,
-                    userFollowers: 1,
-                    count: 1,
-                },
-            },
-        ]
-        const user = await Followers.aggregate(pipeline)
-
-        //check if user followers exist 
-        // check if current user following any user
-        const isUserFollowedAnyOneUser = []
-        // user followers document exist
-        if (!user.length == 0) {
-            user[0].userFollowers.forEach(user => {
-                const isFollowed = user.followers.find(e => e.user.equals(currentUser._id));
-                // user not followed 
-                if (isFollowed === undefined) return
-                // user followed
-                if (isFollowed) isUserFollowedAnyOneUser.push(user.user.toString())
-            })
-
-            // now add isFollowing property
-            user[0].users.forEach(user => {
-                if (isUserFollowedAnyOneUser.includes(user._id.toString())) {
-                    user.isFollowing = true;
-                } else {
-                    user.isFollowing = false;
+                    count: {
+                        $arrayElemAt: ['$count', 0]
+                    },
+                    users: {
+                        $arrayElemAt: ['$users', 0]
+                    },
                 }
+            }, {
+                $project: {
+                    count: '$count.count',
+                    users: '$users.users'
+                }
+            }
+        ]
+        const data = await Followers.aggregate(pipeline)
+
+        if (isEmpty(data[0]) ) {
+            return res.send({
+                users: [],
+                count: 0
             })
         }
+        let users= data[0].users;
+        users = await Promise.all(users.map(async user=>{
+            const isFollowing = await Followers.findOne({user:user._id,'followers.user':{$in:[currentUser._id]}})
+            user.isFollowing = Boolean(isFollowing);
+        }))
 
 
-        const result = {
-            count: !user.length == 0 ? user[0].count : 0,
-            users: !user.length == 0 ? user[0].users : [],
-        }
-        return res.status(200).send(result)
+
+        return res.status(200).send(data[0])
     } catch (error) {
         next(error)
     }
@@ -454,86 +466,101 @@ module.exports.getFollowings = async (req, res, next) => {
             })
         }
         const pipeline = [{
-                $match: {
-                    user: Mongoose.Types.ObjectId(userid)
-                },
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    let: {
-                        userId: '$followings.user'
-                    },
-                    pipeline: [{
-                            $match: {
-                                // Using the $in operator instead of the $eq
-                                // operator because we can't coerce the types
-                                $expr: {
-                                    $in: ['$_id', '$$userId']
-                                },
-                            },
+            $facet: {
+                users: [{
+                        $match: {
+                            user: Mongoose.Types.ObjectId(userid)
                         },
-                        {
-                            $limit: 5
+                    },
+                    {
+                        $lookup: {
+                            from: 'users',
+                            let: {
+                                userId: '$followings.user'
+                            },
+                            pipeline: [{
+                                    $match: {
+                                        // Using the $in operator instead of the $eq
+                                        // operator because we can't coerce the types
+                                        $expr: {
+                                            $in: ['$_id', '$$userId']
+                                        },
+                                    },
+                                },
+                                {
+                                    $limit: 5
+                                }
+                            ],
+                            as: 'users',
                         }
-                    ],
-                    as: 'users',
-                }
-            }, {
-                $lookup: {
-                    from: 'followers',
-                    localField: 'users._id',
-                    foreignField: 'user',
-                    as: 'userFollowers',
-                },
+                    },
 
-            }, {
-                $addFields: {
-                    count: {
-                        $size: '$followings'
-                    }
-                }
+                    {
+                        $project: {
+                            'users._id': 1,
+                            'users.username': 1,
+                            'users.avatar': 1,
+                            'users.fullName': 1,
+                        },
+                    },
+
+                ],
+                count: [{
+                        $match: {
+                            user: Mongoose.Types.ObjectId(userid)
+                        },
+                    },
+                    {
+                        $addFields: {
+                            count: {
+                                $size: '$followings'
+                            }
+                        },
+                    },
+                    {
+                        $project: {
+                            count: 1,
+                        }
+                    },
+
+                ]
             },
-            {
-                $project: {
-                    'users._id': 1,
-                    'users.username': 1,
-                    'users.avatar': 1,
-                    'users.fullName': 1,
-                    userFollowers: 1,
-                    count: 1,
+
+        },
+        {
+            $project: {
+                count: {
+                    $arrayElemAt: ['$count', 0]
                 },
-            },
-        ]
-        const user = await Followings.aggregate(pipeline)
+                users: {
+                    $arrayElemAt: ['$users', 0]
+                },
+            }
+        }, {
+            $project: {
+                count: '$count.count',
+                users: '$users.users'
+            }
+        }
+    ]
+        const data = await Followings.aggregate(pipeline)
         //check if user followers exist 
         // check if current user following any user
         // handel deafualt case in pipeline and handel errors
-        const isUserFollowedAnyOneUser = []
-        if (!user.length == 0) {
-            user[0].userFollowers.forEach(user => {
-                const isFollowed = user.followers.find(e => e.user.equals(currentUser._id));
-                if (isFollowed === undefined) return; //user not followed this user
-                if (isFollowed) isUserFollowedAnyOneUser.push(user.user.toString())
-            })
-            // now add isFollowing property
-            user[0].users.forEach(user => {
-                if (isUserFollowedAnyOneUser.includes(user._id.toString())) {
-                    user.isFollowing = true;
-                } else {
-                    user.isFollowing = false;
-                }
+        if (isEmpty(data[0]) ) {
+            return res.send({
+                users: [],
+                count: 0
             })
         }
-
-
-        const result = {
-            count: !user.length == 0 ? user[0].count : 0,
-            users: !user.length == 0 ? user[0].users : [],
-        }
-        return res.status(200).send(result)
+        let users= data[0].users;
+        users = await Promise.all(users.map(async user=>{
+            const isFollowing = await Followers.findOne({user:user._id,'followers.user':{$in:[currentUser._id]}})
+            user.isFollowing = Boolean(isFollowing);
+        }))
+        
+        return res.status(200).send(data[0])
     } catch (error) {
-        console.log(error)
         next(error)
     }
 }
@@ -638,7 +665,10 @@ module.exports.getUserTweets = async (req, res, next) => {
             }
         }];
         const data = await Tweet.aggregate(pipeline)
-        const result = data.length === 0 ? {tweets:[],count:0}:data[0]
+        const result = data.length === 0 ? {
+            tweets: [],
+            count: 0
+        } : data[0]
         res.status(200).send(result)
     } catch (error) {
         next(error)

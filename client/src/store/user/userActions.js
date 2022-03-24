@@ -119,7 +119,7 @@ export const signInStart = () => async (dispatch) => {
         dispatch(SIGN_IN_SUCCESS(user));
         dispatch(FETCHING_FINISHED())
     } catch (error) {
-        localStorage.removeItem('token')
+        // localStorage.removeItem('token')
         dispatch(FETCHING_FINISHED())
         dispatch(SIGN_IN_FAIL(error.message))
     }
