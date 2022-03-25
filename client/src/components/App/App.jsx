@@ -25,6 +25,7 @@ import NotificationsPage from "./../../Pages/NotificationsPage";
 import SettingsPage from "./../../Pages/SettingsPage";
 import EditProfile from "../User/EditProfile";
 import LikedTweets from "../Tweet/LikedTweets";
+import MediaTweets from "../Tweet/MediaTweets";
 
 
 
@@ -59,6 +60,7 @@ function App() {
               <Route index element={<UserTweets />} />
               <Route path="tweets" element={<UserTweets />} />
               <Route path="likes" element={<LikedTweets />} />
+              <Route path="media" element={<MediaTweets />} />
               <Route path="with_replies" element={<h1>Coming Soon</h1>} />
               <Route path="edit/profile" element={<EditProfile />} />
             </Route>

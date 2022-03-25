@@ -4,12 +4,15 @@ import {
 
 const initialState = {
     likedTweets:null,
+    mediaTweets:null,
     tweets:null,
     tweetsCount:null,
     tweetsFetching:true,
     likedTweetFetching:true,
+    mediaTweetsFetching:true,
     tweetFetchingError:null,
     likedTweetsFetchingError:null,
+    mediaTweetsFetchingError:null,
 }
 
 
@@ -64,7 +67,8 @@ export const feedSlice = createSlice({
                 state.likedTweets.find(tweet => tweet._id === tweetid).isLiked=true
         },
         LIKED_TWEETS_FETCH_SUCCESS:(state,action)=>{
-            state.likedTweets = action.payload;;
+            state.likedTweets = action.payload.tweets;
+            state.tweetsCount=action.payload.count;
             state.likedTweetFetching = false;
         },
         LIKED_TWEETS_FETCH_FAILED:(state,action)=>{
@@ -73,6 +77,18 @@ export const feedSlice = createSlice({
         },
         LIKED_TWEETS_FETCHING_STARTED:(state)=>{
             state.likedTweetFetching = true;
+        },
+        MEDIA_TWEETS_FETCH_SUCCESS:(state,action)=>{
+            state.mediaTweets = action.payload.tweets;
+            state.tweetsCount=action.payload.count;
+            state.mediaTweetsFetching = false;
+        },
+        MEDIA_TWEETS_FETCH_FAILED:(state,action)=>{
+            state.mediaTweetsFetchingError = action.payload;
+            state.mediaTweetsFetching = false;
+        },
+        MEDIA_TWEETS_FETCHING_STARTED:(state)=>{
+            state.mediaTweetsFetching = true;
         },
 
     },
@@ -88,5 +104,8 @@ export const {
     LIKED_TWEETS_FETCHING_STARTED,
     LIKED_TWEETS_FETCH_FAILED,
     LIKED_TWEETS_FETCH_SUCCESS,
+    MEDIA_TWEETS_FETCHING_STARTED,
+    MEDIA_TWEETS_FETCH_FAILED,
+    MEDIA_TWEETS_FETCH_SUCCESS
 } = feedSlice.actions;
 export default feedSlice.reducer;

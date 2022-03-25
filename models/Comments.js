@@ -31,5 +31,5 @@ const CommentSchema = new Schema({
 
 })
 
-const CommentModel = mongoose.model('Tweets', CommentSchema);
+const CommentModel = mongoose.model('Comments', CommentSchema);
 module.exports = CommentModel;

@@ -435,15 +435,20 @@ module.exports.getFollowers = async (req, res, next) => {
         ]
         const data = await Followers.aggregate(pipeline)
 
-        if (isEmpty(data[0]) ) {
+        if (isEmpty(data[0])) {
             return res.send({
                 users: [],
                 count: 0
             })
         }
-        let users= data[0].users;
-        users = await Promise.all(users.map(async user=>{
-            const isFollowing = await Followers.findOne({user:user._id,'followers.user':{$in:[currentUser._id]}})
+        let users = data[0].users;
+        users = await Promise.all(users.map(async user => {
+            const isFollowing = await Followers.findOne({
+                user: user._id,
+                'followers.user': {
+                    $in: [currentUser._id]
+                }
+            })
             user.isFollowing = Boolean(isFollowing);
         }))
 
@@ -466,99 +471,104 @@ module.exports.getFollowings = async (req, res, next) => {
             })
         }
         const pipeline = [{
-            $facet: {
-                users: [{
-                        $match: {
-                            user: Mongoose.Types.ObjectId(userid)
-                        },
-                    },
-                    {
-                        $lookup: {
-                            from: 'users',
-                            let: {
-                                userId: '$followings.user'
+                $facet: {
+                    users: [{
+                            $match: {
+                                user: Mongoose.Types.ObjectId(userid)
                             },
-                            pipeline: [{
-                                    $match: {
-                                        // Using the $in operator instead of the $eq
-                                        // operator because we can't coerce the types
-                                        $expr: {
-                                            $in: ['$_id', '$$userId']
+                        },
+                        {
+                            $lookup: {
+                                from: 'users',
+                                let: {
+                                    userId: '$followings.user'
+                                },
+                                pipeline: [{
+                                        $match: {
+                                            // Using the $in operator instead of the $eq
+                                            // operator because we can't coerce the types
+                                            $expr: {
+                                                $in: ['$_id', '$$userId']
+                                            },
                                         },
                                     },
-                                },
-                                {
-                                    $limit: 5
-                                }
-                            ],
-                            as: 'users',
-                        }
-                    },
-
-                    {
-                        $project: {
-                            'users._id': 1,
-                            'users.username': 1,
-                            'users.avatar': 1,
-                            'users.fullName': 1,
-                        },
-                    },
-
-                ],
-                count: [{
-                        $match: {
-                            user: Mongoose.Types.ObjectId(userid)
-                        },
-                    },
-                    {
-                        $addFields: {
-                            count: {
-                                $size: '$followings'
+                                    {
+                                        $limit: 5
+                                    }
+                                ],
+                                as: 'users',
                             }
                         },
-                    },
-                    {
-                        $project: {
-                            count: 1,
-                        }
-                    },
 
-                ]
+                        {
+                            $project: {
+                                'users._id': 1,
+                                'users.username': 1,
+                                'users.avatar': 1,
+                                'users.fullName': 1,
+                            },
+                        },
+
+                    ],
+                    count: [{
+                            $match: {
+                                user: Mongoose.Types.ObjectId(userid)
+                            },
+                        },
+                        {
+                            $addFields: {
+                                count: {
+                                    $size: '$followings'
+                                }
+                            },
+                        },
+                        {
+                            $project: {
+                                count: 1,
+                            }
+                        },
+
+                    ]
+                },
+
             },
-
-        },
-        {
-            $project: {
-                count: {
-                    $arrayElemAt: ['$count', 0]
-                },
-                users: {
-                    $arrayElemAt: ['$users', 0]
-                },
+            {
+                $project: {
+                    count: {
+                        $arrayElemAt: ['$count', 0]
+                    },
+                    users: {
+                        $arrayElemAt: ['$users', 0]
+                    },
+                }
+            }, {
+                $project: {
+                    count: '$count.count',
+                    users: '$users.users'
+                }
             }
-        }, {
-            $project: {
-                count: '$count.count',
-                users: '$users.users'
-            }
-        }
-    ]
+        ]
         const data = await Followings.aggregate(pipeline)
         //check if user followers exist 
         // check if current user following any user
         // handel deafualt case in pipeline and handel errors
-        if (isEmpty(data[0]) ) {
+        if (isEmpty(data[0])) {
             return res.send({
                 users: [],
                 count: 0
             })
         }
-        let users= data[0].users;
-        users = await Promise.all(users.map(async user=>{
-            const isFollowing = await Followers.findOne({user:user._id,'followers.user':{$in:[currentUser._id]}})
+        let users = data[0].users;
+        users = await Promise.all(users.map(async user => {
+            const isFollowing = await Followers.findOne({
+                user: user._id,
+                'followers.user': {
+                    $in: [currentUser._id]
+                }
+            })
             user.isFollowing = Boolean(isFollowing);
         }))
-        
+
         return res.status(200).send(data[0])
     } catch (error) {
         next(error)
@@ -679,77 +689,211 @@ module.exports.getUserLikedTweets = async (req, res, next) => {
     const userid = req.params.userid;
     const currentUser = res.locals.user;
     try {
-        const pipeline = [
-            [{
-                    $match: {
-                        $expr: {
-                            $in: [
-                                Mongoose.Types.ObjectId(userid), '$likedBy.user'
-                            ]
-                        }
-                    }
-                }, {
-                    $lookup: {
-                        from: 'tweets',
-                        localField: 'tweet',
-                        foreignField: '_id',
-                        as: 'tweet'
-                    }
-                }, {
-                    $unwind: {
-                        path: '$tweet'
-                    }
-                }, {
-                    $lookup: {
-                        from: 'users',
-                        localField: 'tweet.user',
-                        foreignField: '_id',
-                        as: 'user'
-                    }
-                }, {
-                    $unwind: {
-                        path: '$user'
-                    }
-                }, {
-                    $addFields: {
-                        'tweet.user': '$user'
-                    }
-                },
-                {
-                    $addFields: {
-                        'tweet.likesCount': {
-                            $size: '$likedBy'
-                        }
-                    }
-                },
-                {
-                    $addFields: {
-                        'tweet.isLiked': {
-                            $in: [Mongoose.Types.ObjectId(currentUser._id), '$likedBy.user']
+        const pipeline = [{
+                $facet: {
+                    tweets: [{
+                            $match: {
+                                $expr: {
+                                    $in: [
+                                        Mongoose.Types.ObjectId(userid), '$likedBy.user'
+                                    ]
+                                }
+                            }
+                        }, {
+                            $lookup: {
+                                from: 'tweets',
+                                localField: 'tweet',
+                                foreignField: '_id',
+                                as: 'tweet'
+                            }
+                        }, {
+                            $unwind: {
+                                path: '$tweet'
+                            }
+                        }, {
+                            $lookup: {
+                                from: 'users',
+                                localField: 'tweet.user',
+                                foreignField: '_id',
+                                as: 'user'
+                            }
+                        }, {
+                            $unwind: {
+                                path: '$user'
+                            }
+                        }, {
+                            $addFields: {
+                                'tweet.user': '$user'
+                            }
                         },
-                    }
-                }, {
-                    $replaceRoot: {
-                        newRoot: "$tweet"
-                    }
-                },
-                {
-                    $project: {
-                        __v: 0,
-                        'user.password': 0,
-                        'user.bio': 0,
-                        'user.email': 0,
-                        'user.website': 0,
-                        'user.location': 0,
-                        'user.backgroundImage': 0,
-                        'user.__v': 0,
+                        {
+                            $addFields: {
+                                'tweet.likesCount': {
+                                    $size: '$likedBy'
+                                }
+                            }
+                        },
+                        {
+                            $addFields: {
+                                'tweet.isLiked': {
+                                    $in: [Mongoose.Types.ObjectId(currentUser._id), '$likedBy.user']
+                                },
+                            }
+                        }, {
+                            $replaceRoot: {
+                                newRoot: "$tweet"
+                            }
+                        },
+                        {
+                            $project: {
+                                __v: 0,
+                                'user.password': 0,
+                                'user.bio': 0,
+                                'user.email': 0,
+                                'user.website': 0,
+                                'user.location': 0,
+                                'user.backgroundImage': 0,
+                                'user.__v': 0,
 
+                            }
+                        }
+                    ],
+                    tweetsCount: [{
+                        $match: {
+                            $expr: {
+                                $in: [
+                                    Mongoose.Types.ObjectId(userid), '$likedBy.user'
+                                ]
+                            }
+                        }
+                    }, {
+                        $count: 'count'
+                    }, ],
+                }
+            }, {
+                $addFields: {
+                    tweetsCount: {
+                        $arrayElemAt: ['$tweetsCount', 0]
                     }
                 }
-            ]
+            },
+            {
+                $project: {
+                    tweets: 1,
+                    count: '$tweetsCount.count'
+                }
+            }
+
+
         ];
         const likedTweets = await TweetLike.aggregate(pipeline)
-        res.status(200).send(likedTweets)
+        res.status(200).send(likedTweets[0])
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.getUserMediaTweets = async (req, res, next) => {
+    const userid = req.params.userid;
+    const currentUser = res.locals.user;
+    try {
+        const pipeline = [{
+                $facet: {
+                    tweets: [{
+                            $match: {
+                                user: Mongoose.Types.ObjectId(userid),
+                                pic: {
+                                    $ne: null
+                                }
+                            }
+                        }, {
+                            $lookup: {
+                                from: 'users',
+                                localField: 'user',
+                                foreignField: '_id',
+                                as: 'user'
+                            }
+                        }, {
+                            $unwind: {
+                                path: '$user'
+                            }
+                        }, {
+                            $addFields: {
+                                'user': '$user'
+                            }
+                        },
+                        {
+                            $project: {
+                                __v: 0,
+                                'user.password': 0,
+                                'user.bio': 0,
+                                'user.email': 0,
+                                'user.website': 0,
+                                'user.location': 0,
+                                'user.backgroundImage': 0,
+                                'user.__v': 0,
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'tweetlikes',
+                                localField: '_id',
+                                foreignField: 'tweet',
+                                as: 'tweetLikes'
+                            }
+                        },{
+                            $addFields:{
+                                tweetLikes:{$arrayElemAt:['$tweetLikes',0]}
+                            }
+                        },
+                        {
+                            $addFields:{
+                                tweetLikes:'$tweetLikes.likedBy'
+                            }
+                        },
+                        {
+                            $addFields:{
+                                isLiked:{$in: [Mongoose.Types.ObjectId(currentUser._id), '$tweetLikes.user']}
+                            }
+                        },
+                        {
+                            $project:{
+                                tweetLikes:0
+                            }
+                        }
+                        
+                        
+                    ],
+                    tweetsCount: [{
+                        $match: {
+                            user: Mongoose.Types.ObjectId(userid),
+                                pic: {
+                                    $ne: null
+                                }
+                        }
+                    }, {
+                        $count: 'count'
+                    }, ],
+                }
+            }, 
+            {
+                $addFields: {
+                    tweetsCount: {
+                        $arrayElemAt: ['$tweetsCount', 0]
+                    }
+                }
+            },
+            {
+                $project: {
+                    tweets: 1,
+                    count: '$tweetsCount.count'
+                }
+            }
+
+
+        ];
+        const likedTweets = await Tweet.aggregate(pipeline)
+        res.status(200).send(likedTweets[0])
     } catch (error) {
         next(error)
     }

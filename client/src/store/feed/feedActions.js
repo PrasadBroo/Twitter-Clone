@@ -2,7 +2,7 @@ import {
     likeTheTweet,
     unlikeTheTweet
 } from "../../services/tweetService";
-import { fetchTheUserLikedTweets, fetchTheUserTweets } from "../../services/userServices";
+import { fetchTheUserLikedTweets, fetchTheUserMediaTweets, fetchTheUserTweets } from "../../services/userServices";
 
 import {
     TWEETS_FETCHING_STARTED,
@@ -15,6 +15,9 @@ import {
     LIKED_TWEETS_FETCHING_STARTED,
     LIKED_TWEETS_FETCH_FAILED,
     LIKED_TWEETS_FETCH_SUCCESS,
+    MEDIA_TWEETS_FETCHING_STARTED,
+    MEDIA_TWEETS_FETCH_SUCCESS,
+    MEDIA_TWEETS_FETCH_FAILED,
 } from "./feedSlice"
 
 export const fetchUserTweets = (userid) => async (dispatch) => {
@@ -53,6 +56,17 @@ export const fetchUserLikedTweets = (userid) => async (dispatch) => {
         dispatch(LIKED_TWEETS_FETCH_SUCCESS(tweets))
     } catch (error) {
         dispatch(LIKED_TWEETS_FETCH_FAILED(error.message))
+
+    }
+}
+
+export const fetchUserMediaTweets = (userid) => async (dispatch) => {
+    try {
+        dispatch(MEDIA_TWEETS_FETCHING_STARTED())
+        const tweets = await fetchTheUserMediaTweets(userid);
+        dispatch(MEDIA_TWEETS_FETCH_SUCCESS(tweets))
+    } catch (error) {
+        dispatch(MEDIA_TWEETS_FETCH_FAILED(error.message))
 
     }
 }

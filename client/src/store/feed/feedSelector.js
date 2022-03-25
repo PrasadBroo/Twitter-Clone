@@ -8,3 +8,4 @@ export const selectIsTweetsFetching = createSelector(selectFeed,feed => feed.twe
 export const selectUserTweets = createSelector(selectFeed,feed => feed.tweets)
 export const selectIsLikedTweetsFetching = createSelector(selectFeed,feed => feed.likedTweetFetching)
 export const selectUserLikedTweets = createSelector(selectFeed,feed => feed.likedTweets)
+export const selectUserMediaTweets = createSelector(selectFeed,feed => feed.mediaTweets)
