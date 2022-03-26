@@ -8,6 +8,12 @@ const initialState = {
         type:null,
         isUnfollowModelopen: false,
         userToUnfollow: null
+    },
+    composeTweet:{
+        type:'tweetReply',
+        posting:false,
+        tweet:null,
+        retweet:null,
     }
 
 }
@@ -24,6 +30,12 @@ export const modelSlice = createSlice({
         },
         HIDE_UNFOLLOW_MODEL: (state) => {
             state.unfollowModel.isUnfollowModelopen = false;
+        },
+        SET_TWEET_TYPE:(state,action)=>{
+            console.log(action.payload)
+            state.composeTweet.type =action.payload.type;
+            state.composeTweet.tweet = action.payload.tweet;
+            state.composeTweet.retweet = action.payload.retweet;
         }
 
     },
@@ -32,7 +44,7 @@ export const modelSlice = createSlice({
 
 export const {
     SHOW_UNFOLLOW_MODEL,
-    HIDE_UNFOLLOW_MODEL
-
+    HIDE_UNFOLLOW_MODEL,
+    SET_TWEET_TYPE
 } = modelSlice.actions
 export default modelSlice.reducer;

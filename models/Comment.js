@@ -5,14 +5,13 @@ const Schema = mongoose.Schema;
 const CommentSchema = new Schema({
     user: {
         ref: 'User',
-        unique:true,
         type: Schema.Types.ObjectId,
     },
     createdAt:{
         type:Date,
         default:new Date()
     },
-    content:{
+    message:{
         type:String,
         default:null,
         maxlength:700,
@@ -21,12 +20,10 @@ const CommentSchema = new Schema({
         type:String,
         default:null,
     },
-    likedBy:[{
-        user: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    }]
+    tweet:{
+        type:Schema.Types.ObjectId,
+        ref:'Tweet'
+    }
     
 
 })

@@ -172,7 +172,7 @@ export default function DesktopHeader() {
         <div className="header-conatiner tweet-btn-container">
           <LinkButton
             linkText="Tweet"
-            href="compose/tweet"
+            href="/compose/tweet"
             className="tweet-btn"
           />
           {/* <TextButton bcBlue rounded className="tweet-btn">

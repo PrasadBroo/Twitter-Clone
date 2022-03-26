@@ -12,7 +12,8 @@ import "linkify-plugin-mention";
 import moment from "moment";
 import { likeTweet, unlikeTweet } from "../../store/feed/feedActions";
 import { useDispatch } from "react-redux";
-
+import { Link, useNavigate } from "react-router-dom";
+import { SET_TWEET_TYPE } from "../../store/model/modelSlice";
 
 const options = {
   className: () => "default-link",
@@ -32,6 +33,7 @@ const options = {
 };
 
 export default function Tweet({tweet,from}) {
+  const navigate = useNavigate();
   const dispatch = useDispatch()
   const {
     ref: tweetOptionsRef,
@@ -77,8 +79,12 @@ export default function Tweet({tweet,from}) {
       dispatch(unlikeTweet(tweet._id,from))
     }
   }
+  const handelTweetReply = ()=>{
+    dispatch(SET_TWEET_TYPE({type:'tweetReply',retweet:null,tweet:tweet}))
+    navigate('/compose/tweet')
+  }
   return (
-    <div className="tweet tweet-container">
+    <Link to={'/'+tweet.user.username+'/status/'+tweet._id} className="tweet-link"><div className="tweet tweet-container">
       <div className="profile-pic-container">
         <img src={tweet.user.avatar} alt="user-pic" className="profile-pic" />
       </div>
@@ -148,7 +154,7 @@ export default function Tweet({tweet,from}) {
         <div className="tweet-actions">
           <div className=" tweet-actions-child tweet-comment">
             <div className="tweet-icon">
-              <CommentIcon fill={"#536471"} height="18px" width="18px" />
+              <CommentIcon fill={"#536471"} height="18px" width="18px" onClick={handelTweetReply}/>
             </div>
 
             <span className="tweet-comment-count">4k</span>
@@ -219,6 +225,7 @@ export default function Tweet({tweet,from}) {
           </div>
         </div>
       </div>
-    </div>
+    </div></Link>
+    
   );
 }

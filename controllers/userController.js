@@ -841,41 +841,37 @@ module.exports.getUserMediaTweets = async (req, res, next) => {
                                 foreignField: 'tweet',
                                 as: 'tweetLikes'
                             }
-                        },{
-                            $addFields:{
-                                tweetLikes:{$arrayElemAt:['$tweetLikes',0]}
+                        }, {
+                            $unwind: '$tweetLikes'
+                        },
+                        {
+                            $addFields: {
+                                tweetLikes: '$tweetLikes.likedBy'
                             }
                         },
                         {
-                            $addFields:{
-                                tweetLikes:'$tweetLikes.likedBy'
+                            $addFields: {
+                                isLiked: {
+                                    $in: [Mongoose.Types.ObjectId(currentUser._id), '$tweetLikes.user']
+                                }
                             }
                         },
-                        {
-                            $addFields:{
-                                isLiked:{$in: [Mongoose.Types.ObjectId(currentUser._id), '$tweetLikes.user']}
-                            }
-                        },
-                        {
-                            $project:{
-                                tweetLikes:0
-                            }
-                        }
                         
-                        
+
+
                     ],
                     tweetsCount: [{
                         $match: {
                             user: Mongoose.Types.ObjectId(userid),
-                                pic: {
-                                    $ne: null
-                                }
+                            pic: {
+                                $ne: null
+                            }
                         }
                     }, {
                         $count: 'count'
                     }, ],
                 }
-            }, 
+            },
             {
                 $addFields: {
                     tweetsCount: {
@@ -893,8 +889,12 @@ module.exports.getUserMediaTweets = async (req, res, next) => {
 
         ];
         const likedTweets = await Tweet.aggregate(pipeline)
+        if(!("count" in likedTweets[0])){
+            likedTweets[0].count=0
+        }
         res.status(200).send(likedTweets[0])
     } catch (error) {
+        console.log(error)
         next(error)
     }
 }

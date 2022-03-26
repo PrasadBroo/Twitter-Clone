@@ -6,9 +6,17 @@
         margin-top: 2rem;
     }
     .send-tweet{
+        margin-top: 2rem;
         border: 0;
         .send-tweet-heading{
             display: none;
+        }
+    }
+    .tweet-header{
+        color: $color-grey-1;
+        font-size: 1.2rem;
+        .close-btn{
+            cursor: pointer;
         }
     }
 }

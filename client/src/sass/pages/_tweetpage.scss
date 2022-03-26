@@ -1,0 +1,35 @@
+.tweetpage {
+    background-color: #fff;
+
+    .fpc-1 {
+        align-self: stretch;
+    }
+
+    .tweetpage-header {
+        position: sticky;
+        top: 0px;
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        padding: 0 0.5rem;
+        cursor: pointer;
+    }
+
+
+    .user-tweet-content {
+        
+        position: relative;
+        height: 100%;
+        .replying-to {
+            margin-top: 1rem;
+            color: $color-grey-1;
+            margin-left: 1rem;
+        }
+    }
+
+    .tweet-sugg-news-container {
+        .tweet-sugg-news-wrap {
+            max-width: 350px;
+        }
+    }
+
+}

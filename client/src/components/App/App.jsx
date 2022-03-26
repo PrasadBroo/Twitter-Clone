@@ -26,18 +26,17 @@ import SettingsPage from "./../../Pages/SettingsPage";
 import EditProfile from "../User/EditProfile";
 import LikedTweets from "../Tweet/LikedTweets";
 import MediaTweets from "../Tweet/MediaTweets";
-
-
+import ComposeTweetPage from "./../../Pages/ComposeTweetPage";
+import Tweetpage from "../../Pages/Tweetpage";
 
 function App() {
   const state = useSelector((state) => state);
   const is_fetching = selectFetching(state);
   const dispatch = useDispatch();
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   useEffect(() => {
-    if(token)dispatch(signInStart());
-    
-  }, [dispatch,token]);
+    if (token) dispatch(signInStart());
+  }, [dispatch, token]);
 
   return !is_fetching ? (
     <div className="App">
@@ -52,6 +51,9 @@ function App() {
         </Route>
 
         <Route element={<RequireAuth />}>
+          <Route path="compose/tweet" element={<HomepageLayout />}>
+            <Route index element={<ComposeTweetPage />} />
+          </Route>
           <Route path="home" element={<HomepageLayout />}>
             <Route index element={<TweetSections />} />
           </Route>
@@ -82,6 +84,8 @@ function App() {
               <Route path="following" element={<Following />} />
               <Route path="followers" element={<Followers />} />
             </Route>
+            <Route path="status/:tweetid" element={<Tweetpage/>}>
+            </Route>
           </Route>
           <Route path="settings" element={<HomepageLayout />}>
             <Route element={<SettingsPage />}>
@@ -95,7 +99,7 @@ function App() {
             </Route>
           </Route>
         </Route>
-        <Route path="*" element={<h1>404 Page Not Found</h1>}/>
+        <Route path="*" element={<h1>404 Page Not Found</h1>} />
       </Routes>
     </div>
   ) : (
