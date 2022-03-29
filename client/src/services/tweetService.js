@@ -41,3 +41,15 @@ export const unlikeTheTweet = async (tweetid) => {
     }
 }
 
+export const fetchTheTweet = async(tweetid)=>{
+    try {
+        const response = await axios.post(`/api/tweet/${tweetid}`, null, {
+            headers: {
+                authorization: localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error);
+    }
+}

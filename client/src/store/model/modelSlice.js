@@ -10,7 +10,7 @@ const initialState = {
         userToUnfollow: null
     },
     composeTweet:{
-        type:'tweetReply',
+        type:null,
         posting:false,
         tweet:null,
         retweet:null,

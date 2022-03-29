@@ -16,6 +16,7 @@ import useComponentVisible from "./../../CustomHooks/useComponentVisible";
 import { logout } from "../../store/user/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/userSelector";
+import { SET_TWEET_TYPE } from "../../store/model/modelSlice";
 
 export default function DesktopHeader() {
   const state = useSelector(state=>state)
@@ -174,6 +175,7 @@ export default function DesktopHeader() {
             linkText="Tweet"
             href="/compose/tweet"
             className="tweet-btn"
+            onClick={()=>dispatch(SET_TWEET_TYPE({type:'tweet',retweet:null,tweet:null}))}
           />
           {/* <TextButton bcBlue rounded className="tweet-btn">
             Tweet

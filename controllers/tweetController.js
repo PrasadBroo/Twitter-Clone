@@ -6,6 +6,7 @@ const User = require('../models/User')
 const linkify = require('linkifyjs');
 require('linkify-plugin-hashtag');
 require('linkify-plugin-mention');
+const Mongoose = require("mongoose");
 const {
     cloudinary
 } = require("../services/cloudinary");
@@ -153,6 +154,121 @@ module.exports.unlikeTweet = async (req, res, next) => {
             }
         });
         res.status(200).send('success');
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.fetchTweet = async (req, res, next) => {
+    const tweetid = req.params.tweetid;
+    const currentUser = res.locals.user;
+    try {
+        if (!tweetid) return res.status(400).send({
+            error: 'Invalid tweetid'
+        })
+
+        const tweet = await Tweet.findOne({
+            _id: tweetid
+        });
+        if (!tweet) return res.status(404).send({
+            error: 'Invalid tweetid'
+        })
+
+        const pipeline = [{
+                $facet: {
+                    tweet: [{
+                            $match: {
+                                _id: Mongoose.Types.ObjectId(tweetid),
+                            }
+                        }, {
+                            $lookup: {
+                                from: 'users',
+                                localField: 'user',
+                                foreignField: '_id',
+                                as: 'user'
+                            }
+                        }, {
+                            $unwind: {
+                                path: '$user'
+                            }
+                        }, {
+                            $addFields: {
+                                'user': '$user'
+                            }
+                        },
+                        {
+                            $project: {
+                                __v: 0,
+                                'user.password': 0,
+                                'user.bio': 0,
+                                'user.email': 0,
+                                'user.website': 0,
+                                'user.location': 0,
+                                'user.backgroundImage': 0,
+                                'user.__v': 0,
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'tweetlikes',
+                                localField: '_id',
+                                foreignField: 'tweet',
+                                as: 'tweetLikes'
+                            }
+                        }, {
+                            $addFields: {
+                                tweetLikes: {
+                                    $cond: [{
+                                            $eq: ["$tweetLikes", []]
+                                        },
+                                        [{
+                                            likedBy: []
+                                        }], '$tweetLikes'
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $unwind: {
+                                path: '$tweetLikes',
+                                preserveNullAndEmptyArrays: true
+                            }
+                        },
+                        {
+                            $addFields: {
+                                tweetLikes: '$tweetLikes.likedBy'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                isLiked: {
+                                    $in: [Mongoose.Types.ObjectId(currentUser._id), '$tweetLikes.user']
+                                }
+                            }
+                        },
+                        {
+                            $project: {
+                                tweetLikes: 0,
+                            }
+                        }
+
+
+
+                    ],
+                }
+            },
+            {
+                $project: {
+                    tweet: {
+                        $arrayElemAt: ['$tweet', 0]
+                    },
+                }
+            }
+
+
+        ];
+        const data = await Tweet.aggregate(pipeline);
+        res.status(200).send(data[0])
     } catch (error) {
         next(error)
     }

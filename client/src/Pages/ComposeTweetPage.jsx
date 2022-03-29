@@ -16,7 +16,7 @@ export default function ComposeTweetPage() {
         <i className="fas fa-times close-btn" onClick={() => navigate(-1)}></i>
       </div>
       {model.type ==='tweetReply'&& <Retweet tweet={model.tweet}/>}
-      <SendTweet placeholder='Tweet your reply' type='reply'/>
+      <SendTweet placeholder='Tweet your reply' type={model.type}/>
     </RootModel>
   );
 }
