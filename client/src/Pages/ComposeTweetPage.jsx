@@ -10,13 +10,14 @@ export default function ComposeTweetPage() {
   const state = useSelector((state) => state);
   const model = selectComposeTweetModel(state);
   const navigate = useNavigate();
+  console.log(model.type)
   return (
     <RootModel bcWhite hideHeader className="send-tweet-model-wrap">
       <div className="tweet-header">
         <i className="fas fa-times close-btn" onClick={() => navigate(-1)}></i>
       </div>
       {model.type ==='tweetReply'&& <Retweet tweet={model.tweet}/>}
-      <SendTweet placeholder='Tweet your reply' type={model.type}/>
+      <SendTweet placeholder='Tweet your reply' type={model.type} tweet={model.tweet}/>
     </RootModel>
   );
 }

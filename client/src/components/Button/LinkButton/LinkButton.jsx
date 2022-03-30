@@ -12,6 +12,7 @@ export default function LinkButton({
   customstyle,
   targetBlank,
   className,
+  ...otherProps
 }) {
   const linkButtonClass = classNames('button','link-button',className)
   return (
@@ -21,6 +22,7 @@ export default function LinkButton({
       style={customstyle}
       target={targetBlank && "_blank"}
       rel={targetBlank && "noopener noreferrer"}
+      {...otherProps}
     >
       <span className="icon-container">
         {icon && icon}

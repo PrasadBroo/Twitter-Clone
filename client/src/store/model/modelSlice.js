@@ -32,7 +32,6 @@ export const modelSlice = createSlice({
             state.unfollowModel.isUnfollowModelopen = false;
         },
         SET_TWEET_TYPE:(state,action)=>{
-            console.log(action.payload)
             state.composeTweet.type =action.payload.type;
             state.composeTweet.tweet = action.payload.tweet;
             state.composeTweet.retweet = action.payload.retweet;

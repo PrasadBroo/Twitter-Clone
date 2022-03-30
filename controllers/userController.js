@@ -641,6 +641,19 @@ module.exports.getUserTweets = async (req, res, next) => {
                             }
                         }
                     },
+                    {
+                        $lookup:{
+                            from: 'tweets',
+                            localField: '_id',
+                            foreignField: 'in_reply_to_status_id',
+                            as: 'tweetReplies'
+                          }
+                    },
+                    {
+                        $addFields:{
+                            replyCount:{$size:'$tweetReplies'}
+                        }
+                    },
 
                     {
                         $project: {
@@ -653,6 +666,7 @@ module.exports.getUserTweets = async (req, res, next) => {
                             'user.backgroundImage': 0,
                             'user,__v': 0,
                             likes: 0,
+                            tweetReplies:0
 
                         }
                     }
@@ -745,6 +759,19 @@ module.exports.getUserLikedTweets = async (req, res, next) => {
                             }
                         },
                         {
+                            $lookup:{
+                                from: 'tweets',
+                                localField: '_id',
+                                foreignField: 'in_reply_to_status_id',
+                                as: 'tweetReplies'
+                              }
+                        },
+                        {
+                            $addFields:{
+                                replyCount:{$size:'$tweetReplies'}
+                            }
+                        },
+                        {
                             $project: {
                                 __v: 0,
                                 'user.password': 0,
@@ -754,7 +781,7 @@ module.exports.getUserLikedTweets = async (req, res, next) => {
                                 'user.location': 0,
                                 'user.backgroundImage': 0,
                                 'user.__v': 0,
-
+                                tweetReplies:0
                             }
                         }
                     ],
@@ -841,7 +868,28 @@ module.exports.getUserMediaTweets = async (req, res, next) => {
                                 foreignField: 'tweet',
                                 as: 'tweetLikes'
                             }
-                        }, {
+                        },
+                        {
+                            $addFields: {
+                                likesCount: {
+                                    $size: '$tweetLikes.likedBy'
+                                }
+                            }
+                        },
+                        {
+                            $addFields: {
+                                tweetLikes: {
+                                    $cond: [{
+                                            $eq: ["$tweetLikes", []]
+                                        },
+                                        [{
+                                            likedBy: [{user:null}]
+                                        }], '$tweetLikes'
+                                    ]
+                                }
+                            }
+                        }, 
+                        {
                             $unwind: '$tweetLikes'
                         },
                         {
@@ -856,6 +904,25 @@ module.exports.getUserMediaTweets = async (req, res, next) => {
                                 }
                             }
                         },
+                        {
+                            $lookup:{
+                                from: 'tweets',
+                                localField: '_id',
+                                foreignField: 'in_reply_to_status_id',
+                                as: 'tweetReplies'
+                              }
+                        },
+                        {
+                            $addFields:{
+                                replyCount:{$size:'$tweetReplies'}
+                            }
+                        },
+                        {
+                            $project:{
+                                tweetReplies:0,
+                                tweetLikes:0
+                            }
+                        }
                         
 
 

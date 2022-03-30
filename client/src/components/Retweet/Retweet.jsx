@@ -3,7 +3,7 @@ import moment from "moment";
 
 export default function Retweet({ tweet }) {
   return (
-    <div className="retweet">
+    <div className="retweets tweet-link">
       <div className="tweet tweet-container">
         <div className="profile-pic-container">
           <img src={tweet.user.avatar} alt="user-pic" className="profile-pic" />

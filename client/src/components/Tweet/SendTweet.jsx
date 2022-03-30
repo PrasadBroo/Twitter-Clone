@@ -12,7 +12,7 @@ import { useSelector,useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../store/user/userSelector";
 import { postTweet } from "../../store/user/userActions";
 
-export default function SendTweet({ className,placeholder,type }) {
+export default function SendTweet({ className,placeholder,type,tweet=null }) {
   const dispatch = useDispatch()
   const state = useSelector((state) => state);
   const postingTweet = useSelector(state=>state.user.isPostingTweet)
@@ -41,8 +41,8 @@ export default function SendTweet({ className,placeholder,type }) {
     setTweetText(prevState=>prevState+=emojiObject.emoji)
   };
   const handelSubmit = ()=>{
-    if(type==='tweetReply')return
-    dispatch(postTweet(tweetText,tweetPic))
+    // if(type==='tweetReply')dispatch(postTweetReply(tweetText,tweetPic,tweet._id))
+    dispatch(postTweet(tweetText,tweetPic,tweet))
   }
 
   return (

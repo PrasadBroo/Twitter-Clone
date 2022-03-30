@@ -6,7 +6,7 @@ import {
     loginWithEmail,
 } from "../../services/authenticationServices"
 import {
-    postTheTweet
+    postTheTweet, postTheTweetReply
 } from "../../services/tweetService";
 import {
     updateUserProfile
@@ -52,6 +52,9 @@ import {
     POSTING_TWEET_STARTED,
     POSTING_TWEET_FINISED,
     POSTING_TWEET_FAILED,
+    POSTING_TWEET_REPLY_FAILED,
+    POSTING_TWEET_REPLY_STARTED,
+    POSTING_TWEET_REPLY_FINISED,
 } from "./userSlice";
 
 
@@ -163,17 +166,35 @@ export const unfollowTheUser = (userid, type) => async (dispatch) => {
         dispatch(HIDE_UNFOLLOW_MODEL())
     }
 }
-export const postTweet = (caption, pic = null) => async (dispatch) => {
+export const postTweet = (caption, pic = null,tweet) => async (dispatch) => {
     try {
         // if(!caption) dispatch error
         if(!caption){
            return dispatch(POSTING_TWEET_FAILED('No caption provided'))
         }
         dispatch(POSTING_TWEET_STARTED())
-        await postTheTweet(caption, pic);
+        if(!tweet)await postTheTweet(caption, pic,null);
+        else{
+            await postTheTweet(caption, pic,tweet._id);
+        }
+        
         // dispatch success
         dispatch(POSTING_TWEET_FINISED())
     } catch (error) {
         dispatch(POSTING_TWEET_FAILED(error.message))
+    }
+}
+export const postTweetReply = (tweetText,tweetPic=null,tweetid) => async (dispatch) => {
+    try {
+        // if(!caption) dispatch error
+        if(!tweetText || !tweetid){
+           return dispatch(POSTING_TWEET_REPLY_FAILED('Insufficent data provided'))
+        }
+        dispatch(POSTING_TWEET_REPLY_STARTED())
+        await postTheTweetReply(tweetText, tweetPic,tweetid);
+        // dispatch success
+        dispatch(POSTING_TWEET_REPLY_FINISED())
+    } catch (error) {
+        dispatch(POSTING_TWEET_REPLY_FAILED(error.message))
     }
 }

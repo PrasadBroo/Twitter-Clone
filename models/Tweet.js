@@ -20,6 +20,10 @@ const TweetSchema = new Schema({
         type:String,
         default:null,
     },
+    in_reply_to_status_id:{
+        type:Schema.Types.ObjectId,
+        default:null
+    }
 
 })
 

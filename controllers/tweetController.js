@@ -17,19 +17,25 @@ module.exports.postTweet = async (req, res, next) => {
     try {
         let {
             caption,
-            pic
+            pic,
+            tweetid
         } = req.body;
         if (!pic) pic = null
         if (!caption) return res.send({
             error: 'tweet body can not be empty!'
         })
-
+        // if tweetid presents verify if it exist then add tweet
+        const isTweetIdExist = await Tweet.findOne({_id:tweetid});
+        if(!isTweetIdExist && tweetid){
+            return res.status(400).send({error:'Parent tweet does not exist'})
+        }
 
         // add to tweet collection
         const tweet = await Tweet.create({
             user: currentUser._id,
             caption,
-            pic
+            pic,
+            in_reply_to_status_id:tweetid ? isTweetIdExist._id : null
         });
         if (pic) {
             const tweetPicResponse = await cloudinary.uploader.upload(pic, {
@@ -271,5 +277,24 @@ module.exports.fetchTweet = async (req, res, next) => {
         res.status(200).send(data[0])
     } catch (error) {
         next(error)
+    }
+}
+
+module.exports.postTweetReply = async(req,res,next)=>{
+    const parentTweetId = req.params.tweetid;
+    const currentUser = res.locals.user;
+    try {
+        let {
+            tweetText,
+            tweetPic
+        } = req.body;
+        if (!tweetPic) tweetPic = null
+        if (!tweetText) return res.send({
+            error: 'tweet body can not be empty!'
+        })
+
+        
+    } catch (error) {
+        
     }
 }

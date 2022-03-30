@@ -10,7 +10,9 @@ const initialState = {
     fetching: false,
     currentUser: null,
     isPostingTweet:false,
+    isPostingTweetReply:false,
     postingTweetError:null,
+    postingTweetReplyError:null,
     updatingProfile:false,
     followingError:null,
     unfollowingError:null,
@@ -82,6 +84,16 @@ export const userSlice = createSlice({
         },
         POSTING_TWEET_FAILED:(state,action)=>{
             state.postingTweetError = action.payload;
+            state.isPostingTweet=false;
+        },
+        POSTING_TWEET_REPLY_STARTED:(state)=>{
+            state.isPostingTweetReply=true;
+        },
+        POSTING_TWEET_REPLY_FINISED:(state)=>{
+            state.isPostingTweetReply=false;
+        },
+        POSTING_TWEET_REPLY_FAILED:(state,action)=>{
+            state.postingTweetReplyError = action.payload;
         },
 
     },
@@ -106,5 +118,8 @@ export const {
     POSTING_TWEET_FAILED,
     POSTING_TWEET_FINISED,
     POSTING_TWEET_STARTED,
+    POSTING_TWEET_REPLY_FAILED,
+    POSTING_TWEET_REPLY_FINISED,
+    POSTING_TWEET_REPLY_STARTED
 } = userSlice.actions
 export default userSlice.reducer;

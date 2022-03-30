@@ -41,10 +41,15 @@ export const feedSlice = createSlice({
                 tweetid,
                 from
             } = action.payload;
-
-            from === 'tweets' ?
-                state.tweets.find(tweet => tweet._id === tweetid).isLiked = true :
-                state.likedTweets.find(tweet => tweet._id === tweetid).isLiked = true
+            const tweets = state.tweets;
+            const likedTweets = state.likedTweets;
+            if (from === 'tweets') {
+                tweets.find(tweet => tweet._id === tweetid).isLiked = true
+                tweets.find(tweet => tweet._id === tweetid).likesCount += 1
+            } else {
+                likedTweets.find(tweet => tweet._id === tweetid).isLiked = true
+                likedTweets.find(tweet => tweet._id === tweetid).likesCount += 1
+            }
 
         },
         TWEET_LIKED_FAILED: (state, action) => {
@@ -53,9 +58,15 @@ export const feedSlice = createSlice({
                 from
             } = action.payload;
 
-            from === 'tweets' ?
-                state.tweets.find(tweet => tweet._id === tweetid).isLiked = false :
-                state.likedTweets.find(tweet => tweet._id === tweetid).isLiked = false
+            const tweets = state.tweets;
+            const likedTweets = state.likedTweets;
+            if (from === 'tweets') {
+                tweets.find(tweet => tweet._id === tweetid).isLiked = false
+                tweets.find(tweet => tweet._id === tweetid).likesCount -= 1
+            } else {
+                likedTweets.find(tweet => tweet._id === tweetid).isLiked = false
+                likedTweets.find(tweet => tweet._id === tweetid).likesCount -= 1
+            }
         },
         TWEET_UNLIKED_SUCCESS: (state, action) => {
             const {
@@ -63,9 +74,15 @@ export const feedSlice = createSlice({
                 from
             } = action.payload;
 
-            from === 'tweets' ?
-                state.tweets.find(tweet => tweet._id === tweetid).isLiked = false :
-                state.likedTweets.find(tweet => tweet._id === tweetid).isLiked = false
+            const tweets = state.tweets;
+            const likedTweets = state.likedTweets;
+            if (from === 'tweets') {
+                tweets.find(tweet => tweet._id === tweetid).isLiked = false
+                tweets.find(tweet => tweet._id === tweetid).likesCount -= 1
+            } else {
+                likedTweets.find(tweet => tweet._id === tweetid).isLiked = false
+                likedTweets.find(tweet => tweet._id === tweetid).likesCount -= 1
+            }
         },
         TWEET_UNLIKED_FAILED: (state, action) => {
             const {
@@ -73,9 +90,15 @@ export const feedSlice = createSlice({
                 from
             } = action.payload;
 
-            from === 'tweets' ?
-                state.tweets.find(tweet => tweet._id === tweetid).isLiked = true :
-                state.likedTweets.find(tweet => tweet._id === tweetid).isLiked = true
+            const tweets = state.tweets;
+            const likedTweets = state.likedTweets;
+            if (from === 'tweets') {
+                tweets.find(tweet => tweet._id === tweetid).isLiked = true
+                tweets.find(tweet => tweet._id === tweetid).likesCount += 1
+            } else {
+                likedTweets.find(tweet => tweet._id === tweetid).isLiked = true
+                likedTweets.find(tweet => tweet._id === tweetid).likesCount += 1
+            }
         },
         LIKED_TWEETS_FETCH_SUCCESS: (state, action) => {
             state.likedTweets = action.payload.tweets;

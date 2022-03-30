@@ -1,10 +1,11 @@
 import axios from "axios";
 
-export const postTheTweet = async (caption, pic) => {
+export const postTheTweet = async (caption, pic,tweetid) => {
     try {
         const response = await axios.post(`/api/tweet/post`, {
             caption,
-            pic
+            pic,
+            tweetid:tweetid
         }, {
             headers: {
                 authorization: localStorage.getItem('token'),
@@ -44,6 +45,22 @@ export const unlikeTheTweet = async (tweetid) => {
 export const fetchTheTweet = async(tweetid)=>{
     try {
         const response = await axios.post(`/api/tweet/${tweetid}`, null, {
+            headers: {
+                authorization: localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error);
+    }
+}
+
+export const  postTheTweetReply = async(tweetText, tweetPic,tweetid)=>{
+    try {
+        const response = await axios.post(`/api/tweet/post/${tweetid}/reply`, {
+            tweetText,
+            tweetPic,
+        }, {
             headers: {
                 authorization: localStorage.getItem('token'),
             },
