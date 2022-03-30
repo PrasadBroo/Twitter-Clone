@@ -25,9 +25,13 @@ module.exports.postTweet = async (req, res, next) => {
             error: 'tweet body can not be empty!'
         })
         // if tweetid presents verify if it exist then add tweet
-        const isTweetIdExist = await Tweet.findOne({_id:tweetid});
-        if(!isTweetIdExist && tweetid){
-            return res.status(400).send({error:'Parent tweet does not exist'})
+        const isTweetIdExist = await Tweet.findOne({
+            _id: tweetid
+        });
+        if (!isTweetIdExist && tweetid) {
+            return res.status(400).send({
+                error: 'Parent tweet does not exist'
+            })
         }
 
         // add to tweet collection
@@ -35,7 +39,7 @@ module.exports.postTweet = async (req, res, next) => {
             user: currentUser._id,
             caption,
             pic,
-            in_reply_to_status_id:tweetid ? isTweetIdExist._id : null
+            in_reply_to_status_id: tweetid ? isTweetIdExist._id : null
         });
         if (pic) {
             const tweetPicResponse = await cloudinary.uploader.upload(pic, {
@@ -253,8 +257,56 @@ module.exports.fetchTweet = async (req, res, next) => {
                             }
                         },
                         {
+                            $lookup: {
+                                from: 'tweets',
+                                localField: 'in_reply_to_status_id',
+                                foreignField: '_id',
+                                as: 'hasParentTweet'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                hasParentTweet: {
+                                    $cond: [{
+                                            $eq: ["$hasParentTweet", []]
+                                        },
+                                        [{
+                                            user: null
+                                        }], '$hasParentTweet'
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $unwind: '$hasParentTweet'
+                        },
+                        {
+                            $lookup: {
+                                from: 'users',
+                                localField: 'hasParentTweet.user',
+                                foreignField: '_id',
+                                as: 'hasParentTweet.user'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                'hasParentTweet.user': {
+                                    $arrayElemAt: ['$hasParentTweet.user', 0]
+                                }
+                            }
+                        },
+
+                        {
                             $project: {
                                 tweetLikes: 0,
+                                __v: 0,
+                                'hasParentTweet.user.password': 0,
+                                'hasParentTweet.user.bio': 0,
+                                'hasParentTweet.user.email': 0,
+                                'hasParentTweet.user.website': 0,
+                                'hasParentTweet.user.location': 0,
+                                'hasParentTweet.user.backgroundImage': 0,
+                                'hasParentTweet.user.__v': 0,
                             }
                         }
 
@@ -280,7 +332,7 @@ module.exports.fetchTweet = async (req, res, next) => {
     }
 }
 
-module.exports.postTweetReply = async(req,res,next)=>{
+module.exports.postTweetReply = async (req, res, next) => {
     const parentTweetId = req.params.tweetid;
     const currentUser = res.locals.user;
     try {
@@ -293,8 +345,8 @@ module.exports.postTweetReply = async(req,res,next)=>{
             error: 'tweet body can not be empty!'
         })
 
-        
+
     } catch (error) {
-        
+
     }
 }

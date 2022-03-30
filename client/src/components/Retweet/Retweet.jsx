@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import moment from "moment";
 
-export default function Retweet({ tweet }) {
+export default function Retweet({ tweet,showPic }) {
   return (
     <div className="retweets tweet-link">
       <div className="tweet tweet-container">
@@ -25,6 +25,15 @@ export default function Retweet({ tweet }) {
           <div className="tweet-content-text">
             <p className="tweet-text">{tweet.caption}</p>
           </div>
+          {showPic && <div className="tweet-content-image-container">
+            {tweet.pic && (
+              <img
+                src={tweet.pic}
+                alt="tweet-pic"
+                className="tweet-content-image"
+              />
+            )}
+          </div>}
           <div className="reaplying-to">
             <span>
               Replaying to{" "}
