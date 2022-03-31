@@ -1,5 +1,6 @@
 .tweet-link {
     .tweet {
+        position: relative;
         cursor: pointer;
         margin-bottom: 1rem;
         padding: 0.5rem;
@@ -10,8 +11,18 @@
         &:hover {
             background-color: rgba(#dbdbdb, 0.3);
         }
-
+        .hr-line {
+            position: absolute;
+            top: 4.4rem;
+            left: 30px;
+            width: 2px;
+            height: 96%;
+            background-color: $color-grey-2;
+            z-index: 10;
+        }
         .profile-pic-container {
+            position: relative;
+            
             .profile-pic {
                 height: 48px;
                 width: 48px;

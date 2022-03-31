@@ -32,7 +32,7 @@ const options = {
   },
 };
 
-export default function Tweet({ tweet, from }) {
+export default function Tweet({ tweet, from,isParentTweet }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -93,7 +93,9 @@ export default function Tweet({ tweet, from }) {
       <div className="tweet tweet-container">
         <div className="profile-pic-container">
           <img src={tweet.user.avatar} alt="user-pic" className="profile-pic" />
+          
         </div>
+        {isParentTweet &&<span className="hr-line"></span>}
         <div className="tweet-content">
           <div className="tweet-content-header">
             <span className="tweet-content-child user-full-name">

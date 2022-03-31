@@ -1,5 +1,6 @@
 .tweetpage {
     background-color: #fff;
+    
 
     .fpc-1 {
         align-self: stretch;
@@ -16,7 +17,9 @@
 
 
     .user-tweet-content {
-        
+        .retweet-wrap{
+            margin-bottom: 3rem;
+        }
         position: relative;
         height: 100%;
         .replying-to {

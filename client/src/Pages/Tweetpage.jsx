@@ -33,8 +33,12 @@ export default function Tweetpage() {
             ) : (
               <>
                 {tweet.in_reply_to_status_id && (
-                  <Retweet tweet={tweet.hasParentTweet} showPic/>
+                  <div className="retweet-wrap">
+                  <Tweet tweet={tweet.hasParentTweet} isParentTweet/>
+                  </div>
+                  
                 )}
+                
                 <Tweet tweet={tweet} />
                 <div className="replying-to">
                   <span>

@@ -251,6 +251,26 @@ module.exports.fetchTweet = async (req, res, next) => {
                         },
                         {
                             $addFields: {
+                                likesCount: {
+                                    $size: '$tweetLikes'
+                                }
+                            }
+                        },
+                        {
+                            $lookup:{
+                                from: 'tweets',
+                                localField: '_id',
+                                foreignField: 'in_reply_to_status_id',
+                                as: 'tweetReplies'
+                              }
+                        },
+                        {
+                            $addFields:{
+                                replyCount:{$size:'$tweetReplies'}
+                            }
+                        },
+                        {
+                            $addFields: {
                                 isLiked: {
                                     $in: [Mongoose.Types.ObjectId(currentUser._id), '$tweetLikes.user']
                                 }
@@ -289,6 +309,64 @@ module.exports.fetchTweet = async (req, res, next) => {
                             }
                         },
                         {
+                            $lookup:{
+                                from: 'tweets',
+                                localField: 'hasParentTweet._id',
+                                foreignField: 'in_reply_to_status_id',
+                                as: 'hasParentTweet.tweetReplies'
+                              }
+                        },
+                        {
+                            $addFields:{
+                                'hasParentTweet.replyCount':{$size:'$hasParentTweet.tweetReplies'}
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'tweetlikes',
+                                localField: 'hasParentTweet._id',
+                                foreignField: 'tweet',
+                                as: 'hasParentTweet.tweetLikes'
+                            }
+                        }, {
+                            $addFields: {
+                                'hasParentTweet.tweetLikes': {
+                                    $cond: [{
+                                            $eq: ["$hasParentTweet.tweetLikes", []]
+                                        },
+                                        [{
+                                            likedBy: []
+                                        }], '$hasParentTweet.tweetLikes'
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $unwind: {
+                                path: '$hasParentTweet.tweetLikes',
+                                preserveNullAndEmptyArrays: true
+                            }
+                        },
+                        {
+                            $addFields: {
+                                'hasParentTweet.tweetLikes': '$hasParentTweet.tweetLikes.likedBy'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                'hasParentTweet.isLiked': {
+                                    $in: [Mongoose.Types.ObjectId(currentUser._id), '$hasParentTweet.tweetLikes.user']
+                                }
+                            }
+                        },
+                        {
+                            $addFields: {
+                                'hasParentTweet.likesCount': {
+                                    $size: '$hasParentTweet.tweetLikes'
+                                }
+                            }
+                        },
+                        {
                             $addFields: {
                                 'hasParentTweet.user': {
                                     $arrayElemAt: ['$hasParentTweet.user', 0]
@@ -299,6 +377,9 @@ module.exports.fetchTweet = async (req, res, next) => {
                         {
                             $project: {
                                 tweetLikes: 0,
+                                tweetReplies:0,
+                                'hasParentTweet.tweetReplies':0,
+                                'hasParentTweet.tweetLikes':0,
                                 __v: 0,
                                 'hasParentTweet.user.password': 0,
                                 'hasParentTweet.user.bio': 0,
