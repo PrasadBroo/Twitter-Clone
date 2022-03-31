@@ -373,6 +373,33 @@ module.exports.fetchTweet = async (req, res, next) => {
                                 }
                             }
                         },
+                        {
+                            $lookup: {
+                                from: 'tweets',
+                                let:{tweetId:'$_id'},
+                                pipeline:[
+                                    {
+                                        $match:{ "$expr": { "$eq": ["$in_reply_to_status_id", "$$tweetId"] }}
+                                    },{
+                                        $limit:10
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: 'users',
+                                            localField: 'user',
+                                            foreignField: '_id',
+                                            as: 'user'
+                                        }
+                                    },
+                                    {
+                                        $addFields:{
+                                            user:{$arrayElemAt:['$user',0]}
+                                        }
+                                    }
+                                ],
+                                as: 'replies'
+                            }
+                        },
 
                         {
                             $project: {
@@ -388,6 +415,15 @@ module.exports.fetchTweet = async (req, res, next) => {
                                 'hasParentTweet.user.location': 0,
                                 'hasParentTweet.user.backgroundImage': 0,
                                 'hasParentTweet.user.__v': 0,
+                                'replies.tweetReplies':0,
+                                'replies.tweetLikes':0,
+                                'replies.user.password': 0,
+                                'replies.user.bio': 0,
+                                'replies.user.email': 0,
+                                'replies.user.website': 0,
+                                'replies.user.location': 0,
+                                'replies.user.backgroundImage': 0,
+                                'replies.user.__v': 0,
                             }
                         }
 

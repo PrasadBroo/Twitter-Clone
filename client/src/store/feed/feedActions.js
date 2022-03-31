@@ -95,7 +95,6 @@ export const fetchTweet = (tweetid) => async (dispatch) => {
         if (!tweetid) throw new Error('No tweet id provided')
         dispatch(FETCHING_TWEET_STARTED())
         const data = await fetchTheTweet(tweetid);
-        console.log(data)
         dispatch(FETCHING_TWEET_SUCCESS(data.tweet))
     } catch (error) {
         dispatch(FETCHING_TWEET_FAIL(error.message))

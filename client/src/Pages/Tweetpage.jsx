@@ -24,9 +24,8 @@ export default function Tweetpage() {
     <>
       <div className="tweetpage two-flex-col-container">
         <div className="col1 fpc-1">
-          <div className="tweetpage-header">
-            <UserHeader />
-          </div>
+          <UserHeader />
+
           <div className="user-tweet-content">
             {fetching ? (
               <SimpleSpinner topCenter />
@@ -34,12 +33,16 @@ export default function Tweetpage() {
               <>
                 {tweet.in_reply_to_status_id && (
                   <div className="retweet-wrap">
-                  <Tweet tweet={tweet.hasParentTweet} isParentTweet/>
+                    <Tweet
+                      tweet={tweet.hasParentTweet}
+                      isParentTweet
+                      className="tweet-page"
+                      from="tweet-page"
+                    />
                   </div>
-                  
                 )}
-                
-                <Tweet tweet={tweet} />
+
+                <Tweet tweet={tweet} className="tweet-page" />
                 <div className="replying-to">
                   <span>
                     Replaying to{" "}
@@ -51,7 +54,21 @@ export default function Tweetpage() {
                     </Link>
                   </span>
                 </div>
-                <SendTweet type="tweetReply" placeholder="Tweet your reply" tweet={tweet}/>
+                <SendTweet
+                  type="tweetReply"
+                  placeholder="Tweet your reply"
+                  tweet={tweet}
+                  className="tweetpage-send-tweet"
+                />
+                <div className="tweet-replies">
+                  {tweet.replies.map((tweet) => (
+                    <Tweet
+                      tweet={tweet}
+                      from="tweet-page-replies"
+                      className="tweet-page"
+                    />
+                  ))}
+                </div>
               </>
             )}
           </div>

@@ -20,10 +20,13 @@
         .retweet-wrap{
             margin-bottom: 3rem;
         }
+        .tweetpage-send-tweet{
+            border-top: $color-grey-2 solid 2px;
+        }
         position: relative;
         height: 100%;
         .replying-to {
-            margin-top: 1rem;
+            margin: 1rem 0;
             color: $color-grey-1;
             margin-left: 1rem;
         }

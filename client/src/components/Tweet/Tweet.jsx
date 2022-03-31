@@ -32,7 +32,8 @@ const options = {
   },
 };
 
-export default function Tweet({ tweet, from,isParentTweet }) {
+export default function Tweet({ tweet, from,isParentTweet,className }) {
+  const tweetClasses = classNames('tweet-link',className);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -88,7 +89,7 @@ export default function Tweet({ tweet, from,isParentTweet }) {
   return (
     <div
       onClick={()=>navigate("/" + tweet.user.username + "/status/" + tweet._id)}
-      className="tweet-link"
+      className={tweetClasses}
     >
       <div className="tweet tweet-container">
         <div className="profile-pic-container">
