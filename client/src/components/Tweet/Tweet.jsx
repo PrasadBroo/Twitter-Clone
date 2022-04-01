@@ -169,12 +169,13 @@ export default function Tweet({ tweet, from,isParentTweet,className }) {
           <div className="tweet-actions">
             <div className=" tweet-actions-child tweet-comment">
               <div className="tweet-icon">
-                <CommentIcon
+                {/* <CommentIcon
                   fill={"#536471"}
                   height="18px"
                   width="18px"
                   onClick={handelTweetReply}
-                />
+                /> */}
+                <i className="far fa-comment"></i>
               </div>
 
               <span className="tweet-comment-count">{tweet.replyCount}</span>

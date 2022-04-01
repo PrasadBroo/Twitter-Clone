@@ -36,13 +36,13 @@ export default function Tweetpage() {
                     <Tweet
                       tweet={tweet.hasParentTweet}
                       isParentTweet
-                      className="tweet-page"
+                      className="tweetpage-main-tweet"
                       from="tweet-page"
                     />
                   </div>
                 )}
 
-                <Tweet tweet={tweet} className="tweet-page" />
+                <Tweet tweet={tweet} className="tweetpage-main-tweet" />
                 <div className="replying-to">
                   <span>
                     Replaying to{" "}

@@ -395,7 +395,58 @@ module.exports.fetchTweet = async (req, res, next) => {
                                         $addFields:{
                                             user:{$arrayElemAt:['$user',0]}
                                         }
-                                    }
+                                    },
+                                    {
+                                        $lookup:{
+                                            from: 'tweets',
+                                            localField: '_id',
+                                            foreignField: 'in_reply_to_status_id',
+                                            as: 'tweetReplies'
+                                          }
+                                    },
+                                    {
+                                        $addFields:{
+                                            replyCount:{$size:'$tweetReplies'}
+                                        }
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: 'tweetlikes',
+                                            localField: '_id',
+                                            foreignField: 'tweet',
+                                            as: 'tweetLikes'
+                                        }
+                                    }, {
+                                        $addFields: {
+                                            tweetLikes: {
+                                                $cond: [{
+                                                        $eq: ["$tweetLikes", []]
+                                                    },
+                                                    [{
+                                                        likedBy: []
+                                                    }], '$tweetLikes'
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    {
+                                        $unwind: {
+                                            path: '$tweetLikes',
+                                            preserveNullAndEmptyArrays: true
+                                        }
+                                    },
+                                    {
+                                        $addFields: {
+                                            tweetLikes: '$tweetLikes.likedBy'
+                                        }
+                                    },
+                                    {
+                                        $addFields: {
+                                            likesCount: {
+                                                $size: '$tweetLikes'
+                                            }
+                                        }
+                                    },
                                 ],
                                 as: 'replies'
                             }

@@ -1,5 +1,6 @@
 .tweet-link {
     border-top: $color-grey-2 1px solid;
+
     .tweet {
         position: relative;
         cursor: pointer;
@@ -12,6 +13,7 @@
         &:hover {
             background-color: rgba(#dbdbdb, 0.3);
         }
+
         .hr-line {
             position: absolute;
             top: 4.4rem;
@@ -21,9 +23,10 @@
             background-color: $color-grey-2;
             z-index: 10;
         }
+
         .profile-pic-container {
             position: relative;
-            
+
             .profile-pic {
                 height: 48px;
                 width: 48px;
@@ -40,6 +43,7 @@
                 width: 100%;
                 max-width: 500px;
                 margin-top: 1rem;
+                
 
                 .tweet-content-image {
                     height: auto;
@@ -47,6 +51,7 @@
                     object-fit: cover;
                     border-radius: 20px;
                     max-height: 500px;
+                    border: $color-grey-2 solid 1px;
                 }
             }
 
@@ -296,4 +301,15 @@
 
         }
     }
+}
+
+.tweetpage-main-tweet {
+    .tweet-actions {
+
+        .tweet-icon {
+            font-size: 1.3rem;
+            color: $color-black-secondary;
+        }
+    }
+
 }
