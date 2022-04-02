@@ -88,7 +88,7 @@ export default function Tweet({ tweet, from,isParentTweet,className }) {
   };
   return (
     <div
-      onClick={()=>navigate("/" + tweet.user.username + "/status/" + tweet._id)}
+      // onClick={()=>navigate("/" + tweet.user.username + "/status/" + tweet._id)}
       className={tweetClasses}
     >
       <div className="tweet tweet-container">

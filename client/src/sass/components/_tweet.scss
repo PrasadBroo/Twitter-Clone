@@ -4,7 +4,7 @@
     .tweet {
         position: relative;
         cursor: pointer;
-        margin-bottom: 1rem;
+        // margin-bottom: 1rem;
         padding: 0.5rem;
         display: flex;
         align-items: flex-start;
@@ -88,13 +88,16 @@
 
                         .tweet-options-model-item {
                             transition: all 500ms ease-in-out;
-                            padding: 0.5rem 0.2rem;
+                            padding: 0.3rem 0.2rem;
                             @include flexCenter;
 
                             .tweet-options-model-icon {
-                                font-size: 1.2rem;
+                                font-size: 1rem;
                                 color: #536471;
                                 margin-left: 0.5rem;
+                                height: 20px;
+                                width: 20px;
+                                @include flexJustifyCenter;
                             }
 
                             .icon-4 {
@@ -238,10 +241,9 @@
 
                     .tweet-icon {
                         @include flexJustifyCenter;
-                        color: #536471;
+                        color: $color-black-secondary;
                         margin-right: 0.5rem;
-                        height: 25px;
-                        width: 25px;
+                        font-size: 1rem;
                         transition: all 500ms ease-in-out;
                         border-radius: 100%;
 
@@ -251,11 +253,10 @@
                     }
 
                     .tweet-comment-count {
-                        color: #536471;
+                        color: $color-black-secondary;
                     }
 
                     .like-icon {
-                        font-size: 18px;
                         transition: all 500ms ease-in-out;
 
                         @keyframes pulse {
@@ -303,7 +304,7 @@
     }
 }
 
-.tweetpage-main-tweet {
+.tweet-page-replies {
     .tweet-actions {
 
         .tweet-icon {
@@ -312,4 +313,9 @@
         }
     }
 
+}
+.tweetpage-main-tweet{
+    
+        border-top: 0;
+    
 }

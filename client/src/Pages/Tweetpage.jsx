@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import SimpleSpinner from "../components/Loader/SimpleSpinner";
 import News from "../components/News/News";
-import Retweet from "../components/Retweet/Retweet";
 import Searchbar from "../components/Searchbar/Searchbar";
 import SendTweet from "../components/Tweet/SendTweet";
 import Tweet from "../components/Tweet/Tweet";
@@ -65,7 +64,7 @@ export default function Tweetpage() {
                     <Tweet
                       tweet={tweet}
                       from="tweet-page-replies"
-                      className="tweet-page"
+                      className="tweet-page-replies"
                     />
                   ))}
                 </div>
