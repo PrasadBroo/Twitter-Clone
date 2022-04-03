@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ThreeDotsIcon from "../../icons/ThreeDotsIcon";
 import CommentIcon from "./../../icons/CommentIcon";
 import RetweetIcon from "./../../icons/RetweetIcon";
@@ -14,6 +14,7 @@ import { likeTweet, unlikeTweet } from "../../store/feed/feedActions";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { SET_TWEET_TYPE } from "../../store/model/modelSlice";
+import { postTheRetweet } from "../../services/tweetService";
 
 const options = {
   className: () => "default-link",
@@ -35,6 +36,7 @@ const options = {
 export default function Tweet({ tweet, from,isParentTweet,className }) {
   const tweetClasses = classNames('tweet-link',className);
   const navigate = useNavigate();
+  const [isRetweeting,setIsRetweeting] = useState(false);
   const dispatch = useDispatch();
   const {
     ref: tweetOptionsRef,
@@ -86,6 +88,18 @@ export default function Tweet({ tweet, from,isParentTweet,className }) {
     );
     navigate("/compose/tweet");
   };
+  const handelRetweet = async()=>{
+    // this time uing diffrent method
+    try {
+      setIsRetweeting(true)
+     const res = await postTheRetweet(tweet._id)
+     console.log(res)
+      setIsRetweeting(false)
+    } catch (error) {
+      setIsRetweeting(false)
+    }
+    // dispatch(postRetweet(tweet))
+  }
   return (
     <div
       // onClick={()=>navigate("/" + tweet.user.username + "/status/" + tweet._id)}
@@ -169,24 +183,31 @@ export default function Tweet({ tweet, from,isParentTweet,className }) {
           <div className="tweet-actions">
             <div className=" tweet-actions-child tweet-comment">
               <div className="tweet-icon">
-                {/* <CommentIcon
+                <CommentIcon
                   fill={"#536471"}
-                  height="18px"
-                  width="18px"
+                  height="20px"
+                  width="20px"
                   onClick={handelTweetReply}
-                /> */}
-                <i className="far fa-comment"></i>
+                />
+                {/* <i className="far fa-comment"></i> */}
               </div>
 
               <span className="tweet-comment-count">{tweet.replyCount}</span>
             </div>
             <div className="tweet-actions-child tweet-retweet" ref={retweetRef}>
-              <div className="tweet-icon" onClick={showRetweetOptions}>
-                <i className="far fa-arrows-retweet"></i>
+              <div className="tweet-icon" >
+              <RetweetIcon
+                  fill={"rgba(29, 155, 240, 0.8)"}
+                  height="20px"
+                  width="20px"
+                  onClick={handelRetweet}
+
+                />
+                {/* <i className="far fa-arrows-retweet"></i> */}
               </div>
               <div className={retweetOptionsClassnames}>
                 <div className="retweet-options-child retweet-btn-container">
-                  <RetweetIcon fill={"#536471"} height="25px" width="25px" />
+                  <RetweetIcon fill={"#536471"} height="20px" width="20px" />
                   <TextButton className="retweet-btn">Retweet</TextButton>
                 </div>
                 <div className="retweet-options-child quote-tweet-container">
@@ -195,13 +216,13 @@ export default function Tweet({ tweet, from,isParentTweet,className }) {
                 </div>
               </div>
 
-              <span className="tweet-comment-count">9.7k</span>
+              <span className="tweet-comment-count">{tweet.retweetCount}</span>
             </div>
             <div className="tweet-actions-child like-tweet">
               <div className="tweet-icon like-icon" onClick={handelTweetLike}>
                 <i
                   className={
-                    tweet.isLiked ? "fas fa-heart liked" : "far fa-heart"
+                    tweet.isLiked ? "fas fa-heart liked" : "fal fa-heart"
                   }
                 ></i>
                 {/* <LikeIcon fill={"#536471"} height="18px" width="18px"/> */}

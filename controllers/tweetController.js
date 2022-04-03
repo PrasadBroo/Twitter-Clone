@@ -2,6 +2,7 @@ const Tweet = require('../models/Tweet');
 const Hashtags = require('../models/Hashtags');
 const Mentions = require('../models/Mentions');
 const TweetLike = require('../models/TweetLikes');
+const Retweet = require('../models/Retweet');
 const User = require('../models/User')
 const linkify = require('linkifyjs');
 require('linkify-plugin-hashtag');
@@ -516,5 +517,38 @@ module.exports.postTweetReply = async (req, res, next) => {
 
     } catch (error) {
 
+    }
+}
+module.exports.postRetweet = async(req,res,next)=>{
+    const {tweetid} = req.params;
+    const currentUser = res.locals.user;
+    try {
+        if (!tweetid) return res.status(400).send({
+            error: 'Invalid tweetid'
+        })
+        const tweet = await Tweet.findOne({
+            _id: tweetid
+        });
+        if (!tweet) return res.status(404).send({
+            error: 'Tweet does not exist'
+        })
+        const retweetUpdate = await Retweet.updateOne({
+            tweet: tweetid,
+            'users.user': {
+                $ne: currentUser._id
+            }
+        }, {
+            $push: {
+                users: {
+                    user: currentUser._id
+                }
+            }
+        }, {
+            upsert: true
+        });
+
+        res.status(201).send('Success')
+    } catch (error) {
+        next(error)
     }
 }

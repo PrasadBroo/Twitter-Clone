@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Followers = require("../models/Followers");
 const Followings = require("../models/Followings");
 const Tweet = require('../models/Tweet')
+const Retweet = require('../models/Retweet')
 const TweetLike = require('../models/TweetLikes');
 const {
     cloudinary
@@ -192,7 +193,7 @@ module.exports.followUser = async (req, res, next) => {
         const userToFollow = await User.findById(useridToFollow);
         if (!userToFollow) {
             return res
-                .status(400)
+                .status(404)
                 .send({
                     error: 'Could not find a user with that id :('
                 });
@@ -270,7 +271,7 @@ module.exports.unfollowUser = async (req, res, next) => {
         const userToFollow = await User.findById(useridToUnFollow);
         if (!userToFollow) {
             return res
-                .status(400)
+                .status(404)
                 .send({
                     error: 'Could not find a user with that id :('
                 });
@@ -656,6 +657,42 @@ module.exports.getUserTweets = async (req, res, next) => {
                     },
 
                     {
+                        $lookup:{
+                            from: 'retweets',
+                            localField: '_id',
+                            foreignField: 'tweet',
+                            as: 'retweets'
+                          }
+                    },
+                    {
+                        $addFields:{
+                            retweets:{$cond: [{
+                                $eq: ["$retweets", []]
+                            },
+                            [{
+                                users: []
+                            }], '$retweets'
+                        ]}
+                        }
+                    },
+                    {
+                        $unwind:{
+                            path:'$retweets',
+                            preserveNullAndEmptyArrays:true,
+                        }
+                    },
+                    {
+                        $addFields:{
+                            retweetCount:{$size:'$retweets.users'}
+                        }
+                    },
+                    {
+                        $addFields:{
+                            isRetweeted:{$in:[Mongoose.Types.ObjectId(userid),'$retweets.users.user']}
+                        }
+                    },
+
+                    {
                         $project: {
                             __v: 0,
                             'user.password': 0,
@@ -666,7 +703,8 @@ module.exports.getUserTweets = async (req, res, next) => {
                             'user.backgroundImage': 0,
                             'user,__v': 0,
                             likes: 0,
-                            tweetReplies:0
+                            tweetReplies:0,
+                            retweets:0,
 
                         }
                     }
@@ -693,11 +731,174 @@ module.exports.getUserTweets = async (req, res, next) => {
             tweets: [],
             count: 0
         } : data[0]
-        res.status(200).send(result)
+        const pipeline_two = [
+            {
+                $match:{
+                    $expr: {
+                        $in: [
+                            Mongoose.Types.ObjectId(userid), '$users.user'
+                        ]
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'tweets',
+                    localField: 'tweet',
+                    foreignField: '_id',
+                    as: 'tweet',
+
+                }
+            },
+            {
+                $addFields:{
+                    tweet:{$arrayElemAt:['$tweet',0]}
+                }
+            },
+            {
+                $replaceRoot:{
+                    newRoot:'$tweet'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'user',
+                    foreignField: '_id',
+                    as: 'user',
+
+                }
+            },
+            {
+                $addFields:{
+                    user:{$arrayElemAt:['$user',0]}
+                }
+            },
+            {
+                $project: {
+                    __v: 0,
+                    'user.password': 0,
+                    'user.bio': 0,
+                    'user.email': 0,
+                    'user.website': 0,
+                    'user.location': 0,
+                    'user.backgroundImage': 0,
+                    'user,__v': 0,
+
+                }
+            },
+            {
+                $lookup: {
+                    from: 'tweetlikes',
+                    localField: '_id',
+                    foreignField: 'tweet',
+                    as: 'likes'
+                }
+            },
+            {
+                $addFields: {
+                    likes: {
+                        $cond: [{
+                                $eq: ["$likes", []]
+                            },
+                            [{
+                                likedBy: []
+                            }], '$likes'
+                        ]
+                    }
+                }
+            },
+
+            {
+                $unwind: '$likes'
+            },
+            {
+                $addFields: {
+                    isLiked: {
+                        $in: [Mongoose.Types.ObjectId(currentUser._id), '$likes.likedBy.user']
+                    }
+                }
+            },
+            {
+                $addFields: {
+                    likesCount: {
+                        $size: '$likes.likedBy'
+                    }
+                }
+            },
+            {
+                $lookup:{
+                    from: 'tweets',
+                    localField: '_id',
+                    foreignField: 'in_reply_to_status_id',
+                    as: 'tweetReplies'
+                  }
+            },
+            {
+                $addFields:{
+                    replyCount:{$size:'$tweetReplies'}
+                }
+            },
+            {
+                $lookup:{
+                    from: 'retweets',
+                    localField: '_id',
+                    foreignField: 'tweet',
+                    as: 'retweets'
+                  }
+            },
+            {
+                $addFields:{
+                    retweets:{$cond: [{
+                        $eq: ["$retweets", []]
+                    },
+                    [{
+                        users: []
+                    }], '$retweets'
+                ]}
+                }
+            },
+            {
+                $unwind:{
+                    path:'$retweets',
+                    preserveNullAndEmptyArrays:true,
+                }
+            },
+            {
+                $addFields:{
+                    retweetCount:{$size:'$retweets.users'}
+                }
+            },
+            {
+                $addFields:{
+                    isRetweeted:{$in:[Mongoose.Types.ObjectId(userid),'$retweets.users.user']}
+                }
+            },
+            {
+                $addFields:{
+                    isRetweet:true
+                }
+            },
+            {
+                $project:{
+                    likes:0,
+                    tweetReplies:0,
+                    retweets:0,
+                }
+            }
+        ]
+        const retweetData = await Retweet.aggregate(pipeline_two)
+        const modifiedResult = {
+            tweets:result.tweets.concat(retweetData),
+            count:result.count
+        }
+        
+        res.status(200).send(modifiedResult)
     } catch (error) {
         next(error)
     }
 }
+
 
 module.exports.getUserLikedTweets = async (req, res, next) => {
     const userid = req.params.userid;

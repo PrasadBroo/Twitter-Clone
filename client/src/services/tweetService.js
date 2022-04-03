@@ -70,3 +70,16 @@ export const  postTheTweetReply = async(tweetText, tweetPic,tweetid)=>{
         throw new Error(error.response.data.error);
     }
 }
+
+export const  postTheRetweet = async(tweetid)=>{
+    try {
+        const response = await axios.post(`/api/tweet/post/${tweetid}/retweet`, null, {
+            headers: {
+                authorization: localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error);
+    }
+}

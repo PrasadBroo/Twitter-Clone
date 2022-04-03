@@ -243,12 +243,13 @@
                         @include flexJustifyCenter;
                         color: $color-black-secondary;
                         margin-right: 0.5rem;
-                        font-size: 1rem;
+                        font-size: 1.2rem;
                         transition: all 500ms ease-in-out;
                         border-radius: 100%;
 
                         &:hover {
                             background-color: rgba(29, 155, 240, 0.2);
+                            
                         }
                     }
 
