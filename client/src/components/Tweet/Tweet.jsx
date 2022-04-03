@@ -33,10 +33,10 @@ const options = {
   },
 };
 
-export default function Tweet({ tweet, from,isParentTweet,className }) {
-  const tweetClasses = classNames('tweet-link',className);
+export default function Tweet({ tweet, from, isParentTweet, className }) {
+  const tweetClasses = classNames("tweet-link", className);
   const navigate = useNavigate();
-  const [isRetweeting,setIsRetweeting] = useState(false);
+  const [isRetweeting, setIsRetweeting] = useState(false);
   const dispatch = useDispatch();
   const {
     ref: tweetOptionsRef,
@@ -88,29 +88,45 @@ export default function Tweet({ tweet, from,isParentTweet,className }) {
     );
     navigate("/compose/tweet");
   };
-  const handelRetweet = async()=>{
+  const handelRetweet = async () => {
     // this time uing diffrent method
     try {
-      setIsRetweeting(true)
-     const res = await postTheRetweet(tweet._id)
-     console.log(res)
-      setIsRetweeting(false)
+      setIsRetweeting(true);
+      if(tweet.isRetweeted){
+        await postTheRetweet(tweet._id);
+      }
+      else{
+        // 
+      }
+      setIsRetweeting(false);
     } catch (error) {
-      setIsRetweeting(false)
+      setIsRetweeting(false);
     }
     // dispatch(postRetweet(tweet))
-  }
+  };
   return (
     <div
-      // onClick={()=>navigate("/" + tweet.user.username + "/status/" + tweet._id)}
+      onClick={()=>navigate("/" + tweet.user.username + "/status/" + tweet._id)}
       className={tweetClasses}
     >
+      {tweet.isRetweet && (
+        <div className="tweet-retweeted">
+          <span className="retweet-icon">
+            <RetweetIcon
+              fill={"#536471"}
+              height="15px"
+              width="15px"
+              onClick={handelRetweet}
+            />
+          </span>
+          <span className="retweeted-text">You Retweeted</span>
+        </div>
+      )}
       <div className="tweet tweet-container">
         <div className="profile-pic-container">
           <img src={tweet.user.avatar} alt="user-pic" className="profile-pic" />
-          
         </div>
-        {isParentTweet &&<span className="hr-line"></span>}
+        {isParentTweet && <span className="hr-line"></span>}
         <div className="tweet-content">
           <div className="tweet-content-header">
             <span className="tweet-content-child user-full-name">
@@ -195,13 +211,14 @@ export default function Tweet({ tweet, from,isParentTweet,className }) {
               <span className="tweet-comment-count">{tweet.replyCount}</span>
             </div>
             <div className="tweet-actions-child tweet-retweet" ref={retweetRef}>
-              <div className="tweet-icon" >
-              <RetweetIcon
-                  fill={"rgba(29, 155, 240, 0.8)"}
+              <div className="tweet-icon">
+                <RetweetIcon
+                  fill={
+                    tweet.isRetweeted ? "rgba(29, 155, 240, 0.8)" : "#536471"
+                  }
                   height="20px"
                   width="20px"
                   onClick={handelRetweet}
-
                 />
                 {/* <i className="far fa-arrows-retweet"></i> */}
               </div>

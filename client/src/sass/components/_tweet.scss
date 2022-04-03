@@ -1,6 +1,20 @@
 .tweet-link {
     border-top: $color-grey-2 1px solid;
-
+    .tweet-retweeted{
+        @include flexCenter;
+        padding: 0.2rem 0;
+        padding-left: 0.7rem;
+        .retweeted-text{
+            font-size: 13px;
+            color: $color-grey-1;
+            font-weight: 600;
+        }
+        .retweet-icon{
+            color: $color-grey-1;
+            font-size: 13px;
+            margin-right: 0.3rem;
+        }
+    }
     .tweet {
         position: relative;
         cursor: pointer;

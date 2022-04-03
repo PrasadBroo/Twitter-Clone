@@ -688,7 +688,7 @@ module.exports.getUserTweets = async (req, res, next) => {
                     },
                     {
                         $addFields:{
-                            isRetweeted:{$in:[Mongoose.Types.ObjectId(userid),'$retweets.users.user']}
+                            isRetweeted:{$in:[Mongoose.Types.ObjectId(currentUser._id),'$retweets.users.user']}
                         }
                     },
 
@@ -871,7 +871,7 @@ module.exports.getUserTweets = async (req, res, next) => {
             },
             {
                 $addFields:{
-                    isRetweeted:{$in:[Mongoose.Types.ObjectId(userid),'$retweets.users.user']}
+                    isRetweeted:{$in:[Mongoose.Types.ObjectId(currentUser._id),'$retweets.users.user']}
                 }
             },
             {

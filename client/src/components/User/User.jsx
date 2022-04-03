@@ -55,6 +55,9 @@ export default function User() {
   const [backgroundImageLoaded, SetBackgroundImageLoaded] = useState(false);
   const [profileImageLoaded, SetProfileImageLoaded] = useState(false);
   const [followingText, setFollowingText] = useState("Following");
+  useEffect(()=>{
+    document.title = `${currentUser.fullName} (@${currentUser.username}) / Twitter`
+  },[currentUser.fullName,currentUser.username])
   useEffect(() => {
     const retriveUser = (username) => {
       dispatch(fetchUser(username));

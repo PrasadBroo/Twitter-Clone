@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import News from "../News/News";
 import Searchbar from "../Searchbar/Searchbar";
@@ -8,6 +8,9 @@ import WhoToFollow from './../WhoToFollow/WhoToFollow';
 import SendTweetHeader from "./SendTweetHeader";
 
 export default function TweetSections() {
+  useEffect(()=>{
+    document.title = `Home / Twitter`
+  },[])
   return (
     <>
       <div className="tweets-search-news-sections two-flex-col-container">
