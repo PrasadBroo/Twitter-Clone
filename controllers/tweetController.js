@@ -11,6 +11,7 @@ const Mongoose = require("mongoose");
 const {
     cloudinary
 } = require("../services/cloudinary");
+const { retriveComments } = require('../utils/controllerUtils');
 
 
 module.exports.postTweet = async (req, res, next) => {
@@ -258,16 +259,18 @@ module.exports.fetchTweet = async (req, res, next) => {
                             }
                         },
                         {
-                            $lookup:{
+                            $lookup: {
                                 from: 'tweets',
                                 localField: '_id',
                                 foreignField: 'in_reply_to_status_id',
                                 as: 'tweetReplies'
-                              }
+                            }
                         },
                         {
-                            $addFields:{
-                                replyCount:{$size:'$tweetReplies'}
+                            $addFields: {
+                                replyCount: {
+                                    $size: '$tweetReplies'
+                                }
                             }
                         },
                         {
@@ -310,16 +313,18 @@ module.exports.fetchTweet = async (req, res, next) => {
                             }
                         },
                         {
-                            $lookup:{
+                            $lookup: {
                                 from: 'tweets',
                                 localField: 'hasParentTweet._id',
                                 foreignField: 'in_reply_to_status_id',
                                 as: 'hasParentTweet.tweetReplies'
-                              }
+                            }
                         },
                         {
-                            $addFields:{
-                                'hasParentTweet.replyCount':{$size:'$hasParentTweet.tweetReplies'}
+                            $addFields: {
+                                'hasParentTweet.replyCount': {
+                                    $size: '$hasParentTweet.tweetReplies'
+                                }
                             }
                         },
                         {
@@ -374,91 +379,13 @@ module.exports.fetchTweet = async (req, res, next) => {
                                 }
                             }
                         },
-                        {
-                            $lookup: {
-                                from: 'tweets',
-                                let:{tweetId:'$_id'},
-                                pipeline:[
-                                    {
-                                        $match:{ "$expr": { "$eq": ["$in_reply_to_status_id", "$$tweetId"] }}
-                                    },{
-                                        $limit:10
-                                    },
-                                    {
-                                        $lookup: {
-                                            from: 'users',
-                                            localField: 'user',
-                                            foreignField: '_id',
-                                            as: 'user'
-                                        }
-                                    },
-                                    {
-                                        $addFields:{
-                                            user:{$arrayElemAt:['$user',0]}
-                                        }
-                                    },
-                                    {
-                                        $lookup:{
-                                            from: 'tweets',
-                                            localField: '_id',
-                                            foreignField: 'in_reply_to_status_id',
-                                            as: 'tweetReplies'
-                                          }
-                                    },
-                                    {
-                                        $addFields:{
-                                            replyCount:{$size:'$tweetReplies'}
-                                        }
-                                    },
-                                    {
-                                        $lookup: {
-                                            from: 'tweetlikes',
-                                            localField: '_id',
-                                            foreignField: 'tweet',
-                                            as: 'tweetLikes'
-                                        }
-                                    }, {
-                                        $addFields: {
-                                            tweetLikes: {
-                                                $cond: [{
-                                                        $eq: ["$tweetLikes", []]
-                                                    },
-                                                    [{
-                                                        likedBy: []
-                                                    }], '$tweetLikes'
-                                                ]
-                                            }
-                                        }
-                                    },
-                                    {
-                                        $unwind: {
-                                            path: '$tweetLikes',
-                                            preserveNullAndEmptyArrays: true
-                                        }
-                                    },
-                                    {
-                                        $addFields: {
-                                            tweetLikes: '$tweetLikes.likedBy'
-                                        }
-                                    },
-                                    {
-                                        $addFields: {
-                                            likesCount: {
-                                                $size: '$tweetLikes'
-                                            }
-                                        }
-                                    },
-                                ],
-                                as: 'replies'
-                            }
-                        },
 
                         {
                             $project: {
                                 tweetLikes: 0,
-                                tweetReplies:0,
-                                'hasParentTweet.tweetReplies':0,
-                                'hasParentTweet.tweetLikes':0,
+                                tweetReplies: 0,
+                                'hasParentTweet.tweetReplies': 0,
+                                'hasParentTweet.tweetLikes': 0,
                                 __v: 0,
                                 'hasParentTweet.user.password': 0,
                                 'hasParentTweet.user.bio': 0,
@@ -467,15 +394,6 @@ module.exports.fetchTweet = async (req, res, next) => {
                                 'hasParentTweet.user.location': 0,
                                 'hasParentTweet.user.backgroundImage': 0,
                                 'hasParentTweet.user.__v': 0,
-                                'replies.tweetReplies':0,
-                                'replies.tweetLikes':0,
-                                'replies.user.password': 0,
-                                'replies.user.bio': 0,
-                                'replies.user.email': 0,
-                                'replies.user.website': 0,
-                                'replies.user.location': 0,
-                                'replies.user.backgroundImage': 0,
-                                'replies.user.__v': 0,
                             }
                         }
 
@@ -495,6 +413,8 @@ module.exports.fetchTweet = async (req, res, next) => {
 
         ];
         const data = await Tweet.aggregate(pipeline);
+        const comments = await retriveComments(tweetid,currentUser)
+        data[0].tweet.replies = comments;
         res.status(200).send(data[0])
     } catch (error) {
         next(error)
@@ -519,8 +439,10 @@ module.exports.postTweetReply = async (req, res, next) => {
 
     }
 }
-module.exports.postRetweet = async(req,res,next)=>{
-    const {tweetid} = req.params;
+module.exports.postRetweet = async (req, res, next) => {
+    const {
+        tweetid
+    } = req.params;
     const currentUser = res.locals.user;
     try {
         if (!tweetid) return res.status(400).send({
@@ -550,5 +472,131 @@ module.exports.postRetweet = async(req,res,next)=>{
         res.status(201).send('Success')
     } catch (error) {
         next(error)
+    }
+}
+module.exports.fetchTweetComments = async (req, res, next) => {
+    try {
+        const tweetid = req.params.tweetid;
+        const currentUser = res.locals.user;
+
+        if (!tweetid) return res.status(400).send({
+            error: 'Invalid tweetid'
+        })
+
+        const tweet = await Tweet.findOne({
+            _id: tweetid
+        });
+        if (!tweet) return res.status(404).send({
+            error: 'Tweet does not exist'
+        })
+
+        const pipeline = [
+            {
+                $match: {
+                    _id: Mongoose.Types.ObjectId(tweetid),
+                }
+            },
+            {
+                $lookup: {
+                    from: 'tweets',
+                    let: {
+                        tweetId: '$_id'
+                    },
+                    pipeline: [{
+                            $match: {
+                                "$expr": {
+                                    "$eq": ["$in_reply_to_status_id", "$$tweetId"]
+                                }
+                            }
+                        }, {
+                            $limit: 10
+                        },
+                        {
+                            $lookup: {
+                                from: 'users',
+                                localField: 'user',
+                                foreignField: '_id',
+                                as: 'user'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                user: {
+                                    $arrayElemAt: ['$user', 0]
+                                }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'tweets',
+                                localField: '_id',
+                                foreignField: 'in_reply_to_status_id',
+                                as: 'tweetReplies'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                replyCount: {
+                                    $size: '$tweetReplies'
+                                }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'tweetlikes',
+                                localField: '_id',
+                                foreignField: 'tweet',
+                                as: 'tweetLikes'
+                            }
+                        }, {
+                            $addFields: {
+                                tweetLikes: {
+                                    $cond: [{
+                                            $eq: ["$tweetLikes", []]
+                                        },
+                                        [{
+                                            likedBy: []
+                                        }], '$tweetLikes'
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $unwind: {
+                                path: '$tweetLikes',
+                                preserveNullAndEmptyArrays: true
+                            }
+                        },
+                        {
+                            $addFields: {
+                                tweetLikes: '$tweetLikes.likedBy'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                isLiked: {
+                                    $in: [Mongoose.Types.ObjectId(currentUser._id), '$tweetLikes.user']
+                                }
+                            }
+                        },
+                        {
+                            $addFields: {
+                                likesCount: {
+                                    $size: '$tweetLikes'
+                                }
+                            }
+                        },
+                    ],
+                    as: 'replies'
+                }
+            },
+            {
+                $project:{
+                    replies:1
+                }
+            }
+        ]
+    } catch (error) {
+
     }
 }
