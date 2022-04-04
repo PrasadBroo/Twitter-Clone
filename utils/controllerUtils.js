@@ -111,6 +111,36 @@ module.exports.retriveComments = async (tweetid,currentUser,offset=0) => {
                             }
                         },
                         {
+                            $lookup:{
+                                from: 'retweets',
+                                localField: '_id',
+                                foreignField: 'tweet',
+                                as: 'retweets'
+                              }
+                        },
+                        {
+                            $addFields:{
+                                retweets:{$cond: [{
+                                    $eq: ["$retweets", []]
+                                },
+                                [{
+                                    users: []
+                                }], '$retweets'
+                            ]}
+                            }
+                        },
+                        {
+                            $unwind:{
+                                path:'$retweets',
+                                preserveNullAndEmptyArrays:true,
+                            }
+                        },
+                        {
+                            $addFields:{
+                                retweetCount:{$size:'$retweets.users'}
+                            }
+                        },
+                        {
                             $project:{
                                 tweetLikes:0,
                                 tweetReplies:0,

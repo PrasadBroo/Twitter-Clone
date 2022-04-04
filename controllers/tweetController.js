@@ -259,6 +259,36 @@ module.exports.fetchTweet = async (req, res, next) => {
                             }
                         },
                         {
+                            $lookup:{
+                                from: 'retweets',
+                                localField: '_id',
+                                foreignField: 'tweet',
+                                as: 'retweets'
+                              }
+                        },
+                        {
+                            $addFields:{
+                                retweets:{$cond: [{
+                                    $eq: ["$retweets", []]
+                                },
+                                [{
+                                    users: []
+                                }], '$retweets'
+                            ]}
+                            }
+                        },
+                        {
+                            $unwind:{
+                                path:'$retweets',
+                                preserveNullAndEmptyArrays:true,
+                            }
+                        },
+                        {
+                            $addFields:{
+                                retweetCount:{$size:'$retweets.users'}
+                            }
+                        },
+                        {
                             $lookup: {
                                 from: 'tweets',
                                 localField: '_id',
@@ -356,6 +386,36 @@ module.exports.fetchTweet = async (req, res, next) => {
                         {
                             $addFields: {
                                 'hasParentTweet.tweetLikes': '$hasParentTweet.tweetLikes.likedBy'
+                            }
+                        },
+                        {
+                            $lookup:{
+                                from: 'retweets',
+                                localField: 'hasParentTweet._id',
+                                foreignField: 'tweet',
+                                as: 'hasParentTweet.retweets'
+                              }
+                        },
+                        {
+                            $addFields:{
+                                'hasParentTweet.retweets':{$cond: [{
+                                    $eq: ["$hasParentTweet.retweets", []]
+                                },
+                                [{
+                                    users: []
+                                }], '$hasParentTweet.retweets'
+                            ]}
+                            }
+                        },
+                        {
+                            $unwind:{
+                                path:'$hasParentTweet.retweets',
+                                preserveNullAndEmptyArrays:true,
+                            }
+                        },
+                        {
+                            $addFields:{
+                                'hasParentTweet.retweetCount':{$size:'$hasParentTweet.retweets.users'}
                             }
                         },
                         {
@@ -584,6 +644,36 @@ module.exports.fetchTweetComments = async (req, res, next) => {
                                 likesCount: {
                                     $size: '$tweetLikes'
                                 }
+                            }
+                        },
+                        {
+                            $lookup:{
+                                from: 'retweets',
+                                localField: '_id',
+                                foreignField: 'tweet',
+                                as: 'retweets'
+                              }
+                        },
+                        {
+                            $addFields:{
+                                retweets:{$cond: [{
+                                    $eq: ["$retweets", []]
+                                },
+                                [{
+                                    users: []
+                                }], '$retweets'
+                            ]}
+                            }
+                        },
+                        {
+                            $unwind:{
+                                path:'$retweets',
+                                preserveNullAndEmptyArrays:true,
+                            }
+                        },
+                        {
+                            $addFields:{
+                                retweetCount:{$size:'$retweets.users'}
                             }
                         },
                     ],

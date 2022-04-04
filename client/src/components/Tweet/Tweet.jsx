@@ -92,7 +92,7 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
     // this time uing diffrent method
     try {
       setIsRetweeting(true);
-      if(tweet.isRetweeted){
+      if(!tweet.isRetweeted){
         await postTheRetweet(tweet._id);
       }
       else{
