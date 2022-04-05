@@ -56,10 +56,16 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
   const showRetweetOptions = () => {
     setRewteetComponentVisible(true);
   };
-  const showTweetOptions = () => {
+  const showTweetOptions = (e) => {
+    e.stopPropagation();
+    // OR
+    e.preventDefault();
     settweetOptions(true);
   };
-  const showSaveTweetOptions = () => {
+  const showSaveTweetOptions = (e) => {
+    e.stopPropagation();
+    // OR
+    e.preventDefault();
     setsaveOptionsComponentVisible(true);
   };
   const retweetOptionsClassnames = classNames("retweet-options", {
@@ -76,27 +82,35 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
     }
   );
 
-  const handelTweetLike = () => {
+  const handelTweetLike = (e) => {
+    e.stopPropagation();
+    // OR
+    e.preventDefault();
     if (!tweet.isLiked) dispatch(likeTweet(tweet._id, from));
     else {
       dispatch(unlikeTweet(tweet._id, from));
     }
   };
-  const handelTweetReply = () => {
+  const handelTweetReply = (e) => {
+    e.stopPropagation();
+    // OR
+    e.preventDefault();
     dispatch(
       SET_TWEET_TYPE({ type: "tweetReply", retweet: null, tweet: tweet })
     );
     navigate("/compose/tweet");
   };
-  const handelRetweet = async () => {
+  const handelRetweet = async (e) => {
     // this time uing diffrent method
+    e.stopPropagation();
+    // OR
+    e.preventDefault();
     try {
       setIsRetweeting(true);
-      if(!tweet.isRetweeted){
+      if (!tweet.isRetweeted) {
         await postTheRetweet(tweet._id);
-      }
-      else{
-        // 
+      } else {
+        alert("nope");
       }
       setIsRetweeting(false);
     } catch (error) {
@@ -106,7 +120,9 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
   };
   return (
     <div
-      onClick={()=>navigate("/" + tweet.user.username + "/status/" + tweet._id)}
+      onClick={() =>
+        navigate("/" + tweet.user.username + "/status/" + tweet._id)
+      }
       className={tweetClasses}
     >
       {tweet.isRetweet && (
@@ -130,7 +146,7 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
         <div className="tweet-content">
           <div className="tweet-content-header">
             <span className="tweet-content-child user-full-name">
-              {tweet.user.fullName}
+              <Link to={"/" + tweet.user.username}>{tweet.user.fullName}</Link>
             </span>
             <span className="tweet-content-child user-username">
               @{tweet.user.username}
@@ -140,12 +156,15 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
               {moment(tweet.createdAt).fromNow()}
             </span>
             <div className="tweet-options-container" ref={tweetOptionsRef}>
-              <span
-                className="tweet-content-child tweet-options"
+              <TextButton
                 onClick={showTweetOptions}
+                className="tweet-options-btn"
               >
-                <ThreeDotsIcon className="tweet-options-icon" />
-              </span>
+                <span className="tweet-content-child tweet-options">
+                  <ThreeDotsIcon className="tweet-options-icon" />
+                </span>
+              </TextButton>
+
               <ul className={tweetOptionsClassnames}>
                 <li className="tweet-options-model-item">
                   <span className="tweet-options-model-icon">
@@ -199,12 +218,13 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
           <div className="tweet-actions">
             <div className=" tweet-actions-child tweet-comment">
               <div className="tweet-icon">
-                <CommentIcon
-                  fill={"#536471"}
-                  height="20px"
-                  width="20px"
+                <TextButton
+                  className="tweet-icon-wrap"
                   onClick={handelTweetReply}
-                />
+                >
+                  <CommentIcon fill={"#536471"} height="20px" width="20px" />
+                </TextButton>
+
                 {/* <i className="far fa-comment"></i> */}
               </div>
 
@@ -212,14 +232,16 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
             </div>
             <div className="tweet-actions-child tweet-retweet" ref={retweetRef}>
               <div className="tweet-icon">
-                <RetweetIcon
-                  fill={
-                    tweet.isRetweeted ? "rgba(29, 155, 240, 0.8)" : "#536471"
-                  }
-                  height="20px"
-                  width="20px"
-                  onClick={handelRetweet}
-                />
+                <TextButton className="tweet-icon-wrap" onClick={handelRetweet}>
+                  <RetweetIcon
+                    fill={
+                      tweet.isRetweeted ? "rgba(29, 155, 240, 0.8)" : "#536471"
+                    }
+                    height="20px"
+                    width="20px"
+                  />
+                </TextButton>
+
                 {/* <i className="far fa-arrows-retweet"></i> */}
               </div>
               <div className={retweetOptionsClassnames}>
@@ -236,12 +258,18 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
               <span className="tweet-comment-count">{tweet.retweetCount}</span>
             </div>
             <div className="tweet-actions-child like-tweet">
-              <div className="tweet-icon like-icon" onClick={handelTweetLike}>
-                <i
-                  className={
-                    tweet.isLiked ? "fas fa-heart liked" : "fal fa-heart"
-                  }
-                ></i>
+              <div className="tweet-icon like-icon">
+                <TextButton
+                  className="tweet-icon-wrap"
+                  onClick={handelTweetLike}
+                >
+                  <i
+                    className={
+                      tweet.isLiked ? "fas fa-heart liked" : "fal fa-heart"
+                    }
+                  ></i>
+                </TextButton>
+
                 {/* <LikeIcon fill={"#536471"} height="18px" width="18px"/> */}
               </div>
 
@@ -252,12 +280,13 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
                 className="tweet-icon tweet-options-container"
                 ref={saveOptionsRef}
               >
-                <ShareIcon
-                  fill={"#536471"}
-                  height="18px"
-                  width="18px"
+                <TextButton
                   onClick={showSaveTweetOptions}
-                />
+                  className="tweet-options-btn"
+                >
+                  <ShareIcon fill={"#536471"} height="18px" width="18px" />
+                </TextButton>
+
                 <ul className={savetweetOptionsClassnames}>
                   <li className="tweet-options-model-item">
                     <span className="tweet-options-model-icon">

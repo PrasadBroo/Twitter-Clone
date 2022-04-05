@@ -80,6 +80,10 @@
                 .tweet-options-container {
                     position: relative;
                     margin-left: auto;
+                    .tweet-options-btn{
+                        padding: 0;
+                        background-color: transparent;
+                    }
 
                     .tweet-options {
 
@@ -260,6 +264,10 @@
                         font-size: 1.2rem;
                         transition: all 500ms ease-in-out;
                         border-radius: 100%;
+                        .tweet-icon-wrap{
+                            padding: 0;
+                            background-color: transparent;
+                        }
 
                         &:hover {
                             background-color: rgba(29, 155, 240, 0.2);
