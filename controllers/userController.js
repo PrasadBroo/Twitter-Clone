@@ -899,7 +899,6 @@ module.exports.getUserTweets = async (req, res, next) => {
     }
 }
 
-
 module.exports.getUserLikedTweets = async (req, res, next) => {
     const userid = req.params.userid;
     const currentUser = res.locals.user;
@@ -970,6 +969,41 @@ module.exports.getUserLikedTweets = async (req, res, next) => {
                         {
                             $addFields:{
                                 replyCount:{$size:'$tweetReplies'}
+                            }
+                        },
+                        {
+                            $lookup:{
+                                from: 'retweets',
+                                localField: '_id',
+                                foreignField: 'tweet',
+                                as: 'retweets'
+                              }
+                        },
+                        {
+                            $addFields:{
+                                retweets:{$cond: [{
+                                    $eq: ["$retweets", []]
+                                },
+                                [{
+                                    users: []
+                                }], '$retweets'
+                            ]}
+                            }
+                        },
+                        {
+                            $unwind:{
+                                path:'$retweets',
+                                preserveNullAndEmptyArrays:true,
+                            }
+                        },
+                        {
+                            $addFields:{
+                                retweetCount:{$size:'$retweets.users'}
+                            }
+                        },
+                        {
+                            $addFields:{
+                                isRetweeted:{$in:[Mongoose.Types.ObjectId(currentUser._id),'$retweets.users.user']}
                             }
                         },
                         {
@@ -1103,6 +1137,41 @@ module.exports.getUserMediaTweets = async (req, res, next) => {
                                 isLiked: {
                                     $in: [Mongoose.Types.ObjectId(currentUser._id), '$tweetLikes.user']
                                 }
+                            }
+                        },
+                        {
+                            $lookup:{
+                                from: 'retweets',
+                                localField: '_id',
+                                foreignField: 'tweet',
+                                as: 'retweets'
+                              }
+                        },
+                        {
+                            $addFields:{
+                                retweets:{$cond: [{
+                                    $eq: ["$retweets", []]
+                                },
+                                [{
+                                    users: []
+                                }], '$retweets'
+                            ]}
+                            }
+                        },
+                        {
+                            $unwind:{
+                                path:'$retweets',
+                                preserveNullAndEmptyArrays:true,
+                            }
+                        },
+                        {
+                            $addFields:{
+                                retweetCount:{$size:'$retweets.users'}
+                            }
+                        },
+                        {
+                            $addFields:{
+                                isRetweeted:{$in:[Mongoose.Types.ObjectId(currentUser._id),'$retweets.users.user']}
                             }
                         },
                         {

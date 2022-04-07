@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { SET_TWEET_TYPE } from "../../store/model/modelSlice";
 import { postTheRetweet } from "../../services/tweetService";
+import TweetOptions from "../Options/TweetOptions";
 
 const options = {
   className: () => "default-link",
@@ -165,40 +166,7 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
                 </span>
               </TextButton>
 
-              <ul className={tweetOptionsClassnames}>
-                <li className="tweet-options-model-item">
-                  <span className="tweet-options-model-icon">
-                    <i className="far fa-frown"></i>
-                  </span>
-                  <TextButton className="tweet-options-model-btn">
-                    Not insterested in this tweet
-                  </TextButton>
-                </li>
-                <li className="tweet-options-model-item">
-                  <span className="tweet-options-model-icon">
-                    <i className="far fa-user-plus"></i>
-                  </span>
-                  <TextButton className="tweet-options-model-btn">
-                    Follow @Prasadbro
-                  </TextButton>
-                </li>
-                <li className="tweet-options-model-item">
-                  <span className="tweet-options-model-icon">
-                    <i className="far fa-ban"></i>
-                  </span>
-                  <TextButton className="tweet-options-model-btn">
-                    Block @Prasadbro
-                  </TextButton>
-                </li>
-                <li className="tweet-options-model-item">
-                  <span className="tweet-options-model-icon icon-4">
-                    <i className="far fa-flag"></i>
-                  </span>
-                  <TextButton className="tweet-options-model-btn">
-                    Report Tweet
-                  </TextButton>
-                </li>
-              </ul>
+              <TweetOptions istweetOptions={istweetOptions}/>
             </div>
           </div>
           <div className="tweet-content-text">

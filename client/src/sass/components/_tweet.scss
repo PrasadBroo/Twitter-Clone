@@ -117,6 +117,9 @@
                                 width: 20px;
                                 @include flexJustifyCenter;
                             }
+                            .danger-icon{
+                                color: $color-red;
+                            }
 
                             .icon-4 {
                                 transform: rotateY(180deg);
