@@ -54,9 +54,6 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
     isVisible: saveOptonsVisible,
     setIsVisible: setsaveOptionsComponentVisible,
   } = useComponentVisible(false);
-  const showRetweetOptions = () => {
-    setRewteetComponentVisible(true);
-  };
   const showTweetOptions = (e) => {
     e.stopPropagation();
     // OR
@@ -72,9 +69,7 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
   const retweetOptionsClassnames = classNames("retweet-options", {
     show: reweetOptonsVisible,
   });
-  const tweetOptionsClassnames = classNames("tweet-options-model", {
-    show: istweetOptions,
-  });
+
   const savetweetOptionsClassnames = classNames(
     "tweet-options-model",
     "save-options",
@@ -147,7 +142,7 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
         <div className="tweet-content">
           <div className="tweet-content-header">
             <span className="tweet-content-child user-full-name">
-              <Link to={"/" + tweet.user.username}>{tweet.user.fullName}</Link>
+              <Link to={"/" + tweet.user.username} onClick={(e)=>e.stopPropagation()}>{tweet.user.fullName}</Link>
             </span>
             <span className="tweet-content-child user-username">
               @{tweet.user.username}
@@ -166,7 +161,7 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
                 </span>
               </TextButton>
 
-              <TweetOptions istweetOptions={istweetOptions}/>
+              <TweetOptions istweetOptions={istweetOptions} tweet={tweet}/>
             </div>
           </div>
           <div className="tweet-content-text">
@@ -200,7 +195,7 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
             </div>
             <div className="tweet-actions-child tweet-retweet" ref={retweetRef}>
               <div className="tweet-icon">
-                <TextButton className="tweet-icon-wrap" onClick={handelRetweet}>
+                <TextButton className="tweet-icon-wrap" onClick={handelRetweet} disabled={isRetweeting}>
                   <RetweetIcon
                     fill={
                       tweet.isRetweeted ? "rgba(29, 155, 240, 0.8)" : "#536471"

@@ -1,20 +1,24 @@
 .tweet-link {
     border-top: $color-grey-2 1px solid;
-    .tweet-retweeted{
+
+    .tweet-retweeted {
         @include flexCenter;
         padding: 0.2rem 0;
         padding-left: 0.7rem;
-        .retweeted-text{
+
+        .retweeted-text {
             font-size: 13px;
             color: $color-grey-1;
             font-weight: 600;
         }
-        .retweet-icon{
+
+        .retweet-icon {
             color: $color-grey-1;
             font-size: 13px;
             margin-right: 0.3rem;
         }
     }
+
     .tweet {
         position: relative;
         cursor: pointer;
@@ -57,7 +61,7 @@
                 width: 100%;
                 max-width: 500px;
                 margin-top: 1rem;
-                
+
 
                 .tweet-content-image {
                     height: auto;
@@ -80,7 +84,8 @@
                 .tweet-options-container {
                     position: relative;
                     margin-left: auto;
-                    .tweet-options-btn{
+
+                    .tweet-options-btn {
                         padding: 0;
                         background-color: transparent;
                     }
@@ -117,7 +122,8 @@
                                 width: 20px;
                                 @include flexJustifyCenter;
                             }
-                            .danger-icon{
+
+                            .danger-icon {
                                 color: $color-red;
                             }
 
@@ -150,6 +156,10 @@
             .user-full-name {
                 font-size: 15px;
                 font-weight: 700;
+
+                &:hover {
+                    border-bottom: 1px solid $color-black-2;
+                }
             }
 
             .tweet-text {
@@ -267,14 +277,15 @@
                         font-size: 1.2rem;
                         transition: all 500ms ease-in-out;
                         border-radius: 100%;
-                        .tweet-icon-wrap{
+
+                        .tweet-icon-wrap {
                             padding: 0;
                             background-color: transparent;
                         }
 
                         &:hover {
                             background-color: rgba(29, 155, 240, 0.2);
-                            
+
                         }
                     }
 
@@ -340,8 +351,9 @@
     }
 
 }
-.tweetpage-main-tweet{
-    
-        border-top: 0;
-    
+
+.tweetpage-main-tweet {
+
+    border-top: 0;
+
 }

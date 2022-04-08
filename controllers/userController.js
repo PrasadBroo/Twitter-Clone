@@ -605,6 +605,42 @@ module.exports.getUserTweets = async (req, res, next) => {
                     },
                     {
                         $lookup: {
+                            from: 'followers',
+                            localField: 'user._id',
+                            foreignField: 'user',
+                            as: 'userFollowers'
+                        }
+                    },
+                    {
+                        $addFields: {
+                            userFollowers: {
+                                $cond: [{
+                                        $eq: ["$userFollowers", []]
+                                    },
+                                    [{
+                                        followers: []
+                                    }], '$userFollowers'
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        $unwind:'$userFollowers'
+                    },
+                    {
+                        $addFields:{
+                            userFollowers:'$userFollowers.followers'
+                        }
+                    },
+                    {
+                        $addFields:{
+                            isFollowing:{
+                                $in:[currentUser._id,'$userFollowers.user']
+                            }
+                        }
+                    },
+                    {
+                        $lookup: {
                             from: 'tweetlikes',
                             localField: '_id',
                             foreignField: 'tweet',
@@ -705,7 +741,7 @@ module.exports.getUserTweets = async (req, res, next) => {
                             likes: 0,
                             tweetReplies:0,
                             retweets:0,
-
+                            userFollowers:0,
                         }
                     }
                 ],
@@ -740,6 +776,9 @@ module.exports.getUserTweets = async (req, res, next) => {
                         ]
                     }
                 }
+            },
+            {
+                $limit:10,
             },
             {
                 $lookup: {
@@ -785,6 +824,42 @@ module.exports.getUserTweets = async (req, res, next) => {
                     'user.backgroundImage': 0,
                     'user,__v': 0,
 
+                }
+            },
+            {
+                $lookup: {
+                    from: 'followers',
+                    localField: 'user._id',
+                    foreignField: 'user',
+                    as: 'userFollowers'
+                }
+            },
+            {
+                $addFields: {
+                    userFollowers: {
+                        $cond: [{
+                                $eq: ["$userFollowers", []]
+                            },
+                            [{
+                                followers: []
+                            }], '$userFollowers'
+                        ]
+                    }
+                }
+            },
+            {
+                $unwind:'$userFollowers'
+            },
+            {
+                $addFields:{
+                    userFollowers:'$userFollowers.followers'
+                }
+            },
+            {
+                $addFields:{
+                    isFollowing:{
+                        $in:[currentUser._id,'$userFollowers.user']
+                    }
                 }
             },
             {
@@ -884,6 +959,7 @@ module.exports.getUserTweets = async (req, res, next) => {
                     likes:0,
                     tweetReplies:0,
                     retweets:0,
+                    userFollowers:0,
                 }
             }
         ]
