@@ -137,7 +137,10 @@ module.exports.retriveComments = async (tweetid,currentUser,offset=0) => {
                         },
                         {
                             $addFields:{
-                                retweetCount:{$size:'$retweets.users'}
+                                retweetCount:{$size:'$retweets.users'},
+                                isRetweeted: {
+                                    $in: [Mongoose.Types.ObjectId(currentUser._id), '$retweets.users.user']
+                                }
                             }
                         },
                         {

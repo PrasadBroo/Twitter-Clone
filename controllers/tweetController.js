@@ -11,7 +11,9 @@ const Mongoose = require("mongoose");
 const {
     cloudinary
 } = require("../services/cloudinary");
-const { retriveComments } = require('../utils/controllerUtils');
+const {
+    retriveComments
+} = require('../utils/controllerUtils');
 
 
 module.exports.postTweet = async (req, res, next) => {
@@ -259,35 +261,43 @@ module.exports.fetchTweet = async (req, res, next) => {
                             }
                         },
                         {
-                            $lookup:{
+                            $lookup: {
                                 from: 'retweets',
                                 localField: '_id',
                                 foreignField: 'tweet',
                                 as: 'retweets'
-                              }
+                            }
                         },
                         {
-                            $addFields:{
-                                retweets:{$cond: [{
-                                    $eq: ["$retweets", []]
+                            $addFields: {
+                                retweets: {
+                                    $cond: [{
+                                            $eq: ["$retweets", []]
+                                        },
+                                        [{
+                                            users: []
+                                        }], '$retweets'
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $unwind: {
+                                path: '$retweets',
+                                preserveNullAndEmptyArrays: true,
+                            }
+                        },
+                        {
+                            $addFields: {
+                                retweetCount: {
+                                    $size: '$retweets.users'
                                 },
-                                [{
-                                    users: []
-                                }], '$retweets'
-                            ]}
+                                isRetweeted: {
+                                    $in: [Mongoose.Types.ObjectId(currentUser._id), '$retweets.users.user']
+                                }
                             }
                         },
-                        {
-                            $unwind:{
-                                path:'$retweets',
-                                preserveNullAndEmptyArrays:true,
-                            }
-                        },
-                        {
-                            $addFields:{
-                                retweetCount:{$size:'$retweets.users'}
-                            }
-                        },
+
                         {
                             $lookup: {
                                 from: 'tweets',
@@ -389,33 +399,40 @@ module.exports.fetchTweet = async (req, res, next) => {
                             }
                         },
                         {
-                            $lookup:{
+                            $lookup: {
                                 from: 'retweets',
                                 localField: 'hasParentTweet._id',
                                 foreignField: 'tweet',
                                 as: 'hasParentTweet.retweets'
-                              }
+                            }
                         },
                         {
-                            $addFields:{
-                                'hasParentTweet.retweets':{$cond: [{
-                                    $eq: ["$hasParentTweet.retweets", []]
+                            $addFields: {
+                                'hasParentTweet.retweets': {
+                                    $cond: [{
+                                            $eq: ["$hasParentTweet.retweets", []]
+                                        },
+                                        [{
+                                            users: []
+                                        }], '$hasParentTweet.retweets'
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $unwind: {
+                                path: '$hasParentTweet.retweets',
+                                preserveNullAndEmptyArrays: true,
+                            }
+                        },
+                        {
+                            $addFields: {
+                                'hasParentTweet.retweetCount': {
+                                    $size: '$hasParentTweet.retweets.users'
                                 },
-                                [{
-                                    users: []
-                                }], '$hasParentTweet.retweets'
-                            ]}
-                            }
-                        },
-                        {
-                            $unwind:{
-                                path:'$hasParentTweet.retweets',
-                                preserveNullAndEmptyArrays:true,
-                            }
-                        },
-                        {
-                            $addFields:{
-                                'hasParentTweet.retweetCount':{$size:'$hasParentTweet.retweets.users'}
+                                'hasParentTweet.isRetweeted': {
+                                    $in: [Mongoose.Types.ObjectId(currentUser._id), '$hasParentTweet.retweets.users.user']
+                                }
                             }
                         },
                         {
@@ -473,7 +490,7 @@ module.exports.fetchTweet = async (req, res, next) => {
 
         ];
         const data = await Tweet.aggregate(pipeline);
-        const comments = await retriveComments(tweetid,currentUser)
+        const comments = await retriveComments(tweetid, currentUser)
         data[0].tweet.replies = comments;
         res.status(200).send(data[0])
     } catch (error) {
@@ -550,8 +567,7 @@ module.exports.fetchTweetComments = async (req, res, next) => {
             error: 'Tweet does not exist'
         })
 
-        const pipeline = [
-            {
+        const pipeline = [{
                 $match: {
                     _id: Mongoose.Types.ObjectId(tweetid),
                 }
@@ -647,33 +663,37 @@ module.exports.fetchTweetComments = async (req, res, next) => {
                             }
                         },
                         {
-                            $lookup:{
+                            $lookup: {
                                 from: 'retweets',
                                 localField: '_id',
                                 foreignField: 'tweet',
                                 as: 'retweets'
-                              }
-                        },
-                        {
-                            $addFields:{
-                                retweets:{$cond: [{
-                                    $eq: ["$retweets", []]
-                                },
-                                [{
-                                    users: []
-                                }], '$retweets'
-                            ]}
                             }
                         },
                         {
-                            $unwind:{
-                                path:'$retweets',
-                                preserveNullAndEmptyArrays:true,
+                            $addFields: {
+                                retweets: {
+                                    $cond: [{
+                                            $eq: ["$retweets", []]
+                                        },
+                                        [{
+                                            users: []
+                                        }], '$retweets'
+                                    ]
+                                }
                             }
                         },
                         {
-                            $addFields:{
-                                retweetCount:{$size:'$retweets.users'}
+                            $unwind: {
+                                path: '$retweets',
+                                preserveNullAndEmptyArrays: true,
+                            }
+                        },
+                        {
+                            $addFields: {
+                                retweetCount: {
+                                    $size: '$retweets.users'
+                                }
                             }
                         },
                     ],
@@ -681,8 +701,8 @@ module.exports.fetchTweetComments = async (req, res, next) => {
                 }
             },
             {
-                $project:{
-                    replies:1
+                $project: {
+                    replies: 1
                 }
             }
         ]

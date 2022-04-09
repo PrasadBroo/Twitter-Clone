@@ -11,11 +11,13 @@ import "linkify-plugin-hashtag";
 import "linkify-plugin-mention";
 import moment from "moment";
 import { likeTweet, unlikeTweet } from "../../store/feed/feedActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { SET_TWEET_TYPE } from "../../store/model/modelSlice";
 import { postTheRetweet } from "../../services/tweetService";
 import TweetOptions from "../Options/TweetOptions";
+import { selectCurrentUser } from "../../store/user/userSelector";
+import { selectGuestUser } from "../../store/guest/guestSelector";
 
 const options = {
   className: () => "default-link",
@@ -35,6 +37,9 @@ const options = {
 };
 
 export default function Tweet({ tweet, from, isParentTweet, className }) {
+  const state = useSelector(state=>state);
+  const currentUser = selectCurrentUser(state);
+  const guestUser = selectGuestUser(state);
   const tweetClasses = classNames("tweet-link", className);
   const navigate = useNavigate();
   const [isRetweeting, setIsRetweeting] = useState(false);
@@ -131,7 +136,7 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
               onClick={handelRetweet}
             />
           </span>
-          <span className="retweeted-text">You Retweeted</span>
+          <span className="retweeted-text">{currentUser._id === guestUser._id ? 'You Retweeted' : guestUser.username + ' Retweeted'}</span>
         </div>
       )}
       <div className="tweet tweet-container">
