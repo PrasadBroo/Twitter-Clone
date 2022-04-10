@@ -30,7 +30,7 @@ import "linkify-plugin-mention";
 const options = {
   className: () => "default-link",
   formatHref: {
-    hashtag: (href) => "https://twitter.com/hashtag/" + href.substr(1),
+    hashtag: (href) => "/explore?hashtag=" + href.substr(1),
     mention: (href) => "/" + href.substr(1),
   },
   format: {

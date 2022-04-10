@@ -83,3 +83,16 @@ export const  postTheRetweet = async(tweetid)=>{
         throw new Error(error.response.data.error);
     }
 }
+
+export const  deleteTheRetweet = async(tweetid)=>{
+    try {
+        const response = await axios.post(`/api/tweet/post/${tweetid}/retweet/delete`, null, {
+            headers: {
+                authorization: localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error);
+    }
+}

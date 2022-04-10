@@ -461,6 +461,8 @@ module.exports.fetchTweet = async (req, res, next) => {
                             $project: {
                                 tweetLikes: 0,
                                 tweetReplies: 0,
+                                retweets:0,
+                                'hasParentTweet.retweets':0,
                                 'hasParentTweet.tweetReplies': 0,
                                 'hasParentTweet.tweetLikes': 0,
                                 __v: 0,
@@ -708,5 +710,38 @@ module.exports.fetchTweetComments = async (req, res, next) => {
         ]
     } catch (error) {
 
+    }
+}
+
+module.exports.deleteRetweet = async (req, res, next) => {
+    const {
+        tweetid
+    } = req.params;
+    const currentUser = res.locals.user;
+    try {
+        if (!tweetid) return res.status(400).send({
+            error: 'Invalid tweetid'
+        })
+        const tweet = await Tweet.findOne({
+            _id: tweetid
+        });
+        if (!tweet) return res.status(404).send({
+            error: 'Tweet does not exist'
+        })
+        const retweetUpdate = await Retweet.updateOne({
+            tweet: tweetid,
+            'users.user': {
+                $in: currentUser._id
+            }
+        }, {
+            $pull: {
+                users: {
+                    user: currentUser._id
+                }
+            }
+        },);
+        res.status(200).send('Success')
+    } catch (error) {
+        next(error)
     }
 }

@@ -23,7 +23,7 @@ export default function Tweetpage() {
     <>
       <div className="tweetpage two-flex-col-container">
         <div className="col1 fpc-1">
-          <UserHeader />
+          <UserHeader customHeader='Tweet'/>
 
           <div className="user-tweet-content">
             {fetching ? (
@@ -36,12 +36,13 @@ export default function Tweetpage() {
                       tweet={tweet.hasParentTweet}
                       isParentTweet
                       className="tweetpage-main-tweet"
-                      from="tweet-page"
+                      from="parentTweet"
+                      key={tweet.hasParentTweet._id}
                     />
                   </div>
                 )}
 
-                <Tweet tweet={tweet} className="tweetpage-main-tweet" />
+                <Tweet tweet={tweet} className="tweetpage-main-tweet" key={tweet._id} from='replyTweet'/>
                 <div className="replying-to">
                   <span>
                     Replaying to{" "}
@@ -65,6 +66,8 @@ export default function Tweetpage() {
                       tweet={tweet}
                       from="tweet-page-replies"
                       className="tweet-page-replies"
+                      key={tweet._id}
+                      
                     />
                   ))}
                 </div>

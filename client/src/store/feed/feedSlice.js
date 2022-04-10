@@ -134,7 +134,48 @@ export const feedSlice = createSlice({
         FETCHING_TWEET_FAIL: (state, action) => {
             state.fetchingTweet = false;
             state.fetchingTweetError = action.payload;
-        }
+        },
+        TWEET_RETWEETED_FAILED: (state, action) => {
+            const {
+                tweetid,
+                from
+            } = action.payload;
+
+            const tweets = state.tweets;
+            const likedTweets = state.likedTweets;
+            const mediaTweets = state.mediaTweets;
+            if (from === 'tweets') {
+                tweets.find(tweet => tweet._id === tweetid).isRetweeted = false
+                tweets.find(tweet => tweet._id === tweetid).retweetCount -= 1
+            } else if(from ==='likedTweets') {
+                likedTweets.find(tweet => tweet._id === tweetid).isRetweeted = false
+                likedTweets.find(tweet => tweet._id === tweetid).retweetCount -= 1
+            }else{
+                mediaTweets.find(tweet => tweet._id === tweetid).isRetweeted = false
+                mediaTweets.find(tweet => tweet._id === tweetid).retweetCount -= 1
+            }
+        },
+        TWEET_RETWEETED_SUCCESS: (state, action) => {
+            const {
+                tweetid,
+                from
+            } = action.payload;
+
+            const tweets = state.tweets;
+            const likedTweets = state.likedTweets;
+            const mediaTweets = state.mediaTweets;
+            if (from === 'tweets') {
+                tweets.find(tweet => tweet._id === tweetid).isRetweeted = true
+                tweets.find(tweet => tweet._id === tweetid).retweetCount += 1
+            } else if(from ==='likedTweets') {
+                likedTweets.find(tweet => tweet._id === tweetid).isRetweeted = true
+                likedTweets.find(tweet => tweet._id === tweetid).retweetCount += 1
+            }else{
+                mediaTweets.find(tweet => tweet._id === tweetid).isRetweeted = true
+                mediaTweets.find(tweet => tweet._id === tweetid).retweetCount += 1
+            }
+        },
+
 
     },
 })
@@ -154,6 +195,8 @@ export const {
     MEDIA_TWEETS_FETCH_SUCCESS,
     FETCHING_TWEET_FAIL,
     FETCHING_TWEET_STARTED,
-    FETCHING_TWEET_SUCCESS
+    FETCHING_TWEET_SUCCESS,
+    TWEET_RETWEETED_FAILED,
+    TWEET_RETWEETED_SUCCESS
 } = feedSlice.actions;
 export default feedSlice.reducer;

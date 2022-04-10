@@ -21,7 +21,7 @@ export default function MediaTweets() {
         {!fetching ? (
           tweets &&
           tweets.map((tweet) => (
-            <Tweet tweet={tweet} key={tweet._id} from="tweets" />
+            <Tweet tweet={tweet} key={tweet._id} from="mediaTweets" />
           ))
         ) : (
           <SimpleSpinner topCenter />

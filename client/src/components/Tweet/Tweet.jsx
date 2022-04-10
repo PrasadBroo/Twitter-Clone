@@ -14,15 +14,19 @@ import { likeTweet, unlikeTweet } from "../../store/feed/feedActions";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { SET_TWEET_TYPE } from "../../store/model/modelSlice";
-import { postTheRetweet } from "../../services/tweetService";
+import { deleteTheRetweet, postTheRetweet } from "../../services/tweetService";
 import TweetOptions from "../Options/TweetOptions";
 import { selectCurrentUser } from "../../store/user/userSelector";
 import { selectGuestUser } from "../../store/guest/guestSelector";
+import {
+  TWEET_RETWEETED_FAILED,
+  TWEET_RETWEETED_SUCCESS,
+} from "../../store/feed/feedSlice";
 
 const options = {
   className: () => "default-link",
   formatHref: {
-    hashtag: (href) => "https://twitter.com/hashtag/" + href.substr(1),
+    hashtag: (href) => "/explore?hashtag=" + href.substr(1),
     mention: (href) => "/" + href.substr(1),
   },
   format: {
@@ -37,7 +41,7 @@ const options = {
 };
 
 export default function Tweet({ tweet, from, isParentTweet, className }) {
-  const state = useSelector(state=>state);
+  const state = useSelector((state) => state);
   const currentUser = selectCurrentUser(state);
   const guestUser = selectGuestUser(state);
   const tweetClasses = classNames("tweet-link", className);
@@ -106,17 +110,23 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
     e.stopPropagation();
     // OR
     e.preventDefault();
-    try {
-      setIsRetweeting(true);
-      if (!tweet.isRetweeted) {
+
+    if (!tweet.isRetweeted) {
+      try {
+        dispatch(TWEET_RETWEETED_SUCCESS({ from, tweetid: tweet._id }));
         await postTheRetweet(tweet._id);
-      } else {
-        alert("nope");
+      } catch (error) {
+        dispatch(TWEET_RETWEETED_FAILED({ from, tweetid: tweet._id }));
       }
-      setIsRetweeting(false);
-    } catch (error) {
-      setIsRetweeting(false);
+    } else {
+      try {
+        await deleteTheRetweet(tweet._id);
+        dispatch(TWEET_RETWEETED_FAILED({ from, tweetid: tweet._id }));
+      } catch (error) {
+        dispatch(TWEET_RETWEETED_SUCCESS({ from, tweetid: tweet._id }));
+      }
     }
+
     // dispatch(postRetweet(tweet))
   };
   return (
@@ -136,7 +146,11 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
               onClick={handelRetweet}
             />
           </span>
-          <span className="retweeted-text">{currentUser._id === guestUser._id ? 'You Retweeted' : guestUser.username + ' Retweeted'}</span>
+          <span className="retweeted-text">
+            {currentUser._id === guestUser._id
+              ? "You Retweeted"
+              : guestUser.username + " Retweeted"}
+          </span>
         </div>
       )}
       <div className="tweet tweet-container">
@@ -147,7 +161,12 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
         <div className="tweet-content">
           <div className="tweet-content-header">
             <span className="tweet-content-child user-full-name">
-              <Link to={"/" + tweet.user.username} onClick={(e)=>e.stopPropagation()}>{tweet.user.fullName}</Link>
+              <Link
+                to={"/" + tweet.user.username}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {tweet.user.fullName}
+              </Link>
             </span>
             <span className="tweet-content-child user-username">
               @{tweet.user.username}
@@ -166,7 +185,7 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
                 </span>
               </TextButton>
 
-              <TweetOptions istweetOptions={istweetOptions} tweet={tweet}/>
+              <TweetOptions istweetOptions={istweetOptions} tweet={tweet} />
             </div>
           </div>
           <div className="tweet-content-text">
@@ -200,7 +219,11 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
             </div>
             <div className="tweet-actions-child tweet-retweet" ref={retweetRef}>
               <div className="tweet-icon">
-                <TextButton className="tweet-icon-wrap" onClick={handelRetweet} disabled={isRetweeting}>
+                <TextButton
+                  className="tweet-icon-wrap"
+                  onClick={handelRetweet}
+                  disabled={isRetweeting}
+                >
                   <RetweetIcon
                     fill={
                       tweet.isRetweeted ? "rgba(29, 155, 240, 0.8)" : "#536471"
