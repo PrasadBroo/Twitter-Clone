@@ -8,7 +8,8 @@ const {
     unfollowUser,
     getUserTweets,
     getUserLikedTweets,
-    getUserMediaTweets
+    getUserMediaTweets,
+    getUserFeedTweets
 } = require('../controllers/userController');
 const userRouter = express.Router();
 const {
@@ -25,5 +26,6 @@ userRouter.post('/:userid/followings', requireAuth, getFollowings)
 userRouter.post('/:userid/tweets', requireAuth, getUserTweets)
 userRouter.post('/:userid/tweets/liked', requireAuth, getUserLikedTweets)
 userRouter.post('/:userid/tweets/media', requireAuth, getUserMediaTweets)
+userRouter.post('/:userid/tweets/feed', requireAuth, getUserFeedTweets)
 
 module.exports = userRouter;

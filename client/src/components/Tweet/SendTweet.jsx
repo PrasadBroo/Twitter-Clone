@@ -10,7 +10,8 @@ import classNames from "classnames";
 import Picker from "emoji-picker-react";
 import { useSelector,useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../store/user/userSelector";
-import { postTweet } from "../../store/user/userActions";
+import { postTheTweet } from "../../services/tweetService";
+import { POSTING_TWEET_FAILED, POSTING_TWEET_FINISED, POSTING_TWEET_STARTED } from "../../store/user/userSlice";
 
 export default function SendTweet({ className,placeholder,type,tweet=null }) {
   const dispatch = useDispatch()
@@ -40,9 +41,27 @@ export default function SendTweet({ className,placeholder,type,tweet=null }) {
   const onEmojiClick = (event, emojiObject) => {
     setTweetText(prevState=>prevState+=emojiObject.emoji)
   };
-  const handelSubmit = ()=>{
+  const handelSubmit = async()=>{
     // if(type==='tweetReply')dispatch(postTweetReply(tweetText,tweetPic,tweet._id))
-    dispatch(postTweet(tweetText,tweetPic,tweet))
+    // dispatch(postTweet(tweetText,tweetPic,tweet))
+    try {
+      // if(!caption) dispatch error
+      if(!tweetText){
+         return dispatch(POSTING_TWEET_FAILED('No caption provided'))
+      }
+      dispatch(POSTING_TWEET_STARTED())
+      if(!tweet)await postTheTweet(tweetText, tweetPic,null);
+      else{
+          await postTheTweet(tweetText, tweetPic,tweet._id);
+      }
+      
+      // dispatch success
+      dispatch(POSTING_TWEET_FINISED())
+      setTweetPic(null);
+      setTweetText('');
+  } catch (error) {
+      dispatch(POSTING_TWEET_FAILED(error.message))
+  }
   }
 
   return (

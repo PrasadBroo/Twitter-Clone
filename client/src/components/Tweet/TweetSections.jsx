@@ -1,16 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import News from "../News/News";
 import Searchbar from "../Searchbar/Searchbar";
 import SendTweet from "./SendTweet";
-import Tweets from "./Tweets";
 import WhoToFollow from './../WhoToFollow/WhoToFollow';
 import SendTweetHeader from "./SendTweetHeader";
+import { fetchUserFeedTweets } from "../../services/userServices";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/user/userSelector";
+import { FEED_TWEETS_FETCH_SUCCESS,FEED_TWEETS_FETCHING_STARTED,FEED_TWEETS_FETCH_FAILED } from "../../store/feed/feedSlice";
+import Tweet from "./Tweet";
+import SimpleSpinner from "../Loader/SimpleSpinner";
 
 export default function TweetSections() {
+  const dispatch = useDispatch()
+  const state = useSelector((state) => state);
+  const currentUser = selectCurrentUser(state)
+  const feedTweets = useSelector(state=>state.feed.feedTweets)
+  const [fetching,setFetching] = useState(true)
   useEffect(()=>{
     document.title = `Home / Twitter`
   },[])
+  useEffect(()=>{
+    const fetchData = async()=>{
+      try {
+        setFetching(true)
+        dispatch(FEED_TWEETS_FETCHING_STARTED())
+        const tweets = await fetchUserFeedTweets(currentUser._id)
+        dispatch(FEED_TWEETS_FETCH_SUCCESS(tweets))
+        setFetching(false)
+      } catch (error) {
+        dispatch(FEED_TWEETS_FETCH_FAILED(error.message))
+        setFetching(false)
+      }
+      
+   
+    }
+      fetchData()
+
+      
+  },[currentUser._id,dispatch])
+
+
   return (
     <>
       <div className="tweets-search-news-sections two-flex-col-container">
@@ -21,7 +52,9 @@ export default function TweetSections() {
           </div>
           {/* all magic happens here */}
           <div className="tweets">
-            {/* <Tweets /> */}
+            {!fetching && feedTweets.length !== 0 &&  feedTweets.map(tweet => <Tweet tweet={tweet} from='feed'/>) }
+            {!fetching && feedTweets.length ===0 &&  <h1>No tweets</h1>}
+            {fetching && <SimpleSpinner topCenter/>}
           </div>
         </div>
         <div className="col2 sidebar searchbar-news-sections ">

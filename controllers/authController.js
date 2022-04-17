@@ -5,7 +5,7 @@ const {
 } = require("../services/googleAuthService");
 const bcrypt = require('bcrypt');
 const Mongoose = require("mongoose");
-const UserModel = require('../models/User')
+const User = require('../models/User')
 const jwt = require('jsonwebtoken');
 const {
     getGithubAccessTokenFromCode,
@@ -34,7 +34,7 @@ module.exports.googleLoginAuthentication = async (req, res, next) => {
         }
         const userAccessToken = await getGoogleAccessTokenFromCode(code)
         const userinfo = await getGoogleUserInfo(userAccessToken);
-        const userDocument = await UserModel.findOne({$or: [ { googleId:userinfo.id }, { email:userinfo.email } ]});
+        const userDocument = await User.findOne({$or: [ { googleId:userinfo.id }, { email:userinfo.email } ]});
         
         if (userDocument) {
             const followersCount = await Followers.findOne({user:userDocument._id},{followers:1}).size()
@@ -65,7 +65,7 @@ module.exports.googleLoginAuthentication = async (req, res, next) => {
                 googleId: userinfo.id
             }
 
-            const createNewUser = await UserModel.create(userDetails)
+            const createNewUser = await User.create(userDetails)
             // now send jwt
             const userDetailsClient = {
                 email: userinfo.email,
@@ -100,7 +100,7 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
         }
         const userAccessToken = await getGithubAccessTokenFromCode(code)
         const userinfo = await getGithubUserInfo(userAccessToken);
-        const userDocument = await UserModel.findOne({
+        const userDocument = await User.findOne({
             githubId: userinfo.id
         });
         if (userDocument) {
@@ -132,7 +132,7 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
                 githubId: userinfo.id
             }
 
-            const createNewUser = await UserModel.create(userDetails)
+            const createNewUser = await User.create(userDetails)
             // now send jwt
             const userDetailsClient = {
                 email: userinfo.email,
@@ -155,13 +155,14 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
 }
 module.exports.signupUserWithEmail = async(req,res,next)=>{
     const saltRounds = 10;
+    const daysInExpires = 7;
     // get details
 
     const {name,email,username,password,confPassword} = req.body;
     // validate details
     try {
         verifyAll(name,email,username,password,confPassword);
-        const userDocument = await UserModel.findOne({$or: [ { email }, { username } ]});
+        const userDocument = await User.findOne({$or: [ { email }, { username } ]});
         
         if(userDocument){
             const whichOne = userDocument.email === email ? 'email' : 'username'
@@ -177,7 +178,7 @@ module.exports.signupUserWithEmail = async(req,res,next)=>{
                 password:hashPass,
                 avatar: 'https://i.ibb.co/LCk6LbN/default-Profile-Pic-7fe14f0a.jpg', 
             }
-            const user = await UserModel.create(userDetails);
+            const user = await User.create(userDetails);
             const pipeline = [
                 {
                     $match:{_id:Mongoose.Types.ObjectId(user._id)}
@@ -213,12 +214,12 @@ module.exports.signupUserWithEmail = async(req,res,next)=>{
                     }
                 }
             ]
-            const myuser = await UserModel.aggregate(pipeline);
+            const myuser = await User.aggregate(pipeline);
             return res.send({
                 user:myuser[0],
                 token: jwt.sign({
                     id: user._id
-                }, process.env.JWT_TOKEN_SECRET),
+                }, process.env.JWT_TOKEN_SECRET,{expiresIn:86400*daysInExpires}),
             });
         }
     } catch (error) {
@@ -278,7 +279,7 @@ module.exports.loginWithToken = async(req,res,next)=>{
                 }
             }
         ]
-        const userDocument = await UserModel.aggregate(pipeline);
+        const userDocument = await User.aggregate(pipeline);
         if(userDocument.length>=1){
             return res.send({
                 user: userDocument[0],
@@ -300,7 +301,7 @@ module.exports.loginUserWithEmail = async(req,res,next)=>{
         if(!email || !password){
             throw new Error('Email or password not provided');
         }
-        const userDocument = await UserModel.findOne({email:email},{__v:0});
+        const userDocument = await User.findOne({email:email},{__v:0});
         
         if(!userDocument){
             throw new Error('User not exist with that email')
@@ -347,7 +348,7 @@ module.exports.loginUserWithEmail = async(req,res,next)=>{
                     }
                 }
             ]
-            const user = await UserModel.aggregate(pipeline);
+            const user = await User.aggregate(pipeline);
 
             return res.send({
                 user: user[0],
@@ -375,7 +376,7 @@ module.exports.requireAuth = async(req,res,next)=>{
               return res.status(401).send({error:'Invalid token provided'})
           }
           const {id} = isValidJwt;
-        const userDocument = await UserModel.findById(id);
+        const userDocument = await User.findById(id);
         if(userDocument){
             res.locals.user = userDocument;
             return next()

@@ -3,11 +3,13 @@ import {
 } from "@reduxjs/toolkit";
 
 const initialState = {
-    tweet: null,
+    feedTweets:null,
+    tweet: {hasParentTweet:null},
     fetchingTweet: true,
     fetchingTweetError: null,
     likedTweets: null,
     mediaTweets: null,
+    feedTweetsFetching:true,
     tweets: null,
     tweetsCount: null,
     tweetsFetching: true,
@@ -15,6 +17,7 @@ const initialState = {
     mediaTweetsFetching: true,
     tweetFetchingError: null,
     likedTweetsFetchingError: null,
+    feedTweetsFetchingError: null,
     mediaTweetsFetchingError: null,
 }
 
@@ -34,6 +37,17 @@ export const feedSlice = createSlice({
         },
         TWEETS_FETCHING_STARTED: (state) => {
             state.tweetsFetching = true;
+        },
+        FEED_TWEETS_FETCH_SUCCESS: (state, action) => {
+            state.feedTweets = action.payload;
+            state.feedTweetsFetching = false;
+        },
+        FEED_TWEETS_FETCH_FAILED: (state, action) => {
+            state.feedTweetsFetchingError = action.payload;
+            state.feedTweetsFetching = false;
+        },
+        FEED_TWEETS_FETCHING_STARTED: (state) => {
+            state.feedTweetsFetching = true;
         },
         TWEET_LIKED_SUCCESS: (state, action) => {
 
@@ -308,6 +322,9 @@ export const {
     FETCHING_TWEET_STARTED,
     FETCHING_TWEET_SUCCESS,
     TWEET_RETWEETED_FAILED,
-    TWEET_RETWEETED_SUCCESS
+    TWEET_RETWEETED_SUCCESS,
+    FEED_TWEETS_FETCHING_STARTED,
+    FEED_TWEETS_FETCH_FAILED,
+    FEED_TWEETS_FETCH_SUCCESS
 } = feedSlice.actions;
 export default feedSlice.reducer;
