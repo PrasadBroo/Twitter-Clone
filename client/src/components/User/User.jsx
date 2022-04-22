@@ -141,9 +141,9 @@ export default function User() {
                 <div className="user-fullname-container container">
                   <span className="user-fullname">
                     {guestUser.fullName}{" "}
-                    <span className="verfied-icon">
+                    {guestUser.isVerified &&<span className="verfied-icon">
                       <i className="fas fa-badge-check"></i>
-                    </span>{" "}
+                    </span>}{" "}
                   </span>
                   <span className="user-username">@{guestUser.username}</span>
                 </div>

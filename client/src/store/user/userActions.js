@@ -146,22 +146,30 @@ export const updateProfile = (bcPic, profilePic, fullName, bio, website, locatio
 
 export const followTheUser = (userid, type) => async (dispatch) => {
     try {
-        await followUser(userid);
         if (String(type) === 'followers') dispatch(FOLLOWED_FROM_FOLLOWERS(userid))
         if (String(type) === 'followings') dispatch(FOLLOWED_FROM_FOLLOWINGS(userid))
         if (String(type) === 'profile') dispatch(FOLLOWED_FROM_PROFILE())
+        await followUser(userid);
+        
     } catch (error) {
+        if (String(type) === 'followers') dispatch(UNFOLLOWED_FROM_FOLLOWERS(userid))
+        if (String(type) === 'followings') dispatch(UNFOLLOWED_FROM_FOLLOWINGS(userid))
+        if (String(type) === 'profile') dispatch(UNFOLLOWED_FROM_PROFILE())
         dispatch(ERROR_WHILE_FOLLOWING(error.message))
     }
 }
 export const unfollowTheUser = (userid, type) => async (dispatch) => {
     try {
-        await unfollowUser(userid);
         if (String(type) === 'followers') dispatch(UNFOLLOWED_FROM_FOLLOWERS(userid))
         if (String(type) === 'followings') dispatch(UNFOLLOWED_FROM_FOLLOWINGS(userid))
         if (String(type) === 'profile') dispatch(UNFOLLOWED_FROM_PROFILE())
         dispatch(HIDE_UNFOLLOW_MODEL())
+        await unfollowUser(userid);
+        
     } catch (error) {
+        if (String(type) === 'followers') dispatch(FOLLOWED_FROM_FOLLOWERS(userid))
+        if (String(type) === 'followings') dispatch(FOLLOWED_FROM_FOLLOWINGS(userid))
+        if (String(type) === 'profile') dispatch(FOLLOWED_FROM_PROFILE())
         dispatch(ERROR_WHILE_UNFOLLOWING(error.message))
         dispatch(HIDE_UNFOLLOW_MODEL())
     }

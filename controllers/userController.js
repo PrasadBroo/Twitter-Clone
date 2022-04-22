@@ -1579,8 +1579,81 @@ module.exports.getUserFeedTweets = async (req, res, next) => {
             }
 
         ]
+        const pipeline_two = [
+            {
+                $match:{
+                    
+                }
+            }
+        ]
         const data = await Tweet.aggregate(pipeline)
         res.send(data)
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports.getUsersSuggetions = async(req,res,next)=>{
+    const currentUser = res.locals.user;
+    try {
+        const pipeline = [
+            {
+                $limit:5
+            },
+            {
+                $project:{
+                    username:1,
+                    avatar:1,
+                    fullName:1,
+                    isVerified:1,
+                }
+            },
+            {
+                $lookup: {
+                    from: 'followers',
+                    localField: '_id',
+                    foreignField: 'user',
+                    as: 'followers',
+                }
+            },
+            {
+                $addFields: {
+                    followers: {
+                        $cond: [{
+                                $eq: ["$followers", []]
+                            },
+                            [{
+                                followers: []
+                            }], '$followers'
+                        ]
+                    }
+                }
+            },
+            {
+                $unwind:{
+                    path:'$followers',
+                    preserveNullAndEmptyArrays:true
+                }
+            },
+            {
+                $addFields:{
+                    followers: '$followers.followers',
+                }
+            },
+            {
+                $addFields: {
+                    isFollowing: {
+                        $in: [Mongoose.Types.ObjectId(currentUser._id), '$followers.user']
+                    }
+                }
+            },
+            {
+                $project:{
+                    followers:0
+                }
+            }
+        ]
+        const users = await User.aggregate(pipeline)
+        res.send(users)
     } catch (error) {
         next(error)
     }

@@ -1,14 +1,19 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import DesktopHeader from "../components/Header/DesktopHeader";
 import UnfollowModel from "../models/UnfollowModel/UnfollowModel";
 import { selectUnfollowModel } from "../store/model/modelSelector";
+import { fetchSuggUsers } from "../store/suggestedUsers/suggUsersActions";
 
 
 export default function Homepage() {
   const state = useSelector((state) => state);
   let model = selectUnfollowModel(state);
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    dispatch(fetchSuggUsers()) 
+  },[dispatch])
   return (
     <>
       <div className="homepage">
@@ -17,10 +22,6 @@ export default function Homepage() {
           <div className="main-wrapper">
             <Outlet/>
             
-            {/* <div className="container with-searchbar-suggetions">
-              <div className="searchbar"></div>
-              <div className="follow-suggetions"></div>
-            </div> */}
           </div>
         </main>
       </div>

@@ -142,3 +142,15 @@ export const fetchUserFeedTweets = async (userid) => {
   }
 }
 
+export const fetchSuggstedUsers = async () => {
+  try {
+      const response = await axios.post(`/api/user/users_suggestions`, null, {
+          headers: {
+              authorization: localStorage.getItem('token'),
+          },
+      });
+      return response.data;
+  } catch (error) {
+      throw new Error(error.response.data.error);
+  }
+}

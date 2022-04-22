@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ThreeDotsIcon from "../../icons/ThreeDotsIcon";
 import CommentIcon from "./../../icons/CommentIcon";
 import RetweetIcon from "./../../icons/RetweetIcon";
@@ -46,7 +46,6 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
   const guestUser = selectGuestUser(state);
   const tweetClasses = classNames("tweet-link", className);
   const navigate = useNavigate();
-  const [isRetweeting, setIsRetweeting] = useState(false);
   const dispatch = useDispatch();
   const {
     ref: tweetOptionsRef,
@@ -56,7 +55,6 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
   const {
     ref: retweetRef,
     isVisible: reweetOptonsVisible,
-    setIsVisible: setRewteetComponentVisible,
   } = useComponentVisible(false);
   const {
     ref: saveOptionsRef,
@@ -222,7 +220,6 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
                 <TextButton
                   className="tweet-icon-wrap"
                   onClick={handelRetweet}
-                  disabled={isRetweeting}
                 >
                   <RetweetIcon
                     fill={

@@ -58,9 +58,8 @@ function App() {
             <Route index element={<TweetSections />} />
           </Route>
           <Route path="/:username/*" element={<HomepageLayout />}>
-          <Route path="status/:tweetid" element={<Tweetpage/>}/>
+            <Route path="status/:tweetid" element={<Tweetpage />} />
             <Route path="*" element={<User />}>
-              
               <Route index element={<UserTweets />} />
               <Route path="tweets" element={<UserTweets />} />
               <Route path="likes" element={<LikedTweets />} />
@@ -86,7 +85,6 @@ function App() {
               <Route path="following" element={<Following />} />
               <Route path="followers" element={<Followers />} />
             </Route>
-            
           </Route>
           <Route path="settings" element={<HomepageLayout />}>
             <Route element={<SettingsPage />}>

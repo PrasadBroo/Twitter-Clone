@@ -52,7 +52,7 @@ export default function TweetSections() {
           </div>
           {/* all magic happens here */}
           <div className="tweets">
-            {!fetching && feedTweets.length !== 0 &&  feedTweets.map(tweet => <Tweet tweet={tweet} from='feed'/>) }
+            {!fetching && feedTweets.length !== 0 &&  feedTweets.map(tweet => <Tweet tweet={tweet} from='feed' key={tweet._id}/>) }
             {!fetching && feedTweets.length ===0 &&  <h1>No tweets</h1>}
             {fetching && <SimpleSpinner topCenter/>}
           </div>
