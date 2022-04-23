@@ -12,25 +12,25 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../store/user/userActions";
-import { selectLoginError, selectLoginStart } from "../../store/user/userSelector";
-
+import {
+  selectLoginError,
+  selectLoginStart,
+} from "../../store/user/userSelector";
 
 export default function Login() {
-  const state = useSelector(state=>state)
+  const state = useSelector((state) => state);
   let loginError = selectLoginError(state);
-  let loginStart = selectLoginStart(state)
-  const dispatch = useDispatch()
+  let loginStart = selectLoginStart(state);
+  const dispatch = useDispatch();
   const [emailOrPhone, setEmailOrPhone] = useState(null);
   const [password, setPassword] = useState(null);
 
-
-  const handelFormSubmit = (e)=>{
+  const handelFormSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUser(emailOrPhone,password))
+    dispatch(loginUser(emailOrPhone, password));
     // dispatc login action
     // handel err
-
-  }
+  };
   return (
     <div className="login-comp">
       <div className="user-form ">
@@ -41,12 +41,14 @@ export default function Login() {
           />
           <div className="other-login-options">
             <LinkButton
+              externalLink
               className="login-form-google-auth login-form-link mtp-1"
               href={googleAuthenticationUrl()}
               linkText={"Sign in with Goolgle"}
               img={"https://img.icons8.com/color/48/000000/google-logo.png"}
             />
             <LinkButton
+              externalLink
               icon={<i className="fab fa-github"></i>}
               href={githubAuthenticationUrl()}
               linkText={"Sign in with Github"}
@@ -60,7 +62,7 @@ export default function Login() {
             <div className="right-divider"></div>
           </div>
           <Input
-          focused={emailOrPhone}
+            focused={emailOrPhone}
             type="email"
             placeholder="Email, phone or username"
             required
@@ -69,7 +71,7 @@ export default function Login() {
             onChange={(e) => setEmailOrPhone(e.target.value)}
           />
           <Input
-          focused={password}
+            focused={password}
             type="password"
             placeholder="Password"
             required
@@ -83,6 +85,7 @@ export default function Login() {
             rounded
             disabled={!emailOrPhone || !password || loginStart}
             loading={loginStart}
+            className="flow-login-btn"
           >
             Login
           </TextButton>

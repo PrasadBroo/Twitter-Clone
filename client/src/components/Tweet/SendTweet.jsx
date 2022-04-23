@@ -74,14 +74,14 @@ export default function SendTweet({ className,placeholder,type,tweet=null }) {
           <div className="whats-happening">
             <div className="tweet-input-container">
               <textarea
-                onInput={(e) => auto_grow(e)}
+                // onInput={(e) => auto_grow(e)}
                 type="text"
                 name="tweet-text"
                 placeholder={placeholder ||"What's happening?"}
                 className="tweet-input"
                 maxLength={300}
                 value={tweetText}
-                onChange={(e)=>setTweetText(e.target.value)}
+                onChange={(e)=>{setTweetText(e.target.value);auto_grow(e)}}
               />
             </div>
             <div className="tweet-pic">

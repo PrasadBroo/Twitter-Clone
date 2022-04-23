@@ -61,6 +61,7 @@ export const feedSlice = createSlice({
             const parentTweet = state.tweet.hasParentTweet;
             const replyTweet = state.tweet;
             const tweetReplies = state.tweet.replies;
+            const feedTweets = state.feedTweets;
             if (from === 'tweets') {
                 tweets.find(tweet => tweet._id === tweetid).isLiked = true
                 tweets.find(tweet => tweet._id === tweetid).likesCount += 1
@@ -83,6 +84,10 @@ export const feedSlice = createSlice({
             else if(from ==='tweet-page-replies'){
                 tweetReplies.find(tweet => tweet._id === tweetid).isLiked = true
                 tweetReplies.find(tweet => tweet._id === tweetid).likesCount += 1
+            }
+            else if(from ==='feed'){
+                feedTweets.find(tweet => tweet._id === tweetid).isLiked = true
+                feedTweets.find(tweet => tweet._id === tweetid).likesCount += 1
             }
             
 
@@ -99,6 +104,7 @@ export const feedSlice = createSlice({
             const parentTweet = state.tweet.hasParentTweet;
             const replyTweet = state.tweet;
             const tweetReplies = state.tweet.replies;
+            const feedTweets = state.feedTweets;
             if (from === 'tweets') {
                 tweets.find(tweet => tweet._id === tweetid).isLiked = false
                 tweets.find(tweet => tweet._id === tweetid).likesCount -= 1
@@ -121,6 +127,11 @@ export const feedSlice = createSlice({
             else if(from ==='tweet-page-replies'){
                 tweetReplies.find(tweet => tweet._id === tweetid).isLiked = false
                 tweetReplies.find(tweet => tweet._id === tweetid).likesCount -= 1
+            }
+            else if(from ==='feed'){
+                feedTweets.find(tweet => tweet._id === tweetid).isLiked = false
+                feedTweets.find(tweet => tweet._id === tweetid).likesCount -= 1
+                
             }
         },
         TWEET_UNLIKED_SUCCESS: (state, action) => {
@@ -135,6 +146,7 @@ export const feedSlice = createSlice({
             const parentTweet = state.tweet.hasParentTweet;
             const replyTweet = state.tweet;
             const tweetReplies = state.tweet.replies;
+            const feedTweets = state.feedTweets;
             if (from === 'tweets') {
                 tweets.find(tweet => tweet._id === tweetid).isLiked = false
                 tweets.find(tweet => tweet._id === tweetid).likesCount -= 1
@@ -158,6 +170,11 @@ export const feedSlice = createSlice({
                 tweetReplies.find(tweet => tweet._id === tweetid).isLiked = false
                 tweetReplies.find(tweet => tweet._id === tweetid).likesCount -= 1
             }
+            else if(from ==='feed'){
+                feedTweets.find(tweet => tweet._id === tweetid).isLiked = false
+                feedTweets.find(tweet => tweet._id === tweetid).likesCount -= 1
+                
+            }
         },
         TWEET_UNLIKED_FAILED: (state, action) => {
             const {
@@ -171,6 +188,7 @@ export const feedSlice = createSlice({
             const parentTweet = state.tweet.hasParentTweet;
             const replyTweet = state.tweet;
             const tweetReplies = state.tweet.replies;
+            const feedTweets = state.feedTweets;
             if (from === 'tweets') {
                 tweets.find(tweet => tweet._id === tweetid).isLiked = true
                 tweets.find(tweet => tweet._id === tweetid).likesCount += 1
@@ -193,6 +211,11 @@ export const feedSlice = createSlice({
             else if(from ==='tweet-page-replies'){
                 tweetReplies.find(tweet => tweet._id === tweetid).isLiked = true
                 tweetReplies.find(tweet => tweet._id === tweetid).likesCount += 1
+            }
+            else if(from ==='feed'){
+                feedTweets.find(tweet => tweet._id === tweetid).isLiked = true
+                feedTweets.find(tweet => tweet._id === tweetid).likesCount += 1
+                
             }
         },
         LIKED_TWEETS_FETCH_SUCCESS: (state, action) => {
@@ -242,6 +265,7 @@ export const feedSlice = createSlice({
             const parentTweet = state.tweet.hasParentTweet;
             const replyTweet = state.tweet;
             const tweetReplies = state.tweet.replies;
+            const feedTweets = state.feedTweets;
             if (from === 'tweets') {
                 tweets.find(tweet => tweet._id === tweetid).isRetweeted = false
                 tweets.find(tweet => tweet._id === tweetid).retweetCount -= 1
@@ -264,6 +288,10 @@ export const feedSlice = createSlice({
                 tweetReplies.find(tweet => tweet._id === tweetid).isRetweeted = false
                 tweetReplies.find(tweet => tweet._id === tweetid).retweetCount -= 1
             }
+            else if(from ==='feed'){
+                feedTweets.find(tweet => tweet._id === tweetid).isRetweeted = false
+                feedTweets.find(tweet => tweet._id === tweetid).retweetCount -= 1
+            }
         },
         TWEET_RETWEETED_SUCCESS: (state, action) => {
             const {
@@ -277,6 +305,7 @@ export const feedSlice = createSlice({
             const parentTweet = state.tweet.hasParentTweet;
             const replyTweet = state.tweet;
             const tweetReplies = state.tweet.replies;
+            const feedTweets = state.feedTweets;
             if (from === 'tweets') {
                 tweets.find(tweet => tweet._id === tweetid).isRetweeted = true
                 tweets.find(tweet => tweet._id === tweetid).retweetCount += 1
@@ -298,6 +327,10 @@ export const feedSlice = createSlice({
             else if(from ==='tweet-page-replies'){
                 tweetReplies.find(tweet => tweet._id === tweetid).isRetweeted = true
                 tweetReplies.find(tweet => tweet._id === tweetid).retweetCount += 1
+            }
+            else if(from ==='feed'){
+                feedTweets.find(tweet => tweet._id === tweetid).isRetweeted = true
+                feedTweets.find(tweet => tweet._id === tweetid).retweetCount += 1
             }
         },
 

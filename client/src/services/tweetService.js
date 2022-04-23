@@ -86,7 +86,7 @@ export const  postTheRetweet = async(tweetid)=>{
 
 export const  deleteTheRetweet = async(tweetid)=>{
     try {
-        const response = await axios.delete(`/api/tweet/post/${tweetid}/retweet/delete`, null, {
+        const response = await axios.delete(`/api/tweet/post/${tweetid}/retweet/delete`,  {
             headers: {
                 authorization: localStorage.getItem('token'),
             },

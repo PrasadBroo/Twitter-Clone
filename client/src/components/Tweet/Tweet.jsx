@@ -118,8 +118,8 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
       }
     } else {
       try {
-        await deleteTheRetweet(tweet._id);
         dispatch(TWEET_RETWEETED_FAILED({ from, tweetid: tweet._id }));
+        await deleteTheRetweet(tweet._id);
       } catch (error) {
         dispatch(TWEET_RETWEETED_SUCCESS({ from, tweetid: tweet._id }));
       }
