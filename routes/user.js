@@ -10,7 +10,8 @@ const {
     getUserLikedTweets,
     getUserMediaTweets,
     getUserFeedTweets,
-    getUsersSuggetions
+    getUsersSuggetions,
+    searchUsers
 } = require('../controllers/userController');
 const userRouter = express.Router();
 const {
@@ -29,5 +30,6 @@ userRouter.post('/:userid/tweets/liked', requireAuth, getUserLikedTweets)
 userRouter.post('/:userid/tweets/media', requireAuth, getUserMediaTweets)
 userRouter.post('/:userid/tweets/feed', requireAuth, getUserFeedTweets)
 userRouter.post('/users_suggestions', requireAuth, getUsersSuggetions)
+userRouter.post('/search/users', requireAuth, searchUsers)
 
 module.exports = userRouter;

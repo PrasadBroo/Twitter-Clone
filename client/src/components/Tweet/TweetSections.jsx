@@ -22,11 +22,12 @@ export default function TweetSections() {
     document.title = `Home / Twitter`
   },[])
   useEffect(()=>{
+    const controller = new AbortController();
     const fetchData = async()=>{
       try {
         setFetching(true)
         dispatch(FEED_TWEETS_FETCHING_STARTED())
-        const tweets = await fetchUserFeedTweets(currentUser._id)
+        const tweets = await fetchUserFeedTweets(currentUser._id,controller.signal)
         dispatch(FEED_TWEETS_FETCH_SUCCESS(tweets))
         setFetching(false)
       } catch (error) {
@@ -38,7 +39,7 @@ export default function TweetSections() {
     }
       fetchData()
 
-      
+  return ()=>controller.abort();      
   },[currentUser._id,dispatch])
 
 

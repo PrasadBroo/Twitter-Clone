@@ -26,6 +26,40 @@
                 &::placeholder {
                     font-size: 1rem;
                 }
+                &:focus + .users-list{
+                    display: block;
+                }
+            }
+            .users-list{
+                position: absolute;
+                top: calc(100% + 0.5rem);
+                background-color: $color-white;
+                border-radius: 5px;
+                padding: 1rem 0;
+                left: 0;
+                right: 0;
+                min-height: 100px;
+                box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
+                .no-users-found{
+                    @include flexJustifyCenter;
+                    color: $color-black;
+                    margin-top: 1rem;
+                }
+                .close-btn{
+                    position: absolute;
+                    top: 5px;
+                    right: 5px;
+                    cursor: pointer;
+                    display: inline-block;
+                    height: 20px;
+                    width: 20px;
+                    font-size: 0.8rem;
+                    color: $color-white;
+                    background-color: rgba($color: $color-black-2, $alpha: 0.5);
+                    border-radius: 100%;
+                    transition: all 500ms ease-in-out;
+                    @include flexJustifyCenter;
+                }
             }
         }
 

@@ -129,9 +129,11 @@ export const fetchTheUserMediaTweets = async (userid) => {
   }
 }
 
-export const fetchUserFeedTweets = async (userid) => {
+export const fetchUserFeedTweets = async (userid,signal) => {
+  
   try {
       const response = await axios.post(`/api/user/${userid}/tweets/feed`, null, {
+        signal:signal,
           headers: {
               authorization: localStorage.getItem('token'),
           },
@@ -145,6 +147,19 @@ export const fetchUserFeedTweets = async (userid) => {
 export const fetchSuggstedUsers = async () => {
   try {
       const response = await axios.post(`/api/user/users_suggestions`, null, {
+          headers: {
+              authorization: localStorage.getItem('token'),
+          },
+      });
+      return response.data;
+  } catch (error) {
+      throw new Error(error.response.data.error);
+  }
+}
+
+export const searchUsers = async (text) => {
+  try {
+      const response = await axios.post(`/api/user/search/users`, {term:text}, {
           headers: {
               authorization: localStorage.getItem('token'),
           },

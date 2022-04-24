@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import MediaIcon from "../../icons/MediaIcon";
 import TextButton from "../Button/TextButton/TextButton";
 import GifIcon from "./../../icons/GifIcon";
@@ -16,6 +16,7 @@ import { POSTING_TWEET_FAILED, POSTING_TWEET_FINISED, POSTING_TWEET_STARTED } fr
 export default function SendTweet({ className,placeholder,type,tweet=null }) {
   const dispatch = useDispatch()
   const state = useSelector((state) => state);
+  const textInput = useRef(null);
   const postingTweet = useSelector(state=>state.user.isPostingTweet)
   const currentUser = selectCurrentUser(state);
   const [tweetText,setTweetText] = useState('');
@@ -59,6 +60,8 @@ export default function SendTweet({ className,placeholder,type,tweet=null }) {
       dispatch(POSTING_TWEET_FINISED())
       setTweetPic(null);
       setTweetText('');
+
+      textInput.current.style.height = "48px";
   } catch (error) {
       dispatch(POSTING_TWEET_FAILED(error.message))
   }
@@ -76,6 +79,7 @@ export default function SendTweet({ className,placeholder,type,tweet=null }) {
               <textarea
                 // onInput={(e) => auto_grow(e)}
                 type="text"
+                ref={textInput}
                 name="tweet-text"
                 placeholder={placeholder ||"What's happening?"}
                 className="tweet-input"

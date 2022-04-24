@@ -29,7 +29,7 @@ export default function Tweets() {
         ) : (
           <SimpleSpinner topCenter />
         )}
-        {!fetching && tweets.length===0 && <h2>User dont have any tweets :(</h2>}
+        {!fetching && tweets.length===0 && <h2>@{guestUser.username} dont have any tweets :(</h2>}
       </div>
     </>
   );

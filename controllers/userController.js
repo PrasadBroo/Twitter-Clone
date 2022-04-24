@@ -606,7 +606,7 @@ module.exports.getUserTweets = async (req, res, next) => {
                         $unwind: '$user'
                     },
                     {
-                        $limit: 10,
+                        $limit: 5,
                     },
                     {
                         $lookup: {
@@ -1019,6 +1019,8 @@ module.exports.getUserLikedTweets = async (req, res, next) => {
                                 }
                             }
                         }, {
+                            $limit:5
+                        },{
                             $lookup: {
                                 from: 'tweets',
                                 localField: 'tweet',
@@ -1186,7 +1188,11 @@ module.exports.getUserMediaTweets = async (req, res, next) => {
                                     $ne: null
                                 }
                             }
-                        }, {
+                        },
+                        {
+                            $limit:5
+                        } ,
+                        {
                             $lookup: {
                                 from: 'users',
                                 localField: 'user',
@@ -1439,11 +1445,11 @@ module.exports.getUserFeedTweets = async (req, res, next) => {
             {
                 $addFields: {
                     userFollowers: '$userFollowers.followers',
-                    
+
                 }
             },
             {
-                $addFields:{
+                $addFields: {
                     isFollowing: {
                         $in: [currentUser._id, '$userFollowers.user']
                     }
@@ -1472,7 +1478,7 @@ module.exports.getUserFeedTweets = async (req, res, next) => {
                 }
             },
             {
-                $limit: 10
+                $limit: 5
             },
             {
                 $lookup: {
@@ -1571,40 +1577,37 @@ module.exports.getUserFeedTweets = async (req, res, next) => {
                 }
             },
             {
-                $project:{
-                    retweets:0,
-                    tweetReplies:0,
-                    likes:0
+                $project: {
+                    retweets: 0,
+                    tweetReplies: 0,
+                    likes: 0
                 }
             }
 
         ]
-        const pipeline_two = [
-            {
-                $match:{
-                    
-                }
+        const pipeline_two = [{
+            $match: {
+
             }
-        ]
+        }]
         const data = await Tweet.aggregate(pipeline)
         res.send(data)
     } catch (error) {
         next(error)
     }
 }
-module.exports.getUsersSuggetions = async(req,res,next)=>{
+module.exports.getUsersSuggetions = async (req, res, next) => {
     const currentUser = res.locals.user;
     try {
-        const pipeline = [
-            {
-                $limit:5
+        const pipeline = [{
+                $sample: {size:4}
             },
             {
-                $project:{
-                    username:1,
-                    avatar:1,
-                    fullName:1,
-                    isVerified:1,
+                $project: {
+                    username: 1,
+                    avatar: 1,
+                    fullName: 1,
+                    isVerified: 1,
                 }
             },
             {
@@ -1629,13 +1632,13 @@ module.exports.getUsersSuggetions = async(req,res,next)=>{
                 }
             },
             {
-                $unwind:{
-                    path:'$followers',
-                    preserveNullAndEmptyArrays:true
+                $unwind: {
+                    path: '$followers',
+                    preserveNullAndEmptyArrays: true
                 }
             },
             {
-                $addFields:{
+                $addFields: {
                     followers: '$followers.followers',
                 }
             },
@@ -1647,13 +1650,83 @@ module.exports.getUsersSuggetions = async(req,res,next)=>{
                 }
             },
             {
-                $project:{
-                    followers:0
+                $project: {
+                    followers: 0
                 }
             }
         ]
         const users = await User.aggregate(pipeline)
         res.send(users)
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports.searchUsers = async(req,res,next)=>{
+    const {term} = req.body;
+    const currentUser = res.locals.user;
+    try {
+        if(!term){
+            return res.status(400).send({error:'No search provided'})
+        }
+        const pipeline  = [
+            {
+                $match: {
+                    username: { $regex: new RegExp(term) },
+                  },
+            },
+            {
+                $limit:4
+            },
+            {
+                $project:{
+                    username:1,
+                    fullName:1,
+                    avatar:1,
+                    isVerified:1
+                }
+            },
+            {
+                $lookup: {
+                    from: 'followers',
+                    localField: '_id',
+                    foreignField: 'user',
+                    as: 'followers',
+                }
+            },
+            {
+                $addFields: {
+                    followers: {
+                        $cond: [{
+                                $eq: ["$followers", []]
+                            },
+                            [{
+                                followers: []
+                            }], '$followers'
+                        ]
+                    }
+                }
+            },
+            {
+                $unwind: {
+                    path: '$followers',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $addFields: {
+                    followers: '$followers.followers',
+                }
+            },
+            {
+                $addFields: {
+                    isFollowing: {
+                        $in: [Mongoose.Types.ObjectId(currentUser._id), '$followers.user']
+                    }
+                }
+            },
+        ]
+        const result = await User.aggregate(pipeline);
+        return res.send(result)
     } catch (error) {
         next(error)
     }

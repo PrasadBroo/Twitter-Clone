@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import TextButton from "./../Button/TextButton/TextButton";
 import { selectCurrentUser } from "../../store/user/userSelector";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function TweetOptions({ istweetOptions, tweet }) {
   const tweetOptionsClassnames = classNames("tweet-options-model", {
@@ -10,6 +10,11 @@ export default function TweetOptions({ istweetOptions, tweet }) {
   });
   const state = useSelector((state) => state);
   let currentUser = selectCurrentUser(state);
+  const dispatch = useDispatch()
+
+  const handelTweetDelete = async()=>{
+    // dispatch(deleteTweet(tweet._id))
+  }
   return (
     <ul className={tweetOptionsClassnames}>
       <li className="tweet-options-model-item">
@@ -28,7 +33,7 @@ export default function TweetOptions({ istweetOptions, tweet }) {
             <span className="tweet-options-model-icon danger-icon">
               <i className="far fa-trash-can"></i>
             </span>
-            <TextButton className="tweet-options-model-btn">Delete</TextButton>
+            <TextButton className="tweet-options-model-btn" onClick={handelTweetDelete}>Delete</TextButton>
           </>
         )}
       </li>
