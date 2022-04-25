@@ -41,9 +41,13 @@
                     border: 0;
                     outline: 0;
                     // padding: 1rem 0.5rem;
+            
                     flex-grow: 1;
                     height: 100%;
                     transition: height 100ms ease-in-out;
+                    @include for-phone-only-500{
+                        width: 90%;
+                    }
                     &::placeholder{
                         font-size: 1.2rem;
                         font-weight: 600;
@@ -57,9 +61,16 @@
             .tweet-attachment{
                 margin-top: 1rem;
                 width: 100%;@include flexJustifyBetween;
+                @include for-phone-only-500{
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
                 .icon-containers{
                     position: relative;
                     @include flexCenter;
+                    @include for-phone-only-500{
+                        margin-bottom: 1rem;
+                    }
                     .icon-picker-wrap{
                         z-index: 10;
                         position: absolute;
@@ -80,6 +91,9 @@
                             pointer-events: none;
                         }
                         
+                    }
+                    .icon-container:nth-child(2){
+                        display: none;
                     }
                     .icon-disabled{
                         // pointer-events: none;
@@ -133,4 +147,10 @@
 .disabled{
     opacity: 0.5;
     pointer-events: none;
+}
+.model-tweet{
+    .tweet-attachment-pic{
+        max-width: 200px;
+        max-height: 200px;
+    }
 }

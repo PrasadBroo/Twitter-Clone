@@ -6,6 +6,10 @@
     .root-model {
         background-color: $color-black;
         max-width: 320px;
+        @include for-phone-only-500{
+            max-height: 300px;
+            border-radius: 20px;
+        }
     }
 
     .unfollow-model-wrap {

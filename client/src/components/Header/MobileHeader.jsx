@@ -10,7 +10,8 @@ export default function MobileHeader() {
   const state = useSelector((state) => state);
   let user = selectCurrentUser(state);
   return (
-    <ul className=" header-links mobile-header">
+    <div className="wrap-mobile-header">
+      <ul className=" header-links mobile-header">
       <NavLink
         to="/home"
         className={({ isActive }) =>
@@ -19,7 +20,7 @@ export default function MobileHeader() {
       >
         <div className="header-link-icon-wrap">
           <span className="link-icon">
-            <HomeIcon fill />
+            <HomeIcon Classname='nav-home-icon'/>
           </span>
         </div>
       </NavLink>
@@ -61,5 +62,7 @@ export default function MobileHeader() {
         </div>
       </NavLink>
     </ul>
+    </div>
+    
   );
 }

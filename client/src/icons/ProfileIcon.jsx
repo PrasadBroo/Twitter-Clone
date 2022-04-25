@@ -6,7 +6,6 @@ export default function ProfileIcon() {
       viewBox="0 0 24 24"
       width="26.25px"
       height="26.25px"
-      fill="#333"
       className="sc-AxheI dmjApQ"
     >
       <g>

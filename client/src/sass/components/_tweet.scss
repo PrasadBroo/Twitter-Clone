@@ -158,6 +158,7 @@
             .user-full-name {
                 font-size: 15px;
                 font-weight: 700;
+                white-space: nowrap;
                 @include for-phone-only-500{
                     font-size: 12px;
                 }
@@ -181,10 +182,17 @@
                     font-size: 12px;
                 }
             }
+            .user-username{
+                @include for-phone-only-500{
+                    display: none;
+                }
+            }
 
             .timestamp {
                 cursor: pointer;
-
+                @include for-phone-only-500{
+                    margin-left: auto;
+                }
                 &:hover {
                     text-decoration: underline;
                 }
@@ -195,7 +203,9 @@
                 width: 3px;
                 border-radius: 100%;
                 background-color: $color-secondary;
-
+                @include for-phone-only-500{
+                    display: none;
+                }
             }
 
             .tweet-options {

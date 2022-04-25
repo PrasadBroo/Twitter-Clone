@@ -26,6 +26,11 @@
                 bottom: calc(100% - 70px);
                 left: 15px;
 
+                @include for-phone-only-500{
+                    width: 100px;
+                    height: 100px;
+                }
+
                 .profile-pic {
                     @include fullWidthHeightCoverImage;
                     border-radius: 100%;
@@ -83,7 +88,11 @@
 
                 .user-sitelink-joindate-container {
                     @include flexCenter;
-
+                    color: rgb(83, 100, 113);
+                    @include for-phone-only-500{
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
                     .icon-container {
                         color: $color-grey-1;
                         margin-right: 0.5rem;
@@ -111,13 +120,20 @@
             }
             .user-other-links{
                 border-bottom: 1px solid $color-grey-2;
+                overflow: hidden;
+                .user-links::-webkit-scrollbar{
+                    display: none
+                }
                 .user-links{
                     @include flexCenter;
+                    overflow-x:auto ;
+                    overflow-y: hidden;
                     .user-link{
                         padding: 0.8rem;
                         transition: background-color 500ms ease-in-out;
                         flex: 1;
                         text-align: center;
+                        white-space: nowrap;
                         &:hover{
                             background-color: $color-grey-2;
                         }
