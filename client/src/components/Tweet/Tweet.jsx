@@ -201,7 +201,8 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
             )}
           </div>
           <div className="tweet-actions">
-            <div className=" tweet-actions-child tweet-comment">
+            <div className="wrap-tweet-actions-child">
+              <div className=" tweet-actions-child tweet-comment">
               <div className="tweet-icon">
                 <TextButton
                   className="tweet-icon-wrap"
@@ -263,6 +264,8 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
 
               <span className="tweet-comment-count">{tweet.likesCount}</span>
             </div>
+            </div>
+            
             <div className="tweet-actions-child save-tweet-options">
               <div
                 className="tweet-icon tweet-options-container"

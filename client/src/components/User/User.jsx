@@ -26,6 +26,7 @@ import { SHOW_UNFOLLOW_MODEL } from "../../store/model/modelSlice";
 import Linkify from "linkify-react";
 import "linkify-plugin-hashtag";
 import "linkify-plugin-mention";
+import NotFound from "../NotFound/NotFound";
 
 const options = {
   className: () => "default-link",
@@ -48,6 +49,7 @@ export default function User() {
   const state = useSelector((state) => state);
   let currentUser = selectCurrentUser(state);
   let guestUser = selectGuestUser(state);
+  const usernotFound = useSelector(state=>state.guestUser.fetchingError)
   const isFetching = selectGuestFetching(state);
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -70,7 +72,7 @@ export default function User() {
   return (
     <div className="two-flex-col-container userpage">
       <div className="col1 user-section">
-        {!isFetching ? (
+        {!isFetching && !usernotFound ? (
           <>
             <UserHeader />
             <div className="bc-image-container">
@@ -241,8 +243,9 @@ export default function User() {
             </div>
           </>
         ) : (
-          <SimpleSpinner />
+           !usernotFound && <SimpleSpinner />
         )}
+        {usernotFound && !isFetching && <NotFound/>}
       </div>
       <div className="col2 follow-news-suggetions">
         <Searchbar />

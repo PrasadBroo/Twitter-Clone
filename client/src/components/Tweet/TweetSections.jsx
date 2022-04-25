@@ -11,6 +11,7 @@ import { selectCurrentUser } from "../../store/user/userSelector";
 import { FEED_TWEETS_FETCH_SUCCESS,FEED_TWEETS_FETCHING_STARTED,FEED_TWEETS_FETCH_FAILED } from "../../store/feed/feedSlice";
 import Tweet from "./Tweet";
 import SimpleSpinner from "../Loader/SimpleSpinner";
+import useWindowSize from "../../CustomHooks/useWindowSize";
 
 export default function TweetSections() {
   const dispatch = useDispatch()
@@ -18,6 +19,7 @@ export default function TweetSections() {
   const currentUser = selectCurrentUser(state)
   const feedTweets = useSelector(state=>state.feed.feedTweets)
   const [fetching,setFetching] = useState(true)
+  const {width} = useWindowSize()
   useEffect(()=>{
     document.title = `Home / Twitter`
   },[])
@@ -49,7 +51,7 @@ export default function TweetSections() {
         <div className="col1 tweet-sections container wrap-input-tweets ">
           <SendTweetHeader/>
           <div className="tweet-input-container">
-            <SendTweet />
+            {width >500 && <SendTweet />}
           </div>
           {/* all magic happens here */}
           <div className="tweets">

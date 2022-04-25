@@ -12,6 +12,7 @@ import { useSelector,useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../store/user/userSelector";
 import { postTheTweet } from "../../services/tweetService";
 import { POSTING_TWEET_FAILED, POSTING_TWEET_FINISED, POSTING_TWEET_STARTED } from "../../store/user/userSlice";
+import { POSTING_TWEET_REPLY_SUCCESS } from "../../store/feed/feedSlice";
 
 export default function SendTweet({ className,placeholder,type,tweet=null }) {
   const dispatch = useDispatch()
@@ -53,7 +54,19 @@ export default function SendTweet({ className,placeholder,type,tweet=null }) {
       dispatch(POSTING_TWEET_STARTED())
       if(!tweet)await postTheTweet(tweetText, tweetPic,null);
       else{
-          await postTheTweet(tweetText, tweetPic,tweet._id);
+        const data =   await postTheTweet(tweetText, tweetPic,tweet._id);
+          dispatch(POSTING_TWEET_REPLY_SUCCESS({
+            _id:data._id,
+            user:currentUser,
+            createdAt:Date.now(),
+            caption:tweetText,
+            pic:tweetPic,
+            in_reply_to_status_id:tweet._id,
+            replyCount:0,
+            likesCount:0,
+            retweetCount:0,
+            isRetweeted:false
+          }))
       }
       
       // dispatch success

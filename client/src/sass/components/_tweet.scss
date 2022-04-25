@@ -74,6 +74,9 @@
 
             .tweet-content-child {
                 margin-right: 0.5rem;
+                @include for-phone-only-500{
+                    margin-right: 0.2rem;
+                }
             }
 
             .tweet-content-header,
@@ -155,7 +158,9 @@
             .user-full-name {
                 font-size: 15px;
                 font-weight: 700;
-
+                @include for-phone-only-500{
+                    font-size: 12px;
+                }
                 &:hover {
                     border-bottom: 1px solid $color-black-2;
                 }
@@ -172,6 +177,9 @@
             .timestamp {
                 color: $color-grey-1;
                 font-size: 14px;
+                @include for-phone-only-500{
+                    font-size: 12px;
+                }
             }
 
             .timestamp {
@@ -203,9 +211,13 @@
             }
 
             .tweet-actions {
+                
                 margin-top: 0.5rem;
                 @include flexCenter;
-
+                flex-wrap: wrap;
+                .wrap-tweet-actions-child{
+                    width: 70%;
+                    @include flexCenter;
                 .tweet-retweet {
                     position: relative;
                 }
@@ -260,8 +272,10 @@
                 .tweet-actions-child {
                     cursor: pointer;
                     @include flexCenter;
-                    margin-right: 3rem;
-
+                    flex: 1;
+                    @include for-phone-only-500{
+                        margin-right: 1rem;
+                    }
                     &:hover .tweet-comment-count {
                         color: $color-secondary;
                     }
@@ -324,8 +338,10 @@
 
                     }
                 }
+            }
 
                 .save-tweet-options {
+                    margin-left: auto;
                     .save-options {
                         min-width: 200px;
 

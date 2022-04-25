@@ -6,7 +6,11 @@
     flex-direction: column;
     align-items: flex-end;
     font-size: 1.3rem;
-
+    z-index: 99;
+    @include for-big-desktop-down{
+        width: 10%;
+        align-items: center;
+    }
     .sidebar {
         position: fixed;
         background-color: #fff;
@@ -15,7 +19,9 @@
         width: 270px;
         display: flex;
         flex-direction: column;
-
+        @include for-big-desktop-down{
+            width: 50px;
+        }
         .header-logo-container {
             .twitter-logo-container {
                 display: inline-block;
@@ -54,6 +60,11 @@
                 width: 26px;
                 height: 26px;
             }
+            .link-text{
+                @include for-big-desktop-down{
+                    display: none;
+                }
+            }
         }
 
         .more-options-container {
@@ -65,7 +76,8 @@
                 background-color: $color-white;
                 bottom: 0;
                 box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
-
+                min-width: 200px;
+                z-index: 99;
                 .more-options-link {
                     display: block;
                     padding: 1rem;
@@ -111,6 +123,9 @@
                 font-size: large;
                 background-color: $color-secondary-light;
                 color: $color-white;
+                @include for-big-desktop-down{
+                    display: none;
+                }
             }
         }
 
@@ -196,7 +211,9 @@
             .profile-details {
                 width: 60%;
                 margin-right: 1rem;
-
+                @include for-big-desktop-down{
+                    display: none;
+                }
                 .user-fullname {
                     font-weight: 700;
                 }
@@ -208,6 +225,9 @@
 
             .profile-options {
                 width: 20%;
+                @include for-big-desktop-down{
+                    display: none;
+                }
             }
         }
     }

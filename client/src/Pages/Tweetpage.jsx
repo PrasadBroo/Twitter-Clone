@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import SimpleSpinner from "../components/Loader/SimpleSpinner";
 import News from "../components/News/News";
+import NotFound from "../components/NotFound/NotFound";
 import Searchbar from "../components/Searchbar/Searchbar";
 import SendTweet from "../components/Tweet/SendTweet";
 import Tweet from "../components/Tweet/Tweet";
@@ -15,6 +16,7 @@ export default function Tweetpage() {
   const { tweetid } = useParams();
   const tweet = useSelector((state) => state.feed.tweet);
   const fetching = useSelector((state) => state.feed.fetchingTweet);
+  const fetchingError = useSelector(state=>state.feed.fetchingTweetError)
 
   useEffect(() => {
     dispatch(fetchTweet(tweetid));
@@ -25,7 +27,7 @@ export default function Tweetpage() {
         <div className="col1 fpc-1">
           <UserHeader customHeader='Tweet'/>
 
-          <div className="user-tweet-content">
+          {!fetchingError && <div className="user-tweet-content">
             {fetching ? (
               <SimpleSpinner topCenter />
             ) : (
@@ -73,7 +75,8 @@ export default function Tweetpage() {
                 </div>
               </>
             )}
-          </div>
+          </div>}
+          {fetchingError && <NotFound/>}
         </div>
         <div className="col2 tweet-sugg-news-container">
           <div className="tweet-sugg-news-wrap">

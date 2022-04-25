@@ -7,6 +7,13 @@
     .main{
         width: 75%;
         height: 100%;
+        @include for-big-desktop-down{
+            width: 90%;
+        }
+        @include for-phone-only-500{
+            width: 100%;
+            margin-bottom: 5rem;
+        }
         .main-wrapper{
             overflow: auto;
             display: flex;
@@ -20,6 +27,9 @@
             margin:0 0.2rem;
         }.wrap-input-tweets{
             width: 55%;
+            @include for-tablet-landscape-down{
+                width: 100%;
+            }
         }
         .with-searchbar-suggetions{
             width: 50%;

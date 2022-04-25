@@ -153,19 +153,19 @@ export default function DesktopHeader() {
                 <span className="icon-container">
                   <i className="far fa-cog"></i>
                 </span>
-                <span className="link-text">Settings and privacy</span>
+                <span className="link-text-two">Settings and privacy</span>
               </Link>
               <Link to="/display" className="more-options-link">
                 <span className="icon-container">
                 <i className="far fa-edit"></i>
                 </span>
-                <span className="link-text">Display</span>
+                <span className="link-text-two">Display</span>
               </Link>
               <Link to="/help" className="more-options-link">
                 <span className="icon-container">
                   <i className="far fa-question-circle"></i>
                 </span>
-                <span className="link-text">Help Center</span>
+                <span className="link-text-two">Help Center</span>
               </Link>
             </ul>
           </div>

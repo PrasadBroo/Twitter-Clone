@@ -26,6 +26,12 @@ export const suggestedUsersSlice = createSlice({
         FETCHING_USERS_STARTED: (state) => {
             state.fetching = true;
         },
+        FOLLOWED_FROM_SUGGETIONS:(state,action)=>{
+            state.users.find(user => user._id === action.payload).isFollowing = true
+        },
+        UNFOLLOWED_FROM_SUGGETIONS:(state,action)=>{
+            state.users.find(user => user._id === action.payload).isFollowing = false
+        }
 
     },
 })
@@ -34,6 +40,8 @@ export const suggestedUsersSlice = createSlice({
 export const {
     FETCHING_USERS_FAIL,
     FETCHING_USERS_STARTED,
-    FETCHING_USERS_SUCCESS
+    FETCHING_USERS_SUCCESS,
+    FOLLOWED_FROM_SUGGETIONS,
+    UNFOLLOWED_FROM_SUGGETIONS
 } = suggestedUsersSlice.actions
 export default suggestedUsersSlice.reducer;

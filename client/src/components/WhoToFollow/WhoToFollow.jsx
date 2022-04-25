@@ -16,7 +16,7 @@ export default function WhoToFollow() {
             <h2>Who to follow</h2>
           </div>
           {users &&
-            users.map((user) => <FollowUser user={user} key={user._id} />)}
+            users.map((user) => <FollowUser user={user} key={user._id} type='suggUsers'/>)}
           {!users && <h5>No users suggestions</h5>}
         </>
       ) : (

@@ -147,6 +147,7 @@ module.exports.retriveComments = async (tweetid,currentUser,offset=0) => {
                             $project:{
                                 tweetLikes:0,
                                 tweetReplies:0,
+                                retweets:0,
                                 'user.password': 0,
                                 'user.bio': 0,
                                 'user.email': 0,

@@ -333,6 +333,9 @@ export const feedSlice = createSlice({
                 feedTweets.find(tweet => tweet._id === tweetid).retweetCount += 1
             }
         },
+        POSTING_TWEET_REPLY_SUCCESS:(state,action)=>{
+            state.tweet.replies.push(action.payload)
+        }
 
 
     },
@@ -358,6 +361,7 @@ export const {
     TWEET_RETWEETED_SUCCESS,
     FEED_TWEETS_FETCHING_STARTED,
     FEED_TWEETS_FETCH_FAILED,
-    FEED_TWEETS_FETCH_SUCCESS
+    FEED_TWEETS_FETCH_SUCCESS,
+    POSTING_TWEET_REPLY_SUCCESS
 } = feedSlice.actions;
 export default feedSlice.reducer;

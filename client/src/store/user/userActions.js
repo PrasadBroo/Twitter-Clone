@@ -29,6 +29,7 @@ import {
 import {
     HIDE_UNFOLLOW_MODEL
 } from "../model/modelSlice";
+import { FOLLOWED_FROM_SUGGETIONS, UNFOLLOWED_FROM_SUGGETIONS } from "../suggestedUsers/suggestedUsersSlice";
 import {
     followUser,
     unfollowUser
@@ -149,12 +150,14 @@ export const followTheUser = (userid, type) => async (dispatch) => {
         if (String(type) === 'followers') dispatch(FOLLOWED_FROM_FOLLOWERS(userid))
         if (String(type) === 'followings') dispatch(FOLLOWED_FROM_FOLLOWINGS(userid))
         if (String(type) === 'profile') dispatch(FOLLOWED_FROM_PROFILE())
+        if (String(type) === 'suggUsers') dispatch(FOLLOWED_FROM_SUGGETIONS(userid))
         await followUser(userid);
         
     } catch (error) {
         if (String(type) === 'followers') dispatch(UNFOLLOWED_FROM_FOLLOWERS(userid))
         if (String(type) === 'followings') dispatch(UNFOLLOWED_FROM_FOLLOWINGS(userid))
         if (String(type) === 'profile') dispatch(UNFOLLOWED_FROM_PROFILE())
+        if (String(type) === 'suggUsers') dispatch(UNFOLLOWED_FROM_SUGGETIONS(userid))
         dispatch(ERROR_WHILE_FOLLOWING(error.message))
     }
 }
@@ -163,6 +166,7 @@ export const unfollowTheUser = (userid, type) => async (dispatch) => {
         if (String(type) === 'followers') dispatch(UNFOLLOWED_FROM_FOLLOWERS(userid))
         if (String(type) === 'followings') dispatch(UNFOLLOWED_FROM_FOLLOWINGS(userid))
         if (String(type) === 'profile') dispatch(UNFOLLOWED_FROM_PROFILE())
+        if (String(type) === 'suggUsers') dispatch(UNFOLLOWED_FROM_SUGGETIONS(userid))
         dispatch(HIDE_UNFOLLOW_MODEL())
         await unfollowUser(userid);
         
@@ -170,6 +174,7 @@ export const unfollowTheUser = (userid, type) => async (dispatch) => {
         if (String(type) === 'followers') dispatch(FOLLOWED_FROM_FOLLOWERS(userid))
         if (String(type) === 'followings') dispatch(FOLLOWED_FROM_FOLLOWINGS(userid))
         if (String(type) === 'profile') dispatch(FOLLOWED_FROM_PROFILE())
+        if (String(type) === 'suggUsers') dispatch(FOLLOWED_FROM_SUGGETIONS(userid))
         dispatch(ERROR_WHILE_UNFOLLOWING(error.message))
         dispatch(HIDE_UNFOLLOW_MODEL())
     }
@@ -181,13 +186,14 @@ export const postTweet = (caption, pic = null,tweet) => async (dispatch) => {
            return dispatch(POSTING_TWEET_FAILED('No caption provided'))
         }
         dispatch(POSTING_TWEET_STARTED())
-        if(!tweet)await postTheTweet(caption, pic,null);
+        if(!tweet){await postTheTweet(caption, pic,null);dispatch(POSTING_TWEET_FINISED())}
         else{
-            await postTheTweet(caption, pic,tweet._id);
+             await postTheTweet(caption, pic,tweet._id);
+            dispatch(POSTING_TWEET_FINISED())
         }
         
         // dispatch success
-        dispatch(POSTING_TWEET_FINISED())
+        
     } catch (error) {
         dispatch(POSTING_TWEET_FAILED(error.message))
     }

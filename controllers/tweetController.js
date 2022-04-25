@@ -110,7 +110,7 @@ module.exports.postTweet = async (req, res, next) => {
             upsert: true
         });
         // send notification for mentioned user
-        res.status(201).send()
+        res.status(201).send(tweet)
     } catch (error) {
         next(error)
         console.log(error)

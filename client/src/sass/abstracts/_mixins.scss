@@ -1,28 +1,33 @@
 @mixin flexCenter {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
+
 @mixin flexJustifyCenter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 @mixin flexJustifyAround {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
+
 @mixin flexJustifyBetween {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 @mixin absoluteCenter {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
 }
+
 @mixin containCenter {
   position: absolute;
   top: 0;
@@ -31,33 +36,65 @@
   bottom: 0;
 
   @include flexJustifyCenter();
-} 
+}
+
 @mixin flexColumn {
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
 }
 
 @mixin fullResponsiveImage {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
+
 @mixin fullWidthHeightCoverImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+@mixin for-phone-only-500 {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
+
 @mixin for-phone-only {
-    @media (max-width: 599px) { @content; }
+  @media (max-width: 599px) {
+    @content;
   }
-  @mixin for-tablet-portrait-up {
-    @media (min-width: 600px) { @content; }
+}
+
+@mixin for-tablet-portrait-up {
+  @media (min-width: 600px) {
+    @content;
   }
-  @mixin for-tablet-landscape-up {
-    @media (min-width: 1000px) { @content; }
+}
+
+@mixin for-tablet-landscape-up {
+  @media (min-width: 1000px) {
+    @content;
   }
-  @mixin for-desktop-up {
-    @media (min-width: 1200px) { @content; }
+}
+@mixin for-tablet-landscape-down {
+  @media (max-width: 1000px) {
+    @content;
   }
-  @mixin for-big-desktop-up {
-    @media (min-width: 1800px) { @content; }
+}
+
+@mixin for-desktop-up {
+  @media (min-width: 1200px) {
+    @content;
   }
+}
+
+@mixin for-big-desktop-up {
+  @media (min-width: 1800px) {
+    @content;
+  }
+}
+@mixin for-big-desktop-down {
+  @media (max-width: 1300px) {
+    @content;
+  }
+}

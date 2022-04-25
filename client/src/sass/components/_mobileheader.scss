@@ -1,0 +1,18 @@
+.mobile-header{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: $color-white;
+    z-index: 100;
+    padding: 0.5rem;
+    border-top: 1px solid $color-grey-2;
+    @include flexCenter;
+    justify-content: space-between;
+
+    .header-link-icon-wrap{
+        .link-icon{
+            font-size: 1.3rem;
+        }
+    }
+}
