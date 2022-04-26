@@ -2,7 +2,7 @@
   "name": "twitter-clone",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5000/",
   "dependencies": {
     "@reduxjs/toolkit": "^1.7.0",
     "@testing-library/jest-dom": "^5.16.1",
