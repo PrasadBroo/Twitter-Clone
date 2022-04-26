@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/f4e46cfb-d1df-40c8-a030-6807ba116a70/deploy-status)](https://app.netlify.com/sites/elon-musk-twitter/deploys)
+
 ### Todo
 
 - [ ] Work on notifications eg.tweet like,mentioned.
