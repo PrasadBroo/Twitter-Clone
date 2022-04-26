@@ -11,6 +11,7 @@
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
     "cogo-toast": "^4.2.3",
+    "emoji-picker-react": "^3.5.1",
     "linkify-plugin-hashtag": "^3.0.4",
     "linkify-plugin-mention": "^3.0.4",
     "linkify-react": "^3.0.4",
