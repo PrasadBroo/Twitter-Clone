@@ -5,7 +5,7 @@ export const googleAuthenticationUrl = () => {
 
     const stringifiedParams = queryString.stringify({
         client_id: '498497953371-4h3t8oorr2j3mvhrmpvj6h244qqqlcoq.apps.googleusercontent.com', //add env variable later
-        redirect_uri: 'https://elon-musk-twitter.netlify.app/authenticate/google',
+        redirect_uri: 'http://localhost:3000/authenticate/google',
         scope: [
             'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/userinfo.profile',
@@ -24,7 +24,7 @@ export const googleAuthenticationUrl = () => {
 export const githubAuthenticationUrl = () => {
     const params = queryString.stringify({
         client_id: '219c7536dccdba993577',
-        redirect_uri: 'https://elon-musk-twitter.netlify.app/authenticate/github',
+        redirect_uri: 'http://localhost:3000/authenticate/github',
         scope: ['read:user', 'user:email'].join(' '), // space seperated string
         allow_signup: true,
     });

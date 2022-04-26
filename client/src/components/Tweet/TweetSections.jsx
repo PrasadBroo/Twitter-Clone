@@ -56,7 +56,7 @@ export default function TweetSections() {
           {/* all magic happens here */}
           <div className="tweets">
             {!fetching && feedTweets.length !== 0 &&  feedTweets.map(tweet => <Tweet tweet={tweet} from='feed' key={tweet._id}/>) }
-            {!fetching && feedTweets.length ===0 &&  <h1>No tweets</h1>}
+            {!fetching && feedTweets.length ===0 &&  <WhoToFollow headerText='Suggestion'/>}
             {fetching && <SimpleSpinner topCenter/>}
           </div>
         </div>

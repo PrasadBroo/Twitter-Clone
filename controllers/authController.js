@@ -104,21 +104,48 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
             githubId: userinfo.id
         });
         if (userDocument) {
-            const followersCount = await Followers.findOne({user:userDocument._id},{followers:1}).size()
-            const followingsCount = await Followings.findOne({user:userDocument._id},{followings:1}).size()
-            const userDetails = {
-                email: userinfo.email,
-                fullName: userinfo.name,
-                username: 'test',
-                avatar: userinfo.picture,
-                id: userDocument._id,
-                followersCount,
-                followingsCount,
-            }
+            const pipeline = [
+                {
+                    $match:{githubId:userinfo.id}
+                },
+                {
+                    $lookup:{
+                        from:'followers',
+                        localField:'_id',
+                        foreignField:'user',
+                        as:'userFollowers'
+                    }
+                },
+                {
+                    $lookup:{
+                        from:'followings',
+                        localField:'_id',
+                        foreignField:'user',
+                        as:'userFollowings'
+                    }
+                },
+                {
+                    $addFields:{
+                        followersCount:{$size:'$userFollowers.followers'},
+                        followingsCount:{$size:'$userFollowings.followings'}
+                    }
+                },
+                {
+                    $project:{
+                        'password':0,
+                        email:0,
+                        '__v':0,
+                        userFollowers:0,
+                        userFollowings:0,
+                    }
+                }
+            ]
+            const userDocument = await User.aggregate(pipeline);
+
             return res.send({
-                user: userDetails,
+                user: userDocument[0],
                 token: jwt.sign({
-                    id: userDocument._id
+                    id: userDocument[0]._id
                 }, process.env.JWT_TOKEN_SECRET),
             });
             // user alredy registered send jwt
@@ -129,20 +156,52 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
                 fullName: userinfo.name,
                 username: userinfo.login,
                 avatar: userinfo.avatar_url,
-                githubId: userinfo.id
+                githubId: userinfo.id,
+                bio:userinfo.bio,
+                location:userinfo.location
             }
 
             const createNewUser = await User.create(userDetails)
             // now send jwt
-            const userDetailsClient = {
-                email: userinfo.email,
-                fullName: userinfo.name,
-                username: userinfo.login,
-                avatar: userinfo.avatar_url,
-                id: createNewUser._id
-            }
+            const pipeline = [
+                {
+                    $match:{githubId:userinfo.id}
+                },
+                {
+                    $lookup:{
+                        from:'followers',
+                        localField:'_id',
+                        foreignField:'user',
+                        as:'userFollowers'
+                    }
+                },
+                {
+                    $lookup:{
+                        from:'followings',
+                        localField:'_id',
+                        foreignField:'user',
+                        as:'userFollowings'
+                    }
+                },
+                {
+                    $addFields:{
+                        followersCount:{$size:'$userFollowers.followers'},
+                        followingsCount:{$size:'$userFollowings.followings'}
+                    }
+                },
+                {
+                    $project:{
+                        'password':0,
+                        '__v':0,
+                        email:0,
+                        userFollowers:0,
+                        userFollowings:0,
+                    }
+                }
+            ]
+            const userDocument = await User.aggregate(pipeline);
             return res.send({
-                user: userDetailsClient,
+                user: userDocument[0],
                 token: jwt.sign({
                     id: createNewUser._id
                 }, process.env.JWT_TOKEN_SECRET),
@@ -209,6 +268,7 @@ module.exports.signupUserWithEmail = async(req,res,next)=>{
                     $project:{
                         'password':0,
                         '__v':0,
+                        email:0,
                         userFollowers:0,
                         userFollowings:0,
                     }
@@ -274,6 +334,7 @@ module.exports.loginWithToken = async(req,res,next)=>{
                 $project:{
                     'password':0,
                     '__v':0,
+                    email:0,
                     userFollowers:0,
                     userFollowings:0,
                 }

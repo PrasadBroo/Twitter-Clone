@@ -4,7 +4,7 @@ import { selectSuggestedUsers } from "../../store/suggestedUsers/suggUsersSelect
 import FollowUser from "../FollowUser/FollowUser";
 import SimpleSpinner from "../Loader/SimpleSpinner";
 
-export default function WhoToFollow() {
+export default function WhoToFollow({headerText}) {
   const state = useSelector((state) => state);
   const users = selectSuggestedUsers(state);
   const fetching = useSelector((state) => state.suggestedUsers.fetching);
@@ -13,7 +13,7 @@ export default function WhoToFollow() {
       {!fetching ? (
         <>
           <div className="who-to-follow-heading-container">
-            <h2>Who to follow</h2>
+            <h2>{headerText || 'Who to follow'}</h2>
           </div>
           {users &&
             users.map((user) => <FollowUser user={user} key={user._id} type='suggUsers'/>)}
