@@ -1,3 +1,18 @@
+### Todo
+
+- [ ] Work on notifications eg.tweet like,mentioned.
+- [ ] Add send email verification feature.  
+- [ ] Add hashtag,users in explore page.  
+
+### In Progress
+
+- [ ] Work on notifications eg.tweet like,mentioned.
+
+### Done ✓
+
+- [x] Make clone mobile friendly.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
