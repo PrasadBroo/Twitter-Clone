@@ -33,7 +33,8 @@ export default function LoginPage() {
           </div>
           <div className="signup-links">
             <LinkButton
-            externalLink
+              externalLink
+              className='disabled'
               href={googleAuthenticationUrl()}
               linkText={"Sign up with Goolgle"}
               img={"https://img.icons8.com/color/48/000000/google-logo.png"}
@@ -41,7 +42,7 @@ export default function LoginPage() {
 
             <div className="with-phone-email">
               <LinkButton
-              externalLink
+                externalLink
                 icon={<i className="fab fa-github"></i>}
                 href={githubAuthenticationUrl()}
                 linkText={"Sign up with Github"}

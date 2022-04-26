@@ -42,7 +42,7 @@ export default function Login() {
           <div className="other-login-options">
             <LinkButton
               externalLink
-              className="login-form-google-auth login-form-link mtp-1"
+              className="login-form-google-auth login-form-link mtp-1 disabled"
               href={googleAuthenticationUrl()}
               linkText={"Sign in with Goolgle"}
               img={"https://img.icons8.com/color/48/000000/google-logo.png"}
