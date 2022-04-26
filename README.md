@@ -6,7 +6,7 @@
 
 ### In Progress
 
-- [ ] Work on notifications eg.tweet like,mentioned.
+- [ ] Working on notifications eg.tweet like,mentioned.
 
 ### Done ✓
 
