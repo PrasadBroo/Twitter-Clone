@@ -13,6 +13,7 @@ import { selectCurrentUser } from "../../store/user/userSelector";
 import { postTheTweet } from "../../services/tweetService";
 import { POSTING_TWEET_FAILED, POSTING_TWEET_FINISED, POSTING_TWEET_STARTED } from "../../store/user/userSlice";
 import { POSTING_TWEET_REPLY_SUCCESS } from "../../store/feed/feedSlice";
+import cogoToast from 'cogo-toast';
 
 export default function SendTweet({ className,placeholder,type,tweet=null }) {
   const dispatch = useDispatch()
@@ -52,7 +53,7 @@ export default function SendTweet({ className,placeholder,type,tweet=null }) {
          return dispatch(POSTING_TWEET_FAILED('No caption provided'))
       }
       dispatch(POSTING_TWEET_STARTED())
-      if(!tweet)await postTheTweet(tweetText, tweetPic,null);
+      if(!tweet){await postTheTweet(tweetText, tweetPic,null);cogoToast.success('Tweet posted successfully 👍')}
       else{
         const data =   await postTheTweet(tweetText, tweetPic,tweet._id);
           dispatch(POSTING_TWEET_REPLY_SUCCESS({
@@ -67,6 +68,7 @@ export default function SendTweet({ className,placeholder,type,tweet=null }) {
             retweetCount:0,
             isRetweeted:false
           }))
+          cogoToast.success('Added reply successfully 👍')
       }
       
       // dispatch success

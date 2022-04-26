@@ -57,7 +57,7 @@ import {
     POSTING_TWEET_REPLY_STARTED,
     POSTING_TWEET_REPLY_FINISED,
 } from "./userSlice";
-
+import cogoToast from 'cogo-toast';
 
 
 export const googleSignInStart = (code) => async (dispatch) => {
@@ -139,9 +139,11 @@ export const updateProfile = (bcPic, profilePic, fullName, bio, website, locatio
         await updateUserProfile(bcPic, profilePic, fullName, bio, website, location);
         // dispatch update profile success
         dispatch(UPDATING_PROFILE_FINISHED())
+        cogoToast.success('Profile updated successfully 👍 ')
     } catch (error) {
         dispatch(UPDATING_PROFILE_ERROR(error.message))
         dispatch(UPDATING_PROFILE_FINISHED())
+        cogoToast.error(error.message)
     }
 }
 
@@ -159,6 +161,7 @@ export const followTheUser = (userid, type) => async (dispatch) => {
         if (String(type) === 'profile') dispatch(UNFOLLOWED_FROM_PROFILE())
         if (String(type) === 'suggUsers') dispatch(UNFOLLOWED_FROM_SUGGETIONS(userid))
         dispatch(ERROR_WHILE_FOLLOWING(error.message))
+        cogoToast.error(error.message)
     }
 }
 export const unfollowTheUser = (userid, type) => async (dispatch) => {
@@ -177,6 +180,7 @@ export const unfollowTheUser = (userid, type) => async (dispatch) => {
         if (String(type) === 'suggUsers') dispatch(FOLLOWED_FROM_SUGGETIONS(userid))
         dispatch(ERROR_WHILE_UNFOLLOWING(error.message))
         dispatch(HIDE_UNFOLLOW_MODEL())
+        cogoToast.error(error.message)
     }
 }
 export const postTweet = (caption, pic = null,tweet) => async (dispatch) => {

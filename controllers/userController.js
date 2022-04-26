@@ -1401,7 +1401,7 @@ module.exports.getUserFeedTweets = async (req, res, next) => {
                                 fullName: 1,
                                 avatar: 1,
                                 joindate: 1,
-                                isVeryfied: 1
+                                isVerified: 1
                             }
                         }
                     ],

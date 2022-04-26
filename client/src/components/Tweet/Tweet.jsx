@@ -164,6 +164,9 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
                 onClick={(e) => e.stopPropagation()}
               >
                 {tweet.user.fullName}
+                {tweet.user.isVerified &&<span className="verfied-icon">
+                      <i className="fas fa-badge-check"></i>
+                    </span>}
               </Link>
             </span>
             <span className="tweet-content-child user-username">

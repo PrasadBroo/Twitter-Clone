@@ -17,7 +17,7 @@ import {
     FETCHING_FOLLOWINGS_SUCCESS,
 } from "./guestSlice"
 
-
+import cogoToast from 'cogo-toast';
 
 
 export const fetchUser = (username) => async (dispatch) => {
@@ -28,6 +28,7 @@ export const fetchUser = (username) => async (dispatch) => {
     } catch (error) {
         dispatch(FETCHING_GUEST_FAIL(error.message))
         dispatch(FETCHING_FINISHED())
+        cogoToast.error(error.message)
     }
 }
 
@@ -37,6 +38,7 @@ export const getFollowers = (userid) => async (dispatch) => {
         const followers = await getUserFollowers(userid);
         dispatch(FETCHING_FOLLOWERS_SUCCESS(followers))
     } catch (error) {
+        cogoToast.error(error.message)
         dispatch(FETCHING_FOLLOWERS_FAIL(error.message))
     }
 }
@@ -46,6 +48,7 @@ export const getFollowings = (userid) => async (dispatch) => {
         const followings = await getUserFollowings(userid);
         dispatch(FETCHING_FOLLOWINGS_SUCCESS(followings))
     } catch (error) {
+        cogoToast.error(error.message)
         dispatch(FETCHING_FOLLOWINGS_FAIL(error.message))
     }
 }
