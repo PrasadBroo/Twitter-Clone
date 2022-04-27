@@ -148,7 +148,11 @@
                 align-items: flex-start;
                 z-index: 10;
                 box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
-
+                @include for-big-desktop-down{
+                    left: unset;
+                    transform: none;
+                    min-width: 200px;
+                }
                 .logout-btn-container {
                     @include flexJustifyCenter;
 
@@ -169,7 +173,11 @@
             .show {
                 padding: 0;
                 display: block;
-
+                @include for-big-desktop-down{
+                    .profile-details{
+                        display: block;
+                    }
+                }
                 .header-profile {
                     pointer-events: none;
                     border-bottom: 1px solid $color-grey-2;

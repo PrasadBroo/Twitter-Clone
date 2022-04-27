@@ -1585,15 +1585,16 @@ module.exports.getUserFeedTweets = async (req, res, next) => {
             }
 
         ]
-        const pipeline_two = [{
-            $match: {
+        // const pipeline_two = [{
+        //     $match: {
 
-            }
-        }]
+        //     }
+        // }]
         const data = await Tweet.aggregate(pipeline)
         res.send(data)
     } catch (error) {
         next(error)
+        console.log(error)
     }
 }
 module.exports.getUsersSuggetions = async (req, res, next) => {

@@ -128,8 +128,8 @@ export default function User() {
                     onClick={() =>
                       dispatch(
                         SHOW_UNFOLLOW_MODEL({
-                          username: guestUser.username,
-                          _id: guestUser._id,
+                          user:{username: guestUser.username,
+                          _id: guestUser._id,},
                           type: "profile",
                         })
                       )
