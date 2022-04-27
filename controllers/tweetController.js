@@ -14,7 +14,7 @@ const {
 const {
     retriveComments
 } = require('../utils/controllerUtils');
-
+const {isAdultContent} = require('../services/moderatecontent');
 
 module.exports.postTweet = async (req, res, next) => {
     const currentUser = res.locals.user;
@@ -42,7 +42,6 @@ module.exports.postTweet = async (req, res, next) => {
         const tweet = await Tweet.create({
             user: currentUser._id,
             caption,
-            pic,
             in_reply_to_status_id: tweetid ? isTweetIdExist._id : null
         });
         if (pic) {
@@ -51,11 +50,14 @@ module.exports.postTweet = async (req, res, next) => {
                 folder: 'tweet_images',
                 public_id: tweet._id
             })
+            const picShouldBeRemoved = await isAdultContent(tweetPicResponse.secure_url)
+            if(picShouldBeRemoved) cloudinary.uploader.destroy(`tweet_images/${tweet._id}`) //
+            
             await Tweet.updateOne({
                 _id: tweet._id
             }, {
                 $set: {
-                    pic: tweetPicResponse.secure_url
+                    pic: !picShouldBeRemoved ? tweetPicResponse.secure_url : null
                 }
             })
         }
@@ -113,7 +115,6 @@ module.exports.postTweet = async (req, res, next) => {
         res.status(201).send(tweet)
     } catch (error) {
         next(error)
-        console.log(error)
     }
 }
 

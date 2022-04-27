@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,  useState } from "react";
 import { Outlet } from "react-router-dom";
 import News from "../News/News";
 import Searchbar from "../Searchbar/Searchbar";
@@ -51,7 +51,7 @@ export default function TweetSections() {
   }, [currentUser._id, dispatch]);
 
 
-  
+
   return (
     <>
       <div className="tweets-search-news-sections two-flex-col-container" >
