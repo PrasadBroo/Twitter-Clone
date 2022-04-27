@@ -1,6 +1,6 @@
 .tweet-link {
     border-top: $color-grey-2 1px solid;
-
+    @include noHighlightOnSelect;
     .tweet-retweeted {
         @include flexCenter;
         padding: 0.2rem 0;
@@ -145,6 +145,9 @@
                             align-items: unset;
                             padding: 0.5rem 0.7rem;
                             font-size: 15px;
+                            @include for-phone-only-500{
+                                font-size: 12px;
+                            }
                         }
                     }
 
@@ -173,8 +176,8 @@
             .tweet-text {
                 font-size: 15px;
                 color: $color-black-2;
-                font-weight: 600;
-                font-family: 'Montserrat', sans-serif;
+                // font-weight: 600;
+                // font-family: 'Montserrat', sans-serif;
             }
 
             .user-username,
@@ -185,16 +188,15 @@
                     font-size: 12px;
                 }
             }
-            .user-username{
-                @include for-phone-only-500{
-                    display: none;
-                }
-            }
+            
 
             .timestamp {
                 cursor: pointer;
                 @include for-phone-only-500{
-                    margin-left: auto;
+                    width: 30px;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
                 }
                 &:hover {
                     text-decoration: underline;
@@ -206,9 +208,6 @@
                 width: 3px;
                 border-radius: 100%;
                 background-color: $color-secondary;
-                @include for-phone-only-500{
-                    display: none;
-                }
             }
 
             .tweet-options {

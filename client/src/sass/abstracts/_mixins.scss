@@ -53,6 +53,15 @@
   height: 100%;
   object-fit: cover;
 }
+@mixin noHighlightOnSelect{
+  -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 @mixin for-phone-only-500 {
   @media (max-width: 599px) {
     @content;

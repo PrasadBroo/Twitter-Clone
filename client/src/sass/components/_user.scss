@@ -134,6 +134,9 @@
                         flex: 1;
                         text-align: center;
                         white-space: nowrap;
+                        @include for-phone-only-500{
+                            font-size: 12px;
+                        }
                         &:hover{
                             background-color: $color-grey-2;
                         }
