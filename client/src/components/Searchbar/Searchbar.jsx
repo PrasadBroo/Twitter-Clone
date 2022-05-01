@@ -3,7 +3,7 @@ import { searchUsers } from "../../services/userServices";
 import FollowUser from "../FollowUser/FollowUser";
 import SimpleSpinner from "../Loader/SimpleSpinner";
 
-export default function Searchbar() {
+export default function Searchbar({className}) {
   const [searchText, setSearchText] = useState('');
   const [users, setUsers] = useState([]);
   const [fetching, setFetching] = useState(false);
@@ -26,7 +26,7 @@ export default function Searchbar() {
   }, [searchText]);
 
   return (
-    <div className="searchbar">
+    <div className={"searchbar "+className}>
       <label htmlFor="search-input" className="search-input-label">
         <div className="search-icon-container">
           <i className="far fa-search"></i>

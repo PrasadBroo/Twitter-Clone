@@ -90,14 +90,17 @@
                     @include flexCenter;
                     color: rgb(83, 100, 113);
                     @include for-phone-only-500{
-                        flex-direction: column;
-                        align-items: flex-start;
+                        flex-wrap: wrap;
                     }
                     .icon-container {
                         color: $color-grey-1;
                         margin-right: 0.5rem;
                     }
 
+                    
+                    .user-location,.sitelink-container,.joindate-container{
+                        margin: 0.1rem ;
+                    }
                     .user-location,
                     .sitelink-container {
                         margin-right: 1.5rem;

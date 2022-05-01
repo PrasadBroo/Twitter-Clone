@@ -243,7 +243,7 @@ export default function User() {
             </div>
           </>
         ) : (
-           !usernotFound && <SimpleSpinner />
+           !usernotFound && <SimpleSpinner topCenter/>
         )}
         {usernotFound && !isFetching && <NotFound/>}
       </div>
