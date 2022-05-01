@@ -2,6 +2,9 @@
     position: sticky;
     top: 0px;
     z-index: 100;
+    @include for-phone-only-500{
+        top: 32px;
+    }
     .user-header {
         background-color: rgba(255, 255, 255, 0.85);
         display: flex;

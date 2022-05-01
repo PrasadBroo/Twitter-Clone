@@ -68,11 +68,16 @@ function App() {
               <Route path="edit/profile" element={<EditProfile />} />
             </Route>
           </Route>
-          <Route path="explore" element={<HomepageLayout />}>
-            <Route index element={<ExplorePage />} />
+          <Route path="explore/*" element={<HomepageLayout />}>
+            <Route path="" element={<ExplorePage />}>
+            <Route path="home" element={<h1>For you</h1>} />
+            </Route>
           </Route>
           <Route path="bookmarks" element={<HomepageLayout />}>
             <Route index element={<BookmarksPage />} />
+          </Route>
+          <Route path="messages" element={<HomepageLayout />}>
+            <Route index element={<h2>Messages</h2>} />
           </Route>
           <Route path="notifications" element={<HomepageLayout />}>
             <Route element={<NotificationsPage />}>

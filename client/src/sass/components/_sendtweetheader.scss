@@ -2,18 +2,42 @@
     position: sticky;
     top: 0px;
     z-index: 100;
+
+    @include for-phone-only-500 {
+        top: 32px;
+    }
+
     .send-tweet-heading {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-bottom: 0.5rem;
-        padding:  0.5rem;
+        padding: 0.5rem;
         background-color: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(12px);
 
-        .heading-text {
-            font-weight: 700;
-            font-size: 1.2rem;
+        .profile-conatiner {
+            @include flexCenter;
+            .profile-pic {
+                display: none;
+                height: 32px;
+                width: 32px;
+                margin-right: 0.7rem;
+                @include for-phone-only-500 {
+                    display: block;
+                }
+                img{
+                    height: auto;
+                    width: 100%;
+                    border-radius: 100%;
+                }
+            }
+
+            .heading-text {
+                font-weight: 700;
+                font-size: 1.2rem;
+            }
         }
+
     }
 }
