@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useReducer } from "react";
 import ThreeDotsIcon from "../../icons/ThreeDotsIcon";
 import CommentIcon from "./../../icons/CommentIcon";
 import RetweetIcon from "./../../icons/RetweetIcon";
@@ -10,18 +10,26 @@ import Linkify from "linkify-react";
 import "linkify-plugin-hashtag";
 import "linkify-plugin-mention";
 import moment from "moment";
-import { likeTweet, unlikeTweet } from "../../store/feed/feedActions";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { SET_TWEET_TYPE } from "../../store/model/modelSlice";
-import { deleteTheRetweet, postTheRetweet } from "../../services/tweetService";
+import {
+  deleteTheRetweet,
+  likeTheTweet,
+  unlikeTheTweet,
+  postTheRetweet,
+} from "../../services/tweetService";
 import TweetOptions from "../Options/TweetOptions";
 import { selectCurrentUser } from "../../store/user/userSelector";
 import { selectGuestUser } from "../../store/guest/guestSelector";
-import {
-  TWEET_RETWEETED_FAILED,
+import tweetReducer, {
+  initialState,
+  FETCHING_TWEET_SUCCESS,
+  TWEET_LIKED_SUCCESS,
+  TWEET_LIKED_FAILED,
   TWEET_RETWEETED_SUCCESS,
-} from "../../store/feed/feedSlice";
+  TWEET_RETWEETED_FAILED,
+} from "../../store/Tweet/tweetSlice";
 
 const options = {
   className: () => "default-link",
@@ -40,22 +48,33 @@ const options = {
   },
 };
 
-export default function Tweet({ tweet, from, isParentTweet, className }) {
+export default function Tweet({
+  tweet: propTweet,
+  isParentTweet,
+  className,
+}) {
   const state = useSelector((state) => state);
   const currentUser = selectCurrentUser(state);
   const guestUser = selectGuestUser(state);
   const tweetClasses = classNames("tweet-link", className);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const [{ tweet, fetching }, dispatch] = useReducer(
+    tweetReducer,
+    initialState
+  );
+  useEffect(() => {
+    if (propTweet) {
+      dispatch(FETCHING_TWEET_SUCCESS(propTweet));
+    }
+  }, [propTweet]);
   const {
     ref: tweetOptionsRef,
     isVisible: istweetOptions,
     setIsVisible: settweetOptions,
   } = useComponentVisible(false);
-  const {
-    ref: retweetRef,
-    isVisible: reweetOptonsVisible,
-  } = useComponentVisible(false);
+  const { ref: retweetRef, isVisible: reweetOptonsVisible } =
+    useComponentVisible(false);
   const {
     ref: saveOptionsRef,
     isVisible: saveOptonsVisible,
@@ -85,13 +104,16 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
     }
   );
 
-  const handelTweetLike = (e) => {
+  const handelTweetLike = async (e) => {
     e.stopPropagation();
     // OR
     e.preventDefault();
-    if (!tweet.isLiked) dispatch(likeTweet(tweet._id, from));
-    else {
-      dispatch(unlikeTweet(tweet._id, from));
+    if (!tweet.isLiked) {
+      dispatch(TWEET_LIKED_SUCCESS());
+      await likeTheTweet(tweet._id);
+    } else {
+      dispatch(TWEET_LIKED_FAILED());
+      await unlikeTheTweet(tweet._id);
     }
   };
   const handelTweetReply = (e) => {
@@ -111,23 +133,23 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
 
     if (!tweet.isRetweeted) {
       try {
-        dispatch(TWEET_RETWEETED_SUCCESS({ from, tweetid: tweet._id }));
+        dispatch(TWEET_RETWEETED_SUCCESS());
         await postTheRetweet(tweet._id);
       } catch (error) {
-        dispatch(TWEET_RETWEETED_FAILED({ from, tweetid: tweet._id }));
+        dispatch(TWEET_RETWEETED_FAILED());
       }
     } else {
       try {
-        dispatch(TWEET_RETWEETED_FAILED({ from, tweetid: tweet._id }));
+        dispatch(TWEET_RETWEETED_FAILED());
         await deleteTheRetweet(tweet._id);
       } catch (error) {
-        dispatch(TWEET_RETWEETED_SUCCESS({ from, tweetid: tweet._id }));
+        dispatch(TWEET_RETWEETED_SUCCESS());
       }
     }
 
     // dispatch(postRetweet(tweet))
   };
-  return (
+  return !fetching ? (
     <div
       onClick={() =>
         navigate("/" + tweet.user.username + "/status/" + tweet._id)
@@ -164,9 +186,11 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
                 onClick={(e) => e.stopPropagation()}
               >
                 {tweet.user.fullName}
-                {tweet.user.isVerified &&<span className="verfied-icon">
-                      <i className="fas fa-badge-check"></i>
-                    </span>}
+                {tweet.user.isVerified && (
+                  <span className="verfied-icon">
+                    <i className="fas fa-badge-check"></i>
+                  </span>
+                )}
               </Link>
             </span>
             <span className="tweet-content-child user-username">
@@ -206,69 +230,76 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
           <div className="tweet-actions">
             <div className="wrap-tweet-actions-child">
               <div className=" tweet-actions-child tweet-comment">
-              <div className="tweet-icon">
-                <TextButton
-                  className="tweet-icon-wrap"
-                  onClick={handelTweetReply}
-                >
-                  <CommentIcon fill={"#536471"} height="20px" width="20px" />
-                </TextButton>
+                <div className="tweet-icon">
+                  <TextButton
+                    className="tweet-icon-wrap"
+                    onClick={handelTweetReply}
+                  >
+                    <CommentIcon fill={"#536471"} height="20px" width="20px" />
+                  </TextButton>
 
-                {/* <i className="far fa-comment"></i> */}
-              </div>
-
-              <span className="tweet-comment-count">{tweet.replyCount}</span>
-            </div>
-            <div className="tweet-actions-child tweet-retweet" ref={retweetRef}>
-              <div className="tweet-icon">
-                <TextButton
-                  className="tweet-icon-wrap"
-                  onClick={handelRetweet}
-                >
-                  <RetweetIcon
-                    fill={
-                      tweet.isRetweeted ? "rgba(29, 155, 240, 0.8)" : "#536471"
-                    }
-                    height="20px"
-                    width="20px"
-                  />
-                </TextButton>
-
-                {/* <i className="far fa-arrows-retweet"></i> */}
-              </div>
-              <div className={retweetOptionsClassnames}>
-                <div className="retweet-options-child retweet-btn-container">
-                  <RetweetIcon fill={"#536471"} height="20px" width="20px" />
-                  <TextButton className="retweet-btn">Retweet</TextButton>
+                  {/* <i className="far fa-comment"></i> */}
                 </div>
-                <div className="retweet-options-child quote-tweet-container">
-                  <i className="fas fa-pencil-alt"></i>
-                  <TextButton className="quote-btn">Quote tweet</TextButton>
+
+                <span className="tweet-comment-count">{tweet.replyCount}</span>
+              </div>
+              <div
+                className="tweet-actions-child tweet-retweet"
+                ref={retweetRef}
+              >
+                <div className="tweet-icon">
+                  <TextButton
+                    className="tweet-icon-wrap"
+                    onClick={handelRetweet}
+                  >
+                    <RetweetIcon
+                      fill={
+                        tweet.isRetweeted
+                          ? "rgba(29, 155, 240, 0.8)"
+                          : "#536471"
+                      }
+                      height="20px"
+                      width="20px"
+                    />
+                  </TextButton>
+
+                  {/* <i className="far fa-arrows-retweet"></i> */}
                 </div>
+                <div className={retweetOptionsClassnames}>
+                  <div className="retweet-options-child retweet-btn-container">
+                    <RetweetIcon fill={"#536471"} height="20px" width="20px" />
+                    <TextButton className="retweet-btn">Retweet</TextButton>
+                  </div>
+                  <div className="retweet-options-child quote-tweet-container">
+                    <i className="fas fa-pencil-alt"></i>
+                    <TextButton className="quote-btn">Quote tweet</TextButton>
+                  </div>
+                </div>
+
+                <span className="tweet-comment-count">
+                  {tweet.retweetCount}
+                </span>
               </div>
+              <div className="tweet-actions-child like-tweet">
+                <div className="tweet-icon like-icon">
+                  <TextButton
+                    className="tweet-icon-wrap"
+                    onClick={handelTweetLike}
+                  >
+                    <i
+                      className={
+                        tweet.isLiked ? "fas fa-heart liked" : "fal fa-heart"
+                      }
+                    ></i>
+                  </TextButton>
 
-              <span className="tweet-comment-count">{tweet.retweetCount}</span>
-            </div>
-            <div className="tweet-actions-child like-tweet">
-              <div className="tweet-icon like-icon">
-                <TextButton
-                  className="tweet-icon-wrap"
-                  onClick={handelTweetLike}
-                >
-                  <i
-                    className={
-                      tweet.isLiked ? "fas fa-heart liked" : "fal fa-heart"
-                    }
-                  ></i>
-                </TextButton>
+                  {/* <LikeIcon fill={"#536471"} height="18px" width="18px"/> */}
+                </div>
 
-                {/* <LikeIcon fill={"#536471"} height="18px" width="18px"/> */}
+                <span className="tweet-comment-count">{tweet.likesCount}</span>
               </div>
+            </div>
 
-              <span className="tweet-comment-count">{tweet.likesCount}</span>
-            </div>
-            </div>
-            
             <div className="tweet-actions-child save-tweet-options">
               <div
                 className="tweet-icon tweet-options-container"
@@ -313,5 +344,5 @@ export default function Tweet({ tweet, from, isParentTweet, className }) {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 }

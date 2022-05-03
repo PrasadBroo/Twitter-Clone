@@ -1,7 +1,5 @@
 import {
     fetchTheTweet,
-    likeTheTweet,
-    unlikeTheTweet
 } from "../../services/tweetService";
 import {
     fetchTheUserLikedTweets,
@@ -13,10 +11,6 @@ import {
     TWEETS_FETCHING_STARTED,
     TWEETS_FETCH_SUCCESS,
     TWEETS_FETCH_FAILED,
-    TWEET_LIKED_SUCCESS,
-    TWEET_LIKED_FAILED,
-    TWEET_UNLIKED_SUCCESS,
-    TWEET_UNLIKED_FAILED,
     LIKED_TWEETS_FETCHING_STARTED,
     LIKED_TWEETS_FETCH_FAILED,
     LIKED_TWEETS_FETCH_SUCCESS,
@@ -38,38 +32,6 @@ export const fetchUserTweets = (userid) => async (dispatch) => {
         cogoToast.error(error.message)
         dispatch(TWEETS_FETCH_FAILED(error.message))
 
-    }
-}
-export const likeTweet = (tweetid, from) => async (dispatch) => {
-    try {
-        dispatch(TWEET_LIKED_SUCCESS({
-            tweetid,
-            from
-        }))
-        await likeTheTweet(tweetid);
-
-    } catch (error) {
-        dispatch(TWEET_LIKED_FAILED({
-            error: error.message,
-            from
-        }))
-        cogoToast.error(error.message)
-    }
-}
-export const unlikeTweet = (tweetid, from = 'tweets') => async (dispatch) => {
-    try {
-        dispatch(TWEET_UNLIKED_SUCCESS({
-            tweetid,
-            from
-        }))
-        await unlikeTheTweet(tweetid);
-
-    } catch (error) {
-        dispatch(TWEET_UNLIKED_FAILED({
-            error,
-            from
-        }));
-        cogoToast.error(error.message)
     }
 }
 

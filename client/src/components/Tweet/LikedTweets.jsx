@@ -23,7 +23,7 @@ export default function LikedTweets() {
     <>
       <div className="tweets-wrap" style={{position:'relative'}}>
         {!fetching ? (
-          tweets && tweets.map((tweet) => <Tweet tweet={tweet} key={tweet._id} from='likedTweets'/>)
+          tweets && tweets.map((tweet) => <Tweet tweet={tweet} key={tweet._id}/>)
         ) : (
           <SimpleSpinner topCenter/>
         )}

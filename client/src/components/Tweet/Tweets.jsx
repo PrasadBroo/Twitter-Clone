@@ -25,7 +25,7 @@ export default function Tweets() {
       <div className="tweets-wrap" style={{ position: "relative" }}>
         {!fetching ? (
           tweets &&
-          tweets.map((tweet,i) => <Tweet tweet={tweet} key={i} from='tweets'/>)
+          tweets.map((tweet,i) => <Tweet tweet={tweet} key={i} />)
         ) : (
           <SimpleSpinner topCenter />
         )}

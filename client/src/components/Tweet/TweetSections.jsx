@@ -65,7 +65,7 @@ export default function TweetSections() {
             {!fetching &&
               feedTweets.length !== 0 &&
               feedTweets.map((tweet) => (
-                <Tweet tweet={tweet} from="feed" key={tweet._id} />
+                <Tweet tweet={tweet}  key={tweet._id} />
               ))}
             {!fetching && feedTweets.length === 0 && (
               <WhoToFollow headerText="Suggestion" />
