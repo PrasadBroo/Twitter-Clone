@@ -2,15 +2,22 @@ import React, { useState, useEffect } from "react";
 import { searchUsers } from "../../services/userServices";
 import FollowUser from "../FollowUser/FollowUser";
 import SimpleSpinner from "../Loader/SimpleSpinner";
+import useComponentVisible from "./../../CustomHooks/useComponentVisible";
 
 export default function Searchbar({className}) {
   const [searchText, setSearchText] = useState('');
   const [users, setUsers] = useState([]);
   const [fetching, setFetching] = useState(false);
   const [isError, setIsError] = useState(null);
+  const {
+    ref: searchbarRef,
+    isVisible: isResultVisible,
+    setIsVisible: setResultVisible,
+  } = useComponentVisible(false);
   useEffect(() => {
     try {
       setFetching(true);
+      setResultVisible(true)
       async function fetchUsers() {
         const users = await searchUsers(searchText);
         setUsers(users);
@@ -23,11 +30,11 @@ export default function Searchbar({className}) {
       setIsError(error.message);
       setFetching(false);
     }
-  }, [searchText]);
+  }, [searchText,setResultVisible]);
 
   return (
-    <div className={"searchbar "+className}>
-      <label htmlFor="search-input" className="search-input-label">
+    <div className={"searchbar "+className} ref={searchbarRef}>
+      <label htmlFor="search-input" className="search-input-label" >
         <div className="search-icon-container">
           <i className="far fa-search"></i>
         </div>
@@ -41,7 +48,7 @@ export default function Searchbar({className}) {
             onChange={(e) => setSearchText(e.target.value)}
             placeholder="Search Twitter Clone"
           />
-          {searchText && (
+          {searchText && isResultVisible && (
             <div className="users-list">
               <span className="close-btn" onClick={() => setSearchText('')}>
                 <i className="fas fa-xmark"></i>

@@ -23,22 +23,34 @@
 
         .nav-links {
             margin-top: 1rem;
-            // padding: 0 0.8rem;
             overflow-x: auto;
             overflow-y: hidden;
             @include flexCenter;
+            border-bottom: 1px solid $color-grey-2;
 
             .header-link {
+                position: relative;
                 flex: 1;
-                color: $color-black;
+                color: $color-black-grey;
                 white-space: nowrap;
                 padding: 0.7rem;
+                @include flexJustifyCenter;
+                .custom-border-bottom{
+                    position: absolute ;
+                    bottom: 0;
+                    display: block;
+                    width: 40px;
+                    height: 4px;
+                    // margin-top: 0.5rem;
+                    background-color: $color-secondary-light;
+                    border-radius: 10px;
+                }
             }
 
             .active-header-link{
                 border-bottom: 4px solid #0056B3;
             }
-            .active-header-link:hover{
+            .header-link:hover{
                 background-color: rgba($color: $color-grey-2, $alpha: 0.2) ;
             }
         }

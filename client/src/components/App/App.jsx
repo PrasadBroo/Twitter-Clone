@@ -28,6 +28,8 @@ import LikedTweets from "../Tweet/LikedTweets";
 import MediaTweets from "../Tweet/MediaTweets";
 import ComposeTweetPage from "./../../Pages/ComposeTweetPage";
 import Tweetpage from "../../Pages/Tweetpage";
+import ForYou from "../../subcomponents/ForYou";
+import SearchPage from "../../Pages/SearchPage";
 
 function App() {
   const state = useSelector((state) => state);
@@ -37,7 +39,7 @@ function App() {
   useEffect(() => {
     if (token) dispatch(signInStart());
   }, [dispatch, token]);
-  
+
   return !is_fetching ? (
     <div className="App">
       <Routes>
@@ -70,7 +72,11 @@ function App() {
           </Route>
           <Route path="explore/*" element={<HomepageLayout />}>
             <Route path="" element={<ExplorePage />}>
-            <Route path="home" element={<h1>For you</h1>} />
+              <Route path="home" element={<ForYou />} />
+            </Route>
+          </Route>
+          <Route path="search/*" element={<HomepageLayout />}>
+            <Route index element={<SearchPage />}>
             </Route>
           </Route>
           <Route path="bookmarks" element={<HomepageLayout />}>
