@@ -28,7 +28,7 @@ import LikedTweets from "../Tweet/LikedTweets";
 import MediaTweets from "../Tweet/MediaTweets";
 import ComposeTweetPage from "./../../Pages/ComposeTweetPage";
 import Tweetpage from "../../Pages/Tweetpage";
-import ForYou from "../../subcomponents/ForYou";
+import ExploreForYou from "../../subcomponents/ExploreForYou";
 import SearchPage from "../../Pages/SearchPage";
 
 function App() {
@@ -72,12 +72,12 @@ function App() {
           </Route>
           <Route path="explore/*" element={<HomepageLayout />}>
             <Route path="" element={<ExplorePage />}>
-              <Route path="home" element={<ForYou />} />
+              <Route index element={<ExploreForYou />} />
+              <Route path="for-you" element={<ExploreForYou />} />
             </Route>
           </Route>
           <Route path="search/*" element={<HomepageLayout />}>
-            <Route index element={<SearchPage />}>
-            </Route>
+            <Route index element={<SearchPage />}></Route>
           </Route>
           <Route path="bookmarks" element={<HomepageLayout />}>
             <Route index element={<BookmarksPage />} />

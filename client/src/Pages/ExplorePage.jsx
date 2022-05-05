@@ -17,7 +17,7 @@ export default function ExplorePage() {
           <div className="nav-links-wrapper">
             <div className="nav-links">
             <NavLink
-              to="home"
+              to="for-you"
               className={({ isActive }) =>
                 "header-link" + (isActive ? " active-header-link" : "")
               }

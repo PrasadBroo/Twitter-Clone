@@ -52,6 +52,7 @@ export default function Tweet({
   tweet: propTweet,
   isParentTweet,
   className,
+  newlook
 }) {
   const state = useSelector((state) => state);
   const currentUser = selectCurrentUser(state);
@@ -227,7 +228,7 @@ export default function Tweet({
               />
             )}
           </div>
-          <div className="tweet-actions">
+          {!newlook && <div className="tweet-actions">
             <div className="wrap-tweet-actions-child">
               <div className=" tweet-actions-child tweet-comment">
                 <div className="tweet-icon">
@@ -340,9 +341,119 @@ export default function Tweet({
                 </ul>
               </div>
             </div>
-          </div>
+          </div>}
         </div>
       </div>
+      {newlook &&<div className="tweet-info">
+        <Link to='retweets' className="tweet-info-link"><b>{tweet.retweetCount}</b> Retweets</Link>
+        <Link to='quote-tweets' className="tweet-info-link"><b>{tweet.retweetCount}</b> Quote Retweets</Link>
+        <Link to='likes' className="tweet-info-link"><b>{tweet.likesCount}</b> Likes</Link>
+      </div>}
+      {newlook && <div className="tweet-actions tweet-actions-new-look">
+            <div className="wrap-tweet-actions-child">
+              <div className=" tweet-actions-child tweet-comment">
+                <div className="tweet-icon">
+                  <TextButton
+                    className="tweet-icon-wrap"
+                    onClick={handelTweetReply}
+                  >
+                    <CommentIcon fill={"#536471"} height="25px" width="25px" />
+                  </TextButton>
+
+                  {/* <i className="far fa-comment"></i> */}
+                </div>
+
+                {/* <span className="tweet-comment-count">{tweet.replyCount}</span> */}
+              </div>
+              <div
+                className="tweet-actions-child tweet-retweet"
+                ref={retweetRef}
+              >
+                <div className="tweet-icon">
+                  <TextButton
+                    className="tweet-icon-wrap"
+                    onClick={handelRetweet}
+                  >
+                    <RetweetIcon
+                      fill={
+                        tweet.isRetweeted
+                          ? "rgba(29, 155, 240, 0.8)"
+                          : "#536471"
+                      }
+                      height="25px"
+                      width="25px"
+                    />
+                  </TextButton>
+
+                  {/* <i className="far fa-arrows-retweet"></i> */}
+                </div>
+
+                {/* <span className="tweet-comment-count">
+                  {tweet.retweetCount}
+                </span> */}
+              </div>
+              <div className="tweet-actions-child like-tweet">
+                <div className="tweet-icon like-icon">
+                  <TextButton
+                    className="tweet-icon-wrap"
+                    onClick={handelTweetLike}
+                  >
+                    <i
+                      className={
+                        tweet.isLiked ? "fas fa-heart liked" : "fal fa-heart"
+                      }
+                    ></i>
+                  </TextButton>
+
+                  {/* <LikeIcon fill={"#536471"} height="18px" width="18px"/> */}
+                </div>
+
+                {/* <span className="tweet-comment-count">{tweet.likesCount}</span> */}
+              </div>
+              <div className="tweet-actions-child save-tweet-options">
+              <div
+                className="tweet-icon tweet-options-container"
+                ref={saveOptionsRef}
+              >
+                <TextButton
+                  onClick={showSaveTweetOptions}
+                  className="tweet-options-btn"
+                >
+                  <ShareIcon fill={"#536471"} height="25px" width="25px" />
+                </TextButton>
+
+                <ul className={savetweetOptionsClassnames}>
+                  <li className="tweet-options-model-item">
+                    <span className="tweet-options-model-icon">
+                      <i className="far fa-bookmark"></i>
+                    </span>
+                    <TextButton className="tweet-options-model-btn">
+                      Bookmark
+                    </TextButton>
+                  </li>
+                  <li className="tweet-options-model-item">
+                    <span className="tweet-options-model-icon">
+                      <i className="far fa-link"></i>
+                    </span>
+                    <TextButton className="tweet-options-model-btn">
+                      Copy link to tweet
+                    </TextButton>
+                  </li>
+                  <li className="tweet-options-model-item">
+                    <span className="tweet-options-model-icon">
+                      <i className="far fa-share"></i>
+                    </span>
+                    <TextButton className="tweet-options-model-btn">
+                      Sharet tweet via
+                    </TextButton>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            </div>
+
+            
+          </div>}
     </div>
   ) : null;
 }

@@ -44,7 +44,7 @@ export default function Tweetpage() {
                   </div>
                 )}
 
-                <Tweet tweet={tweet} className="tweetpage-main-tweet" key={tweet._id} from='replyTweet'/>
+                <Tweet tweet={tweet} className="tweetpage-main-tweet" key={tweet._id} from='replyTweet' newlook/>
                 <div className="replying-to">
                   <span>
                     Replaying to{" "}
