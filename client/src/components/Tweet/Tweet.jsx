@@ -181,7 +181,8 @@ export default function Tweet({
         {isParentTweet && <span className="hr-line"></span>}
         <div className="tweet-content">
           <div className="tweet-content-header">
-            <span className="tweet-content-child user-full-name">
+            <div className="tweet-header-child">
+              <span className="tweet-content-child user-full-name">
               <Link
                 to={"/" + tweet.user.username}
                 onClick={(e) => e.stopPropagation()}
@@ -201,6 +202,8 @@ export default function Tweet({
             <span className="tweet-content-child timestamp">
               {moment(tweet.createdAt).fromNow()}
             </span>
+            </div>
+            
             <div className="tweet-options-container" ref={tweetOptionsRef}>
               <TextButton
                 onClick={showTweetOptions}

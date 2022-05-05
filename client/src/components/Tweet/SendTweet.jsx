@@ -15,7 +15,7 @@ import { POSTING_TWEET_FAILED, POSTING_TWEET_FINISED, POSTING_TWEET_STARTED } fr
 import { POSTING_TWEET_REPLY_SUCCESS } from "../../store/feed/feedSlice";
 import cogoToast from 'cogo-toast';
 
-export default function SendTweet({ className,placeholder,type,tweet=null }) {
+export default function SendTweet({ className,placeholder,tweet=null }) {
   const dispatch = useDispatch()
   const state = useSelector((state) => state);
   const textInput = useRef(null);
@@ -38,7 +38,7 @@ export default function SendTweet({ className,placeholder,type,tweet=null }) {
         setTweetPic(reader.result);
       };
     } catch (error) {
-      alert(error.message);
+      cogoToast.error(error.message)
     }
   };
   const onEmojiClick = (event, emojiObject) => {
@@ -166,7 +166,7 @@ export default function SendTweet({ className,placeholder,type,tweet=null }) {
               </div>
               <div className="send-tweet-btn-container">
                 <TextButton bcBlue rounded className="send-tweet-btn" disabled={!tweetText} onClick={handelSubmit}>
-                  Tweet
+                  { placeholder ? 'Reply' : 'Tweet'}
                 </TextButton>
               </div>
             </div>

@@ -64,10 +64,12 @@
                 @include for-phone-only-500{
                     flex-direction: column;
                     align-items: flex-start;
+                    margin-top: 0;
                 }
                 .icon-containers{
                     position: relative;
                     @include flexCenter;
+                    flex-wrap: wrap;
                     @include for-phone-only-500{
                         margin-bottom: 1rem;
                     }

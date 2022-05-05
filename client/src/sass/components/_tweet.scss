@@ -1,6 +1,7 @@
 .tweet-link {
     border-top: $color-grey-2 1px solid;
     @include noHighlightOnSelect;
+
     .tweet-retweeted {
         @include flexCenter;
         padding: 0.2rem 0;
@@ -55,6 +56,7 @@
         .tweet-content {
             margin-left: 0.5rem;
             flex-grow: 1;
+
             .tweet-content-image-container {
                 margin-top: 1rem;
                 width: 100%;
@@ -74,7 +76,8 @@
 
             .tweet-content-child {
                 margin-right: 0.5rem;
-                @include for-phone-only-500{
+
+                @include for-phone-only-500 {
                     margin-right: 0.2rem;
                 }
             }
@@ -145,7 +148,8 @@
                             align-items: unset;
                             padding: 0.5rem 0.7rem;
                             font-size: 15px;
-                            @include for-phone-only-500{
+
+                            @include for-phone-only-500 {
                                 font-size: 12px;
                             }
                         }
@@ -158,46 +162,65 @@
 
             }
 
+            .tweet-content-header {
+                .tweet-header-child {
+                    @include flexCenter;
+                    flex-wrap: wrap;
+                }
+            }
+
             .user-full-name {
                 font-size: 15px;
                 font-weight: 700;
                 white-space: nowrap;
-                @include for-phone-only-500{
+
+                @include for-phone-only-500 {
                     font-size: 12px;
                 }
+
                 &:hover {
                     border-bottom: 1px solid $color-black-2;
                 }
-                .verfied-icon{
+
+                .verfied-icon {
                     margin-left: 0.5rem;
                 }
             }
 
-            .tweet-text {
-                font-size: 15px;
-                color: $color-black-2;
-                // font-weight: 600;
-                // font-family: 'Montserrat', sans-serif;
+            .tweet-content-text {
+                .tweet-text {
+                    font-size: 15px;
+                    color: $color-black-2;
+                    // font-weight: 600;
+                    // font-family: 'Montserrat', sans-serif;
+                }
+                @include for-phone-only-500{
+                    margin-top: 0.2rem;
+                }
             }
+
 
             .user-username,
             .timestamp {
                 color: $color-grey-1;
                 font-size: 14px;
-                @include for-phone-only-500{
+
+                @include for-phone-only-500 {
                     font-size: 12px;
                 }
             }
-            
+
 
             .timestamp {
                 cursor: pointer;
-                @include for-phone-only-500{
+
+                @include for-phone-only-500 {
                     width: 30px;
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     overflow: hidden;
                 }
+
                 &:hover {
                     text-decoration: underline;
                 }
@@ -222,133 +245,138 @@
                 }
             }
 
-            .tweet-actions{
-                
+            .tweet-actions {
+
                 margin-top: 0.5rem;
                 @include flexCenter;
                 flex-wrap: wrap;
-                .wrap-tweet-actions-child{
+
+                .wrap-tweet-actions-child {
                     width: 70%;
                     @include flexCenter;
-                .tweet-retweet {
-                    position: relative;
-                }
 
-                .retweet-options {
-                    @include flexColumn;
-                    align-items: center;
-                    position: absolute;
-                    top: 10%;
-                    left: 0;
-                    transform: translate(-50%);
-                    height: auto;
-                    width: 150px;
-                    background-color: rgba(255, 255, 255, 1.00);
-                    box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
-                    display: none;
-
-                    .retweet-btn,
-                    .quote-btn {
-                        background-color: transparent;
-                        margin: 0;
-                        padding: 0;
-
+                    .tweet-retweet {
+                        position: relative;
                     }
 
-                    .quote-btn {
-                        cursor: not-allowed;
+                    .retweet-options {
+                        @include flexColumn;
+                        align-items: center;
+                        position: absolute;
+                        top: 10%;
+                        left: 0;
+                        transform: translate(-50%);
+                        height: auto;
+                        width: 150px;
+                        background-color: rgba(255, 255, 255, 1.00);
+                        box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
+                        display: none;
 
-                    }
-                }
-
-                .show {
-                    display: block;
-                }
-
-                .retweet-options-child {
-                    @include flexCenter;
-                    transition: all 500ms ease-in-out;
-                    width: 100%;
-                    padding: 0.5rem 1rem;
-
-                    &:hover {
-                        background-color: $color-grey-2;
-                    }
-
-                    .fa-pencil-alt {
-                        font-size: 16px;
-                        color: $color-grey-1;
-                    }
-                }
-
-                .tweet-actions-child {
-                    cursor: pointer;
-                    @include flexCenter;
-                    flex: 1;
-                    @include for-phone-only-500{
-                        margin-right: 1rem;
-                    }
-                    &:hover .tweet-comment-count {
-                        color: $color-secondary;
-                    }
-
-                    &:last-child {
-                        margin-left: auto;
-                    }
-
-                    .tweet-icon {
-                        @include flexJustifyCenter;
-                        color: $color-black-secondary;
-                        margin-right: 0.5rem;
-                        font-size: 1.2rem;
-                        transition: all 500ms ease-in-out;
-                        border-radius: 100%;
-
-                        .tweet-icon-wrap {
-                            padding: 0;
+                        .retweet-btn,
+                        .quote-btn {
                             background-color: transparent;
+                            margin: 0;
+                            padding: 0;
+
+                        }
+
+                        .quote-btn {
+                            cursor: not-allowed;
+
                         }
                     }
 
-                    .tweet-comment-count {
-                        color: $color-black-secondary;
+                    .show {
+                        display: block;
                     }
 
-                    .like-icon {
+                    .retweet-options-child {
+                        @include flexCenter;
                         transition: all 500ms ease-in-out;
+                        width: 100%;
+                        padding: 0.5rem 1rem;
 
-                        @keyframes pulse {
-                            0% {
-                                transform: scale(1);
-                            }
+                        &:hover {
+                            background-color: $color-grey-2;
+                        }
 
-                            50% {
-                                transform: scale(1.3);
-                            }
+                        .fa-pencil-alt {
+                            font-size: 16px;
+                            color: $color-grey-1;
+                        }
+                    }
 
-                            80% {
-                                transform: scale(0.8);
-                            }
+                    .tweet-actions-child {
+                        cursor: pointer;
+                        @include flexCenter;
+                        flex: 1;
 
-                            100% {
-                                transform: scale(1);
+                        @include for-phone-only-500 {
+                            margin-right: 1rem;
+                        }
+
+                        &:hover .tweet-comment-count {
+                            color: $color-secondary;
+                        }
+
+                        &:last-child {
+                            margin-left: auto;
+                        }
+
+                        .tweet-icon {
+                            @include flexJustifyCenter;
+                            color: $color-black-secondary;
+                            margin-right: 0.5rem;
+                            font-size: 1.2rem;
+                            transition: all 500ms ease-in-out;
+                            border-radius: 100%;
+
+                            .tweet-icon-wrap {
+                                padding: 0;
+                                background-color: transparent;
                             }
                         }
 
-                        .liked {
-                            color: $color-red;
-                            animation-name: pulse;
-                            animation-duration: 0.3s;
-                            animation-iteration-count: 1;
+                        .tweet-comment-count {
+                            color: $color-black-secondary;
                         }
 
+                        .like-icon {
+                            transition: all 500ms ease-in-out;
 
+                            @keyframes pulse {
+                                0% {
+                                    transform: scale(1);
+                                }
+
+                                50% {
+                                    transform: scale(1.3);
+                                }
+
+                                80% {
+                                    transform: scale(0.8);
+                                }
+
+                                100% {
+                                    transform: scale(1);
+                                }
+                            }
+
+                            .liked {
+                                color: $color-red;
+                                animation-name: pulse;
+                                animation-duration: 0.3s;
+                                animation-iteration-count: 1;
+                            }
+
+
+                        }
                     }
                 }
-            }
 
                 .save-tweet-options {
                     margin-left: auto;
+
                     .save-options {
                         min-width: 200px;
 
@@ -377,220 +405,229 @@
 
 .tweetpage-main-tweet {
     border-top: 0;
+
     .tweet-actions-new-look {
-        border-top: 1px solid  #EFF3F4;
-        border-right: 0px solid  #000000;
-        border-bottom: 1px solid  #EFF3F4;
-        border-left: 0px solid  #000000;
+        border-top: 1px solid #EFF3F4;
+        border-right: 0px solid #000000;
+        border-bottom: 1px solid #EFF3F4;
+        border-left: 0px solid #000000;
         border-left: 0;
-        border-right: 0;       
+        border-right: 0;
         margin-top: 0.5rem;
         padding: 0.5rem;
         flex-wrap: wrap;
-        .wrap-tweet-actions-child{
+
+        .wrap-tweet-actions-child {
             width: 100%;
             @include flexCenter;
-        .tweet-retweet {
-            position: relative;
-        }
 
-        .retweet-options {
-            @include flexColumn;
-            align-items: center;
-            position: absolute;
-            top: 10%;
-            left: 0;
-            transform: translate(-50%);
-            height: auto;
-            width: 150px;
-            background-color: rgba(255, 255, 255, 1.00);
-            box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
-            display: none;
-
-            .retweet-btn,
-            .quote-btn {
-                background-color: transparent;
-                margin: 0;
-                padding: 0;
-
+            .tweet-retweet {
+                position: relative;
             }
 
-            .quote-btn {
-                cursor: not-allowed;
-
-            }
-        }
-
-        .show {
-            display: block;
-        }
-
-        .retweet-options-child {
-            @include flexCenter;
-            transition: all 500ms ease-in-out;
-            width: 100%;
-            padding: 0.5rem 1rem;
-
-            &:hover {
-                background-color: $color-grey-2;
-            }
-
-            .fa-pencil-alt {
-                font-size: 16px;
-                color: $color-grey-1;
-            }
-        }
-
-        .tweet-actions-child {
-            cursor: pointer;
-            flex: 1;
-            @include for-phone-only-500{
-                margin-right: 1rem;
-            }
-            &:hover .tweet-comment-count {
-                color: $color-secondary;
-            }
-
-            .tweet-icon {
-                @include flexJustifyCenter;
-                color: $color-black-secondary;
-                margin-right: 0.5rem;
-                font-size: 1.2rem;
-                transition: all 500ms ease-in-out;
-                border-radius: 100%;
-
-                .tweet-icon-wrap {
-                    padding: 0;
-                    background-color: transparent;
-                    font-size: 1.4rem;
-                }
-            }
-
-            .tweet-comment-count {
-                color: $color-black-secondary;
-            }
-
-            .like-icon {
-                transition: all 500ms ease-in-out;
-
-                @keyframes pulse {
-                    0% {
-                        transform: scale(1);
-                    }
-
-                    50% {
-                        transform: scale(1.3);
-                    }
-
-                    80% {
-                        transform: scale(0.8);
-                    }
-
-                    100% {
-                        transform: scale(1);
-                    }
-                }
-
-                .liked {
-                    color: $color-red;
-                    animation-name: pulse;
-                    animation-duration: 0.3s;
-                    animation-iteration-count: 1;
-                }
-
-
-            }
-        }
-    }
-
-    .save-tweet-options {
-        .tweet-options-container {
-            position: relative;
-            margin-left: auto;
-
-            .tweet-options-btn {
-                padding: 0;
-                background-color: transparent;
-                font-size: 1.4rem;
-            }
-
-            .tweet-options {
-
-                .tweet-options-icon {
-                    height: 20px;
-                    width: 20px;
-                }
-            }
-
-            .tweet-options-model {
-                display: none;
-                background-color: $color-white;
-                min-width: 300px;
-                list-style: none;
+            .retweet-options {
+                @include flexColumn;
+                align-items: center;
                 position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 100;
+                top: 10%;
+                left: 0;
+                transform: translate(-50%);
+                height: auto;
+                width: 150px;
+                background-color: rgba(255, 255, 255, 1.00);
                 box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
+                display: none;
 
-                .tweet-options-model-item {
-                    transition: all 500ms ease-in-out;
-                    padding: 0.3rem 0.2rem;
-                    @include flexCenter;
+                .retweet-btn,
+                .quote-btn {
+                    background-color: transparent;
+                    margin: 0;
+                    padding: 0;
 
-                    .tweet-options-model-icon {
-                        font-size: 1rem;
-                        color: #536471;
-                        margin-left: 0.5rem;
-                        height: 20px;
-                        width: 20px;
-                        @include flexJustifyCenter;
-                    }
-
-                    .danger-icon {
-                        color: $color-red;
-                    }
-
-                    .icon-4 {
-                        transform: rotateY(180deg);
-                    }
-
-                    &:hover {
-                        background-color: $color-grey-2;
-                    }
                 }
 
-                .tweet-options-model-btn {
-                    background-color: transparent;
-                    justify-content: unset;
-                    color: $color-black-2;
-                    align-items: unset;
-                    padding: 0.5rem 0.7rem;
-                    font-size: 15px;
-                    @include for-phone-only-500{
-                        font-size: 12px;
-                    }
+                .quote-btn {
+                    cursor: not-allowed;
+
                 }
             }
 
             .show {
                 display: block;
             }
+
+            .retweet-options-child {
+                @include flexCenter;
+                transition: all 500ms ease-in-out;
+                width: 100%;
+                padding: 0.5rem 1rem;
+
+                &:hover {
+                    background-color: $color-grey-2;
+                }
+
+                .fa-pencil-alt {
+                    font-size: 16px;
+                    color: $color-grey-1;
+                }
+            }
+
+            .tweet-actions-child {
+                cursor: pointer;
+                flex: 1;
+
+                @include for-phone-only-500 {
+                    margin-right: 1rem;
+                }
+
+                &:hover .tweet-comment-count {
+                    color: $color-secondary;
+                }
+
+                .tweet-icon {
+                    @include flexJustifyCenter;
+                    color: $color-black-secondary;
+                    margin-right: 0.5rem;
+                    font-size: 1.2rem;
+                    transition: all 500ms ease-in-out;
+                    border-radius: 100%;
+
+                    .tweet-icon-wrap {
+                        padding: 0;
+                        background-color: transparent;
+                        font-size: 1.4rem;
+                    }
+                }
+
+                .tweet-comment-count {
+                    color: $color-black-secondary;
+                }
+
+                .like-icon {
+                    transition: all 500ms ease-in-out;
+
+                    @keyframes pulse {
+                        0% {
+                            transform: scale(1);
+                        }
+
+                        50% {
+                            transform: scale(1.3);
+                        }
+
+                        80% {
+                            transform: scale(0.8);
+                        }
+
+                        100% {
+                            transform: scale(1);
+                        }
+                    }
+
+                    .liked {
+                        color: $color-red;
+                        animation-name: pulse;
+                        animation-duration: 0.3s;
+                        animation-iteration-count: 1;
+                    }
+
+
+                }
+            }
+        }
+
+        .save-tweet-options {
+            .tweet-options-container {
+                position: relative;
+                margin-left: auto;
+
+                .tweet-options-btn {
+                    padding: 0;
+                    background-color: transparent;
+                    font-size: 1.4rem;
+                }
+
+                .tweet-options {
+
+                    .tweet-options-icon {
+                        height: 20px;
+                        width: 20px;
+                    }
+                }
+
+                .tweet-options-model {
+                    display: none;
+                    background-color: $color-white;
+                    min-width: 300px;
+                    list-style: none;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    z-index: 100;
+                    box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
+
+                    .tweet-options-model-item {
+                        transition: all 500ms ease-in-out;
+                        padding: 0.3rem 0.2rem;
+                        @include flexCenter;
+
+                        .tweet-options-model-icon {
+                            font-size: 1rem;
+                            color: #536471;
+                            margin-left: 0.5rem;
+                            height: 20px;
+                            width: 20px;
+                            @include flexJustifyCenter;
+                        }
+
+                        .danger-icon {
+                            color: $color-red;
+                        }
+
+                        .icon-4 {
+                            transform: rotateY(180deg);
+                        }
+
+                        &:hover {
+                            background-color: $color-grey-2;
+                        }
+                    }
+
+                    .tweet-options-model-btn {
+                        background-color: transparent;
+                        justify-content: unset;
+                        color: $color-black-2;
+                        align-items: unset;
+                        padding: 0.5rem 0.7rem;
+                        font-size: 15px;
+
+                        @include for-phone-only-500 {
+                            font-size: 12px;
+                        }
+                    }
+                }
+
+                .show {
+                    display: block;
+                }
+            }
+
         }
 
     }
 
-    }
-    .tweet-info{
+    .tweet-info {
         margin: 1rem 0;
         margin-bottom: 0;
         padding: 0.5rem;
-        border-top: 1px solid  #EFF3F4;
-        .tweet-info-link{
+        border-top: 1px solid #EFF3F4;
+
+        .tweet-info-link {
             margin-right: 1rem;
             color: $color-black-2;
             font-size: 14px;
-            &:hover{
+
+            &:hover {
                 border-bottom: 1px solid $color-black-2;
             }
         }
