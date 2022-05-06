@@ -3,10 +3,6 @@
     top: 0px;
     z-index: 100;
 
-    @include for-phone-only-500 {
-        top: 32px;
-    }
-
     .send-tweet-heading {
         display: flex;
         align-items: center;
