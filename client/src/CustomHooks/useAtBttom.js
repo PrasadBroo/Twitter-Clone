@@ -1,20 +1,25 @@
+import {
+  useEffect,
+  useState
+} from 'react';
 
-import { useEffect,useState } from 'react';
-
-export default function useAtBttom(ele) {
-  const [atBottom,setAtBotoom] = useState(false);
-  function onScroll() {    
-    if (window.pageYOffset + window.innerHeight >= document.documentElement.scrollHeight - 50) {
-        setAtBotoom(true)
-    }
-    else{
-        setAtBotoom(false)
-    }
+export default function useAtBttom() {
+  const [atBottom, setAtBotoom] = useState(false);
+  function isContentScrolledToBottom(element) {
+    const rest = element.scrollHeight - element.scrollTop;
+    return Math.abs(element.clientHeight - rest) < 1;
 }
-  useEffect(()=>{
-    
-    window.addEventListener("scroll", onScroll)
-    return ()=>window.removeEventListener("scroll", onScroll)
-  },[])
+  const handelScroll = () => {
+    if (isContentScrolledToBottom(window)) {
+      setAtBotoom(true)
+  } else {
+      setAtBotoom(false)
+    }
+  }
+  useEffect(() => {
+    window.addEventListener('scroll', handelScroll);
+
+    return ()=>window.removeEventListener('scroll',handelScroll)
+  }, [])
   return atBottom;
 }

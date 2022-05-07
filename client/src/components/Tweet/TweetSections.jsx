@@ -50,14 +50,6 @@ export default function TweetSections() {
     return () => controller.abort();
   }, [currentUser._id, dispatch]);
 
-  useEffect(()=>{
-    window.addEventListener('scroll', function() {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-         console.log("you're at the bottom of the page");
-         // Show loading spinner and make fetch request to api
-      }
-   });
-  },[])
 
   return (
     <>
