@@ -48,6 +48,7 @@ export const feedSlice = createSlice({
         },
         CLEAR_FEED_TWEETS: (state) => {
             state.feedTweets = [];
+            state.hasMoreFeedTweets = true;
         },
         FEED_TWEETS_FETCH_FAILED: (state, action) => {
             state.feedTweetsFetchingError = action.payload;
