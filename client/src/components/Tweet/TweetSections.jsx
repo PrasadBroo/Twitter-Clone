@@ -12,7 +12,7 @@ import {
   FEED_TWEETS_FETCH_SUCCESS,
   FEED_TWEETS_FETCHING_STARTED,
   FEED_TWEETS_FETCH_FAILED,
-  CLEAR_FEED_TWEETS
+  CLEAR_FEED_TWEETS,
 } from "../../store/feed/feedSlice";
 import Tweet from "./Tweet";
 import SimpleSpinner from "../Loader/SimpleSpinner";
@@ -24,7 +24,7 @@ import AllCaughtUp from "../AllCaughtUp/AllCaughtUp";
 export default function TweetSections() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const hasMore = useSelector(state => state.feed.hasMoreFeedTweets)
+  const hasMore = useSelector((state) => state.feed.hasMoreFeedTweets);
   const currentUser = selectCurrentUser(state);
   const feedTweets = useSelector((state) => state.feed.feedTweets);
   const [fetching, setFetching] = useState(true);
@@ -53,7 +53,10 @@ export default function TweetSections() {
     };
     fetchData();
 
-    return () => {controller.abort();dispatch(CLEAR_FEED_TWEETS())};
+    return () => {
+      controller.abort();
+      dispatch(CLEAR_FEED_TWEETS());
+    };
   }, [currentUser._id, dispatch]);
 
   useBottomScrollListener(async () => {
@@ -69,7 +72,7 @@ export default function TweetSections() {
         setFetchingMoreTweets(false);
       } catch (error) {
         setFetchingMoreTweets(false);
-        cogoToast.error(error.message)
+        cogoToast.error(error.message);
       }
     }
   });
@@ -92,7 +95,13 @@ export default function TweetSections() {
               <WhoToFollow headerText="Suggestion" />
             )}
             {fetching && <SimpleSpinner topCenter />}
-            {!hasMore && !fetching && <AllCaughtUp/>}
+
+            {fetchingMoreTweets && (
+              <div className="loading-more-tweets">
+                <SimpleSpinner topCenter/>
+              </div>
+            )}
+            {!hasMore && !fetching && <AllCaughtUp />}
           </div>
         </div>
         <div className="col2 sidebar searchbar-news-sections ">
