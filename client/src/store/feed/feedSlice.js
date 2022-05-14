@@ -3,7 +3,8 @@ import {
 } from "@reduxjs/toolkit";
 
 const initialState = {
-    feedTweets:null,
+    feedTweets:[],
+    hasMoreFeedTweets:true,
     tweet: {hasParentTweet:null},
     fetchingTweet: true,
     fetchingTweetError: null,
@@ -39,8 +40,14 @@ export const feedSlice = createSlice({
             state.tweetsFetching = true;
         },
         FEED_TWEETS_FETCH_SUCCESS: (state, action) => {
-            state.feedTweets = action.payload;
+            if(action.payload.length < 5){
+                state.hasMoreFeedTweets = false;
+            }
+            state.feedTweets = state.feedTweets.concat(action.payload);
             state.feedTweetsFetching = false;
+        },
+        CLEAR_FEED_TWEETS: (state) => {
+            state.feedTweets = [];
         },
         FEED_TWEETS_FETCH_FAILED: (state, action) => {
             state.feedTweetsFetchingError = action.payload;
@@ -107,6 +114,7 @@ export const {
     FEED_TWEETS_FETCHING_STARTED,
     FEED_TWEETS_FETCH_FAILED,
     FEED_TWEETS_FETCH_SUCCESS,
-    POSTING_TWEET_REPLY_SUCCESS
+    POSTING_TWEET_REPLY_SUCCESS,
+    CLEAR_FEED_TWEETS
 } = feedSlice.actions;
 export default feedSlice.reducer;

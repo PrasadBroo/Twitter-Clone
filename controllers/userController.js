@@ -1372,6 +1372,7 @@ module.exports.getUserMediaTweets = async (req, res, next) => {
 }
 module.exports.getUserFeedTweets = async (req, res, next) => {
     const userid = req.params.userid;
+    const {offset} = req.body;
     const currentUser = res.locals.user;
     try {
         if (!userid) {
@@ -1473,12 +1474,15 @@ module.exports.getUserFeedTweets = async (req, res, next) => {
                 }
             },
             {
-                $project: {
-                    userFollowers: 0,
-                }
+                $skip:offset
             },
             {
                 $limit: 5
+            },
+            {
+                $project: {
+                    userFollowers: 0,
+                }
             },
             {
                 $lookup: {

@@ -129,10 +129,10 @@ export const fetchTheUserMediaTweets = async (userid) => {
   }
 }
 
-export const fetchUserFeedTweets = async (userid,signal) => {
+export const fetchUserFeedTweets = async (userid,offset=0,signal) => {
   
   try {
-      const response = await axios.post(`/api/user/${userid}/tweets/feed`, null, {
+      const response = await axios.post(`/api/user/${userid}/tweets/feed`, {offset}, {
         signal:signal,
           headers: {
               authorization: localStorage.getItem('token'),

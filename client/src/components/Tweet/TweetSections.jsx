@@ -1,4 +1,4 @@
-import React, { useEffect,  useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import News from "../News/News";
 import Searchbar from "../Searchbar/Searchbar";
@@ -12,18 +12,23 @@ import {
   FEED_TWEETS_FETCH_SUCCESS,
   FEED_TWEETS_FETCHING_STARTED,
   FEED_TWEETS_FETCH_FAILED,
+  CLEAR_FEED_TWEETS
 } from "../../store/feed/feedSlice";
 import Tweet from "./Tweet";
 import SimpleSpinner from "../Loader/SimpleSpinner";
 import useWindowSize from "../../CustomHooks/useWindowSize";
-
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import cogoToast from "cogo-toast";
+import AllCaughtUp from "../AllCaughtUp/AllCaughtUp";
 
 export default function TweetSections() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
+  const hasMore = useSelector(state => state.feed.hasMoreFeedTweets)
   const currentUser = selectCurrentUser(state);
   const feedTweets = useSelector((state) => state.feed.feedTweets);
   const [fetching, setFetching] = useState(true);
+  const [fetchingMoreTweets, setFetchingMoreTweets] = useState(false);
   const { width } = useWindowSize();
   useEffect(() => {
     document.title = `Home / Twitter`;
@@ -36,6 +41,7 @@ export default function TweetSections() {
         dispatch(FEED_TWEETS_FETCHING_STARTED());
         const tweets = await fetchUserFeedTweets(
           currentUser._id,
+          0,
           controller.signal
         );
         dispatch(FEED_TWEETS_FETCH_SUCCESS(tweets));
@@ -47,32 +53,49 @@ export default function TweetSections() {
     };
     fetchData();
 
-    return () => controller.abort();
+    return () => {controller.abort();dispatch(CLEAR_FEED_TWEETS())};
   }, [currentUser._id, dispatch]);
 
-
+  useBottomScrollListener(async () => {
+    if (!fetchingMoreTweets && hasMore) {
+      try {
+        setFetchingMoreTweets(true);
+        dispatch(FEED_TWEETS_FETCHING_STARTED());
+        const tweets = await fetchUserFeedTweets(
+          currentUser._id,
+          feedTweets.length
+        );
+        dispatch(FEED_TWEETS_FETCH_SUCCESS(tweets));
+        setFetchingMoreTweets(false);
+      } catch (error) {
+        setFetchingMoreTweets(false);
+        cogoToast.error(error.message)
+      }
+    }
+  });
   return (
     <>
-      <div className="tweets-search-news-sections two-flex-col-container" >
+      <div className="tweets-search-news-sections two-flex-col-container">
         <div className="col1 tweet-sections container wrap-input-tweets ">
           <SendTweetHeader />
           <div className="tweet-input-container">
             {width > 500 && <SendTweet />}
           </div>
           {/* all magic happens here */}
-          <div className="tweets" >
+          <div className="tweets">
             {!fetching &&
               feedTweets.length !== 0 &&
               feedTweets.map((tweet) => (
-                <Tweet tweet={tweet}  key={tweet._id} />
+                <Tweet tweet={tweet} key={tweet._id} />
               ))}
             {!fetching && feedTweets.length === 0 && (
               <WhoToFollow headerText="Suggestion" />
             )}
             {fetching && <SimpleSpinner topCenter />}
+            {!hasMore && !fetching && <AllCaughtUp/>}
           </div>
         </div>
-        <div className="col2 sidebar searchbar-news-sections " >
+        <div className="col2 sidebar searchbar-news-sections ">
           <div className="searchbar-news-sections-wrap">
             <Searchbar />
             <News />
