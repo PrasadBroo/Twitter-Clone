@@ -60,9 +60,7 @@ export default function ExplorePage() {
           
         </div>
         <div
-          className="col2 follow-sugg-news-container"
-          style={{ maxWidth: "350px" }}
-        >
+          className="col2 follow-sugg-news-container">
           <WhoToFollow />
         </div>
       </div>

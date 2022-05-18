@@ -4,7 +4,6 @@ import Searchbar from "../components/Searchbar/Searchbar";
 import WhoToFollow from "../components/WhoToFollow/WhoToFollow";
 import { useSearchParams } from "react-router-dom";
 import SearchTop from "../subcomponents/SearchTop";
-import Tweets from "../components/Tweet/Tweets";
 import SearchLatest from './../subcomponents/SearchLatest';
 import SearchPeoples from './../subcomponents/SearchPeoples';
 import SearchImages from "../subcomponents/SearchImages";
@@ -23,7 +22,7 @@ export default function SearchPage() {
   const handelRenderComp = () => {
     switch (componentToRender) {
       case "trend":
-        return <Tweets />;
+        return <SearchTop />;
       case "live":
         return <SearchLatest />;
       case "users":
@@ -33,15 +32,15 @@ export default function SearchPage() {
       case "videos":
         return <SearchVideos />;
       default:
-        <SearchTop />;
+        return <SearchTop />;
     }
   };
   return (
     <>
-      <div className="explorepage two-flex-col-container">
+      <div className="explorepage two-flex-col-container searchpage">
         <div className="col1 explorepage-col1">
           <div className="top-header">
-            <Searchbar className="explorepage-searchbar" />
+            <Searchbar className="explorepage-searchbar" searchtext={searchParams.get("q")}/>
             <div className="icon-conatiner">
               <i className="far fa-gear"></i>
             </div>

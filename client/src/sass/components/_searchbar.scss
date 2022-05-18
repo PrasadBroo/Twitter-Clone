@@ -25,7 +25,7 @@
                 height: 100%;
                 background-color: transparent;
                 width: 100%;
-
+                color: $color-black-2;
                 &::placeholder {
                     font-size: 1rem;
                 }
@@ -43,6 +43,19 @@
                 right: 0;
                 min-height: 100px;
                 box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px, rgb(101 119 134 / 15%) 0px 0px 3px 1px;
+
+                .custom-search{
+                    padding: 0.5rem;
+                    @include flexCenter;
+                    .icon-container{
+                        color: $color-grey-2;
+                        font-size: 1.3rem;
+                        margin-right: 1rem;
+                    }
+                    .custom-search-text{
+                        cursor: pointer;
+                    }
+                }
                 .no-users-found{
                     @include flexJustifyCenter;
                     color: $color-black;

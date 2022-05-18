@@ -1,7 +1,9 @@
-import React from 'react'
+import React from "react";
 
 export default function SearchVideos() {
   return (
-    <div>SearchVideos</div>
-  )
+    <div>
+      <h2>Coming Soon</h2>
+    </div>
+  );
 }

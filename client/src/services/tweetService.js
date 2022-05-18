@@ -96,3 +96,19 @@ export const  deleteTheRetweet = async(tweetid)=>{
         throw new Error(error.response.data.error);
     }
 }
+
+export const  searchTweets = async(query,filter)=>{
+    try {
+        const response = await axios.post(`/api/search/tweets/`,{
+            query,
+            filter
+        } , {
+            headers: {
+                authorization: localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error);
+    }
+}

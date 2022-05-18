@@ -19,6 +19,7 @@
         display: none;
         margin-left: 1rem;
         width: 45%;
+        max-width: 350px;
         @include for-tablet-landscape-up{
             display: block;
         }
