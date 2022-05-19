@@ -1,27 +1,24 @@
 import React from "react";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import {  useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { githubSignInStart } from "../../store/user/userActions";
 
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
+
 export default function GithubAuthPage() {
-  const is_fetching = useSelector(state => state.user.fetching)
-  const user = useSelector(state => state.user.currentUser)
-  const query = useQuery();
-  const code = query.get("code");
+  const error = useSelector(state => state.user.signInFail)
+  const [searchParams] = useSearchParams();
+  const code = searchParams.get("code");
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(!is_fetching && !user)dispatch(githubSignInStart(code));
-    
-
-  }, [code, dispatch,is_fetching,user]);
+    dispatch(githubSignInStart(code));
+  
+  }, [code, dispatch]);
   return (
     <div>
-      <h1>Redirecting...</h1>
+      {!error && <h1>Redirecting...</h1>}
+      {error && <h2>{error}</h2>}
     </div>
   );
 }

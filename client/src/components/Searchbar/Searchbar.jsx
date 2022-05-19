@@ -5,7 +5,7 @@ import FollowUser from "../FollowUser/FollowUser";
 import SimpleSpinner from "../Loader/SimpleSpinner";
 import useComponentVisible from "./../../CustomHooks/useComponentVisible";
 
-export default function Searchbar({ className,searchtext }) {
+ function Searchbar({ className,searchtext }) {
   const [searchText, setSearchText] = useState(searchtext || '');
   const [users, setUsers] = useState([]);
   const [fetching, setFetching] = useState(false);
@@ -17,9 +17,9 @@ export default function Searchbar({ className,searchtext }) {
   } = useComponentVisible(false);
   useEffect(() => {
     try {
-      setFetching(true);
-      setResultVisible(true)
       async function fetchUsers() {
+        setFetching(true);
+      setResultVisible(true)
         const users = await searchUsers(searchText);
         setUsers(users);
         setFetching(false);
@@ -33,6 +33,7 @@ export default function Searchbar({ className,searchtext }) {
     }
   }, [searchText, setResultVisible]);
 
+  
   return (
     <div className={"searchbar " + className} >
       <label htmlFor="search-input" className="search-input-label">
@@ -75,3 +76,5 @@ export default function Searchbar({ className,searchtext }) {
     </div>
   );
 }
+
+export default React.memo(Searchbar)

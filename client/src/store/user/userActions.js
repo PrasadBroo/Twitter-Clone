@@ -62,26 +62,20 @@ import cogoToast from 'cogo-toast';
 
 export const googleSignInStart = (code) => async (dispatch) => {
     try {
-        dispatch(FETCHING_STARTED())
         const user = await googleAuthentication(code);
         dispatch(SIGN_IN_SUCCESS(user))
         localStorage.setItem('token', user.token);
-        dispatch(FETCHING_FINISHED())
     } catch (error) {
-        dispatch(FETCHING_FINISHED())
         dispatch(SIGN_IN_FAIL(error.message))
     }
 }
 
 export const githubSignInStart = (code) => async (dispatch) => {
     try {
-        dispatch(FETCHING_STARTED())
         const user = await githubAuthentication(code);
         dispatch(SIGN_IN_SUCCESS(user))
         localStorage.setItem('token', user.token);
-        dispatch(FETCHING_FINISHED())
     } catch (error) {
-        dispatch(FETCHING_FINISHED())
         dispatch(SIGN_IN_FAIL(error.message))
     }
 }

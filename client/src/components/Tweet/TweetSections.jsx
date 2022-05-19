@@ -20,6 +20,7 @@ import useWindowSize from "../../CustomHooks/useWindowSize";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import cogoToast from "cogo-toast";
 import AllCaughtUp from "../AllCaughtUp/AllCaughtUp";
+import { defaultOffset } from "../../CONSTANTS";
 
 export default function TweetSections() {
   const dispatch = useDispatch();
@@ -75,7 +76,7 @@ export default function TweetSections() {
         cogoToast.error(error.message);
       }
     }
-  });
+  },{offset:defaultOffset});
   return (
     <>
       <div className="tweets-search-news-sections two-flex-col-container">
