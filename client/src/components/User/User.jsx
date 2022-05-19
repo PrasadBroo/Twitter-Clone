@@ -210,6 +210,7 @@ export default function User() {
                     to="tweets"
                   >
                     Tweets
+                    <span className="custom-border-bottom"></span>
                   </NavLink>
                   <NavLink
                     className={({ isActive }) =>
@@ -218,6 +219,7 @@ export default function User() {
                     to="with_replies"
                   >
                     Tweets & replies
+                    <span className="custom-border-bottom"></span>
                   </NavLink>
                   <NavLink
                     className={({ isActive }) =>
@@ -226,6 +228,7 @@ export default function User() {
                     to="media"
                   >
                     Media
+                    <span className="custom-border-bottom"></span>
                   </NavLink>
                   <NavLink
                     className={({ isActive }) =>
@@ -234,6 +237,7 @@ export default function User() {
                     to="likes"
                   >
                     Likes
+                    <span className="custom-border-bottom"></span>
                   </NavLink>
                 </ul>
               </div>
