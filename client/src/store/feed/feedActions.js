@@ -23,10 +23,13 @@ import {
 } from "./feedSlice"
 import cogoToast from 'cogo-toast';
 
-export const fetchUserTweets = (userid) => async (dispatch) => {
+export const fetchUserTweets = (userid,offset) => async (dispatch) => {
     try {
-        dispatch(TWEETS_FETCHING_STARTED())
-        const tweets = await fetchTheUserTweets(userid);
+        if(!offset){
+            dispatch(TWEETS_FETCHING_STARTED())
+        }
+        
+        const tweets = await fetchTheUserTweets(userid,offset);
         dispatch(TWEETS_FETCH_SUCCESS(tweets))
     } catch (error) {
         cogoToast.error(error.message)
@@ -35,10 +38,13 @@ export const fetchUserTweets = (userid) => async (dispatch) => {
     }
 }
 
-export const fetchUserLikedTweets = (userid) => async (dispatch) => {
+export const fetchUserLikedTweets = (userid,offset) => async (dispatch) => {
     try {
-        dispatch(LIKED_TWEETS_FETCHING_STARTED())
-        const tweets = await fetchTheUserLikedTweets(userid);
+        if(!offset){
+            dispatch(LIKED_TWEETS_FETCHING_STARTED())
+        }
+        
+        const tweets = await fetchTheUserLikedTweets(userid,offset);
         dispatch(LIKED_TWEETS_FETCH_SUCCESS(tweets))
     } catch (error) {
         cogoToast.error(error.message)
@@ -47,10 +53,13 @@ export const fetchUserLikedTweets = (userid) => async (dispatch) => {
     }
 }
 
-export const fetchUserMediaTweets = (userid) => async (dispatch) => {
+export const fetchUserMediaTweets = (userid,offset) => async (dispatch) => {
     try {
-        dispatch(MEDIA_TWEETS_FETCHING_STARTED())
-        const tweets = await fetchTheUserMediaTweets(userid);
+        if(!offset){
+            dispatch(MEDIA_TWEETS_FETCHING_STARTED())
+        }
+        
+        const tweets = await fetchTheUserMediaTweets(userid,offset);
         dispatch(MEDIA_TWEETS_FETCH_SUCCESS(tweets))
     } catch (error) {
         cogoToast.error(error.message)

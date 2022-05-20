@@ -579,11 +579,17 @@ module.exports.getFollowings = async (req, res, next) => {
 module.exports.getUserTweets = async (req, res, next) => {
     const userid = req.params.userid;
     const currentUser = res.locals.user;
+    let {
+        offset
+    } = req.body;
     try {
         if (!userid) {
             return res.status(400).send({
                 error: 'Please provide userid'
             })
+        }
+        if (isNaN(offset)) {
+            offset = 0
         }
         const pipeline = [{
             $facet: {
@@ -604,6 +610,9 @@ module.exports.getUserTweets = async (req, res, next) => {
                     },
                     {
                         $unwind: '$user'
+                    },
+                    {
+                        $skip: offset
                     },
                     {
                         $limit: 5,
@@ -790,7 +799,10 @@ module.exports.getUserTweets = async (req, res, next) => {
                 }
             },
             {
-                $limit: 10,
+                $skip: parseInt(offset / 2)
+            },
+            {
+                $limit: 5,
             },
             {
                 $lookup: {
@@ -1002,11 +1014,17 @@ module.exports.getUserTweets = async (req, res, next) => {
 module.exports.getUserLikedTweets = async (req, res, next) => {
     const userid = req.params.userid;
     const currentUser = res.locals.user;
+    let {
+        offset
+    } = req.body;
     try {
         if (!userid) {
             return res.status(400).send({
                 error: 'Please provide userid'
             })
+        }
+        if (isNaN(offset)) {
+            offset = 0
         }
         const pipeline = [{
                 $facet: {
@@ -1019,8 +1037,11 @@ module.exports.getUserLikedTweets = async (req, res, next) => {
                                 }
                             }
                         }, {
-                            $limit:5
-                        },{
+                            $skip: offset
+                        },
+                        {
+                            $limit: 5
+                        }, {
                             $lookup: {
                                 from: 'tweets',
                                 localField: 'tweet',
@@ -1173,11 +1194,17 @@ module.exports.getUserLikedTweets = async (req, res, next) => {
 module.exports.getUserMediaTweets = async (req, res, next) => {
     const userid = req.params.userid;
     const currentUser = res.locals.user;
+    let {
+        offset
+    } = req.body;
     try {
         if (!userid) {
             return res.status(400).send({
                 error: 'Please provide userid'
             })
+        }
+        if (isNaN(offset)) {
+            offset = 0
         }
         const pipeline = [{
                 $facet: {
@@ -1190,8 +1217,11 @@ module.exports.getUserMediaTweets = async (req, res, next) => {
                             }
                         },
                         {
-                            $limit:5
-                        } ,
+                            $skip:offset
+                        },
+                        {
+                            $limit: 5
+                        },
                         {
                             $lookup: {
                                 from: 'users',
@@ -1372,13 +1402,18 @@ module.exports.getUserMediaTweets = async (req, res, next) => {
 }
 module.exports.getUserFeedTweets = async (req, res, next) => {
     const userid = req.params.userid;
-    const {offset} = req.body;
+    let {
+        offset
+    } = req.body;
     const currentUser = res.locals.user;
     try {
         if (!userid) {
             return res.status(400).send({
                 error: 'Please provide userid'
             })
+        }
+        if (isNaN(offset)) {
+            offset = 0
         }
         const pipeline = [{
                 $lookup: {
@@ -1474,7 +1509,7 @@ module.exports.getUserFeedTweets = async (req, res, next) => {
                 }
             },
             {
-                $skip:offset
+                $skip: offset
             },
             {
                 $limit: 5
@@ -1605,7 +1640,9 @@ module.exports.getUsersSuggetions = async (req, res, next) => {
     const currentUser = res.locals.user;
     try {
         const pipeline = [{
-                $sample: {size:4}
+                $sample: {
+                    size: 4
+                }
             },
             {
                 $project: {
@@ -1666,28 +1703,42 @@ module.exports.getUsersSuggetions = async (req, res, next) => {
         next(error)
     }
 }
-module.exports.searchUsers = async(req,res,next)=>{
-    const {term} = req.body;
+module.exports.searchUsers = async (req, res, next) => {
+    const {
+        term
+    } = req.body;
     const currentUser = res.locals.user;
+    let {
+        offset
+    } = req.body;
     try {
-        if(!term){
-            return res.status(400).send({error:'No search provided'})
+        if (!term) {
+            return res.status(400).send({
+                error: 'No search provided'
+            })
         }
-        const pipeline  = [
-            {
+        if (isNaN(offset)) {
+            offset = 0
+        }
+        const pipeline = [{
                 $match: {
-                    username: { $regex: new RegExp(term) },
-                  },
+                    username: {
+                        $regex: new RegExp(term)
+                    },
+                },
             },
             {
-                $limit:4
+                $skip:offset
             },
             {
-                $project:{
-                    username:1,
-                    fullName:1,
-                    avatar:1,
-                    isVerified:1
+                $limit: 4
+            },
+            {
+                $project: {
+                    username: 1,
+                    fullName: 1,
+                    avatar: 1,
+                    isVerified: 1
                 }
             },
             {

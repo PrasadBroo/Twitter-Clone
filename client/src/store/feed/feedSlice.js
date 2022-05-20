@@ -8,10 +8,13 @@ const initialState = {
     tweet: {hasParentTweet:null},
     fetchingTweet: true,
     fetchingTweetError: null,
-    likedTweets: null,
-    mediaTweets: null,
+    likedTweets: [],
+    mediaTweets: [],
     feedTweetsFetching:true,
-    tweets: null,
+    hasMoreUserTweets:true,
+    hasMoreMediaTweets:true,
+    hasMoreLikesTweets:true,
+    tweets: [],
     tweetsCount: null,
     tweetsFetching: true,
     likedTweetFetching: true,
@@ -28,7 +31,10 @@ export const feedSlice = createSlice({
     initialState,
     reducers: {
         TWEETS_FETCH_SUCCESS: (state, action) => {
-            state.tweets = action.payload.tweets;
+            if(action.payload.tweets.length < 5){
+                state.hasMoreUserTweets = false;
+            }
+            state.tweets = state.tweets.concat(action.payload.tweets);
             state.tweetsCount = action.payload.count;
             state.tweetsFetching = false;
         },
@@ -50,6 +56,10 @@ export const feedSlice = createSlice({
             state.feedTweets = [];
             state.hasMoreFeedTweets = true;
         },
+        CLEAR_USER_TWEETS: (state) => {
+            state.tweets = [];
+            state.hasMoreUserTweets = true;
+        },
         FEED_TWEETS_FETCH_FAILED: (state, action) => {
             state.feedTweetsFetchingError = action.payload;
             state.feedTweetsFetching = false;
@@ -58,7 +68,10 @@ export const feedSlice = createSlice({
             state.feedTweetsFetching = true;
         },
         LIKED_TWEETS_FETCH_SUCCESS: (state, action) => {
-            state.likedTweets = action.payload.tweets;
+            if(action.payload.tweets.length < 5){
+                state.hasMoreLikesTweets = false;
+            }
+            state.likedTweets = state.likedTweets.concat(action.payload.tweets);
             state.tweetsCount = action.payload.count;
             state.likedTweetFetching = false;
         },
@@ -70,7 +83,10 @@ export const feedSlice = createSlice({
             state.likedTweetFetching = true;
         },
         MEDIA_TWEETS_FETCH_SUCCESS: (state, action) => {
-            state.mediaTweets = action.payload.tweets;
+            if(action.payload.tweets.length < 5){
+                state.hasMoreMediaTweets = false;
+            }
+            state.mediaTweets = state.mediaTweets.concat(action.payload.tweets);
             state.tweetsCount = action.payload.count;
             state.mediaTweetsFetching = false;
         },
@@ -116,6 +132,8 @@ export const {
     FEED_TWEETS_FETCH_FAILED,
     FEED_TWEETS_FETCH_SUCCESS,
     POSTING_TWEET_REPLY_SUCCESS,
-    CLEAR_FEED_TWEETS
+    CLEAR_FEED_TWEETS,
+    CLEAR_USER_TWEETS
 } = feedSlice.actions;
 export default feedSlice.reducer;
+

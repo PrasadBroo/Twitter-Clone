@@ -64,9 +64,9 @@ export const unfollowUser = async (userId) => {
   }
 };
 
-export const getUserFollowers = async (userId) => {
+export const getUserFollowers = async (userId,offset=0) => {
   try {
-    const response = await axios.post(`/api/user/${userId}/followers`, null, {
+    const response = await axios.post(`/api/user/${userId}/followers`, {offset}, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
@@ -77,9 +77,9 @@ export const getUserFollowers = async (userId) => {
   }
 };
 
-export const getUserFollowings = async (userId) => {
+export const getUserFollowings = async (userId,offset=0) => {
   try {
-    const response = await axios.post(`/api/user/${userId}/followings`, null, {
+    const response = await axios.post(`/api/user/${userId}/followings`, {offset}, {
       headers: {
         authorization: localStorage.getItem('token'),
       },
@@ -90,9 +90,9 @@ export const getUserFollowings = async (userId) => {
   }
 };
 
-export const fetchTheUserTweets = async (userid) => {
+export const fetchTheUserTweets = async (userid,offset=0) => {
   try {
-      const response = await axios.post(`/api/user/${userid}/tweets`, null, {
+      const response = await axios.post(`/api/user/${userid}/tweets`, {offset}, {
           headers: {
               authorization: localStorage.getItem('token'),
           },
@@ -103,9 +103,9 @@ export const fetchTheUserTweets = async (userid) => {
   }
 }
 
-export const fetchTheUserLikedTweets = async (userid) => {
+export const fetchTheUserLikedTweets = async (userid,offset=0) => {
   try {
-      const response = await axios.post(`/api/user/${userid}/tweets/liked`, null, {
+      const response = await axios.post(`/api/user/${userid}/tweets/liked`, {offset}, {
           headers: {
               authorization: localStorage.getItem('token'),
           },
@@ -116,9 +116,9 @@ export const fetchTheUserLikedTweets = async (userid) => {
   }
 }
 
-export const fetchTheUserMediaTweets = async (userid) => {
+export const fetchTheUserMediaTweets = async (userid,offset=0) => {
   try {
-      const response = await axios.post(`/api/user/${userid}/tweets/media`, null, {
+      const response = await axios.post(`/api/user/${userid}/tweets/media`, {offset}, {
           headers: {
               authorization: localStorage.getItem('token'),
           },
