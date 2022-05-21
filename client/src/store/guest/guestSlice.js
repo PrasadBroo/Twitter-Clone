@@ -43,7 +43,7 @@ export const guestSlice = createSlice({
             state.fetchingFollowings = true;
         },
         FETCHING_FOLLOWERS_SUCCESS:(state,action)=>{
-            if(action.payload.users.length <5){
+            if(action.payload.users.length < 20){
                 state.hasMoreFollowers = false;
             }
             state.followers.users = state.followers.users.concat(action.payload.users);
@@ -51,7 +51,7 @@ export const guestSlice = createSlice({
             state.fetchingFollowers = false;
         },
         FETCHING_FOLLOWINGS_SUCCESS:(state,action)=>{
-            if(action.payload.users.length <5){
+            if(action.payload.users.length < 20){
                 state.hasMoreFollowings = false;
             }
             state.followings.users = state.followings.users.concat(action.payload.users);

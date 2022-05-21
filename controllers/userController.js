@@ -376,7 +376,7 @@ module.exports.getFollowers = async (req, res, next) => {
                                         $skip:offset
                                     },
                                     {
-                                        $limit: 5
+                                        $limit: 20
                                     }
                                 ],
                                 as: 'users',
@@ -513,7 +513,7 @@ module.exports.getFollowings = async (req, res, next) => {
                                         $skip:offset
                                     },
                                     {
-                                        $limit: 5
+                                        $limit: 20
                                     }
                                 ],
                                 as: 'users',
