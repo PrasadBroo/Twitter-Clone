@@ -10,7 +10,7 @@ import { fetchUserLikedTweets } from "../../store/feed/feedActions";
 import { selectIsLikedTweetsFetching, selectUserLikedTweets } from "../../store/feed/feedSelector";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { fetchTheUserLikedTweets } from "../../services/userServices";
-import { LIKED_TWEETS_FETCH_SUCCESS } from "../../store/feed/feedSlice";
+import { CLEAR_LIKED_TWEETS, LIKED_TWEETS_FETCH_SUCCESS } from "../../store/feed/feedSlice";
 import cogoToast from "cogo-toast";
 import AllCaughtUp from "../AllCaughtUp/AllCaughtUp";
 
@@ -25,10 +25,11 @@ export default function LikedTweets() {
   useEffect(() => {
     // dispatch fetch tweets action
     dispatch(fetchUserLikedTweets(guestUser._id));
+    return ()=>dispatch(CLEAR_LIKED_TWEETS())
   }, [dispatch, guestUser._id]);
 
   useBottomScrollListener(async () => {
-    if (fetchingMoreTweets  || !hasMore) return
+    if (fetchingMoreTweets || fetching  || !hasMore) return
       try {
         setFetchingMoreTweets(true);
         const result = await fetchTheUserLikedTweets(guestUser._id,tweets.length);

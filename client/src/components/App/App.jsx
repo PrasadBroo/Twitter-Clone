@@ -17,7 +17,6 @@ import BookmarksPage from "../../Pages/BookmarksPage";
 import ExplorePage from "./../../Pages/ExplorePage";
 import TweetSections from "../Tweet/TweetSections";
 import User from "../User/User";
-import UserTweets from "../User/UserTweets";
 import FollowPage from "./../../Pages/FollowPage";
 import Following from "../Followings/Following";
 import Followers from "../Followers/Followers";
@@ -30,6 +29,7 @@ import ComposeTweetPage from "./../../Pages/ComposeTweetPage";
 import Tweetpage from "../../Pages/Tweetpage";
 import ExploreForYou from "../../subcomponents/ExploreForYou";
 import SearchPage from "../../Pages/SearchPage";
+import Tweets from "../Tweet/Tweets";
 
 function App() {
   const state = useSelector((state) => state);
@@ -61,9 +61,9 @@ function App() {
           </Route>
           <Route path="/:username/*" element={<HomepageLayout />}>
             <Route path="status/:tweetid" element={<Tweetpage />} />
-            <Route path="*" element={<User />}>
-              <Route index element={<UserTweets />} />
-              <Route path="tweets" element={<UserTweets />} />
+            <Route path="" element={<User />}>
+              <Route index element={<Tweets />} />
+              <Route path="tweets" element={<Tweets />} />
               <Route path="likes" element={<LikedTweets />} />
               <Route path="media" element={<MediaTweets />} />
               <Route path="with_replies" element={<h1>Coming Soon</h1>} />

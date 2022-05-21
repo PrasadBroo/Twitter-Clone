@@ -27,6 +27,7 @@ import Linkify from "linkify-react";
 import "linkify-plugin-hashtag";
 import "linkify-plugin-mention";
 import NotFound from "../NotFound/NotFound";
+import { CLEAR_GUEST_USER } from "../../store/guest/guestSlice";
 
 const options = {
   className: () => "default-link",
@@ -57,6 +58,7 @@ export default function User() {
   const [backgroundImageLoaded, SetBackgroundImageLoaded] = useState(false);
   const [profileImageLoaded, SetProfileImageLoaded] = useState(false);
   const [followingText, setFollowingText] = useState("Following");
+
   useEffect(()=>{
     document.title = `${currentUser.fullName} (@${currentUser.username}) / Twitter`
   },[currentUser.fullName,currentUser.username])
@@ -67,6 +69,7 @@ export default function User() {
       // handel success fail
     };
     retriveUser(username);
+    return ()=> dispatch(CLEAR_GUEST_USER())
   }, [username, dispatch]);
 
   return (

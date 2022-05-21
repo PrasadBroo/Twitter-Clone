@@ -31,14 +31,14 @@ export default function Tweets() {
 
 
   useBottomScrollListener(async () => {
-    if (fetchingMoreTweets  || !hasMore) return
+    if (fetchingMoreTweets || fetching  || !hasMore) return
       try {
-        setFetchingMoreTweets(prevState => !prevState);
+        setFetchingMoreTweets(true);
         const result = await fetchTheUserTweets(guestUser._id,tweets.length);
         dispatch(TWEETS_FETCH_SUCCESS(result))
-        setFetchingMoreTweets(prevState => !prevState);
+        setFetchingMoreTweets(false);
       } catch (error) {
-        setFetchingMoreTweets(prevState => !prevState);
+        setFetchingMoreTweets(false);
         cogoToast.error(error.message);
       }
     

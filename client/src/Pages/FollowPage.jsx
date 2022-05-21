@@ -7,11 +7,17 @@ import UserHeader from "../components/User/UserHeader";
 import WhoToFollow from "../components/WhoToFollow/WhoToFollow";
 import { getFollowers,getFollowings } from "../store/guest/guestActions";
 import { selectGuestUser } from "../store/guest/guestSelector";
+import { CLEAR_FOLLOWINGS,CLEAR_FOLLOWERS } from "../store/guest/guestSlice";
 
 export default function FollowPage() {
   const state = useSelector((state) => state);
   let guestUser = selectGuestUser(state);
   const dispatch = useDispatch();
+
+  useEffect(()=>{
+    return ()=> {dispatch(CLEAR_FOLLOWERS());dispatch(CLEAR_FOLLOWINGS())}
+  },[dispatch])
+
   useEffect(() => {
     dispatch(getFollowers(guestUser._id));
     dispatch(getFollowings(guestUser._id))

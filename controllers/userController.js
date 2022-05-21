@@ -338,11 +338,17 @@ module.exports.unfollowUser = async (req, res, next) => {
 module.exports.getFollowers = async (req, res, next) => {
     const userid = req.params.userid;
     const currentUser = res.locals.user;
+    let {
+        offset
+    } = req.body;
     try {
         if (!userid) {
             return res.status(400).send({
                 error: 'Please provide userid'
             })
+        }
+        if (isNaN(offset)) {
+            offset = 0
         }
         const pipeline = [{
                 $facet: {
@@ -365,6 +371,9 @@ module.exports.getFollowers = async (req, res, next) => {
                                                 $in: ['$_id', '$$userId']
                                             },
                                         },
+                                    },
+                                    {
+                                        $skip:offset
                                     },
                                     {
                                         $limit: 5
@@ -392,6 +401,7 @@ module.exports.getFollowers = async (req, res, next) => {
                                 'users.username': 1,
                                 'users.avatar': 1,
                                 'users.fullName': 1,
+                                'users.isVerified':1,
                             },
                         },
 
@@ -465,11 +475,17 @@ module.exports.getFollowers = async (req, res, next) => {
 module.exports.getFollowings = async (req, res, next) => {
     const userid = req.params.userid;
     const currentUser = res.locals.user;
+    let {
+        offset
+    } = req.body;
     try {
         if (!userid) {
             return res.status(400).send({
                 error: 'Please provide userid'
             })
+        }
+        if (isNaN(offset)) {
+            offset = 0
         }
         const pipeline = [{
                 $facet: {
@@ -494,6 +510,9 @@ module.exports.getFollowings = async (req, res, next) => {
                                         },
                                     },
                                     {
+                                        $skip:offset
+                                    },
+                                    {
                                         $limit: 5
                                     }
                                 ],
@@ -507,6 +526,7 @@ module.exports.getFollowings = async (req, res, next) => {
                                 'users.username': 1,
                                 'users.avatar': 1,
                                 'users.fullName': 1,
+                                'users.isVerified':1,
                             },
                         },
 

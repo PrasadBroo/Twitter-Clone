@@ -8,6 +8,8 @@ const initialState = {
     fetchingError:null,
     followers:{users:[],count:0},
     followings:{users:[],count:0},
+    hasMoreFollowers:true,
+    hasMoreFollowings:true,
     fetchingFollowers:true,
     fetchingFollowings:true,
     fetchingFollowingsError:null,
@@ -41,11 +43,19 @@ export const guestSlice = createSlice({
             state.fetchingFollowings = true;
         },
         FETCHING_FOLLOWERS_SUCCESS:(state,action)=>{
-            state.followers = action.payload;
+            if(action.payload.users.length <5){
+                state.hasMoreFollowers = false;
+            }
+            state.followers.users = state.followers.users.concat(action.payload.users);
+            state.followers.count = action.payload.count
             state.fetchingFollowers = false;
         },
         FETCHING_FOLLOWINGS_SUCCESS:(state,action)=>{
-            state.followings = action.payload;
+            if(action.payload.users.length <5){
+                state.hasMoreFollowings = false;
+            }
+            state.followings.users = state.followings.users.concat(action.payload.users);
+            state.followings.count = action.payload.count
             state.fetchingFollowings = false;
         },
         FETCHING_FOLLOWERS_FAIL:(state,action)=>{
@@ -78,7 +88,23 @@ export const guestSlice = createSlice({
         FOLLOWED_FROM_PROFILE:(state)=>{
             state.guestUser.isFollowing = true;
         },
-        
+        CLEAR_GUEST_USER:(state)=>{
+            state.fetching = true;
+            // misleading action name :(
+        },
+        CLEAR_FOLLOWERS:(state)=>{
+            state.followers.users = [];
+            state.followers.count = 0;
+            state.hasMoreFollowers = true;
+            // misleading action name :(
+        },
+        CLEAR_FOLLOWINGS:(state)=>{
+            state.followings.users = [];
+            state.followings.count = 0;
+            state.hasMoreFollowings = true;
+            // misleading action name :(
+        },
+
 
     },
 })
@@ -107,6 +133,9 @@ export const {
     TWEET_LIKED_FAILED,
     TWEET_LIKED_SUCCESS,
     TWEET_UNLIKED_FAILED,
-    TWEET_UNLIKED_SUCCESS
+    TWEET_UNLIKED_SUCCESS,
+    CLEAR_GUEST_USER,
+    CLEAR_FOLLOWERS,
+    CLEAR_FOLLOWINGS
 } = guestSlice.actions
 export default guestSlice.reducer;

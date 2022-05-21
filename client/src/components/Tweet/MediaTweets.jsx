@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTheUserMediaTweets } from "../../services/userServices";
 import { fetchUserMediaTweets } from "../../store/feed/feedActions";
 import { selectUserMediaTweets } from "../../store/feed/feedSelector";
-import { MEDIA_TWEETS_FETCH_SUCCESS } from "../../store/feed/feedSlice";
+import { CLEAR_MEDIA_TWEETS, MEDIA_TWEETS_FETCH_SUCCESS } from "../../store/feed/feedSlice";
 import { selectGuestUser } from "../../store/guest/guestSelector";
 import AllCaughtUp from "../AllCaughtUp/AllCaughtUp";
 import SimpleSpinner from "../Loader/SimpleSpinner";
@@ -21,10 +21,11 @@ export default function MediaTweets() {
   const [fetchingMoreTweets, setFetchingMoreTweets] = useState(false);
   useEffect(() => {
     dispatch(fetchUserMediaTweets(guestUser._id));
+    return ()=>dispatch(CLEAR_MEDIA_TWEETS())
   }, [dispatch, guestUser._id]);
 
   useBottomScrollListener(async () => {
-    if (fetchingMoreTweets || !hasMore) return;
+    if (fetchingMoreTweets || fetching || !hasMore) return;
     try {
       setFetchingMoreTweets(true);
       const result = await fetchTheUserMediaTweets(

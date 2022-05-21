@@ -56,6 +56,12 @@ export const feedSlice = createSlice({
             state.feedTweets = [];
             state.hasMoreFeedTweets = true;
         },
+        CLEAR_MEDIA_TWEETS:(state)=>{
+            state.mediaTweets = []
+        },
+        CLEAR_LIKED_TWEETS:(state)=>{
+            state.likedTweets = []
+        },
         CLEAR_USER_TWEETS: (state) => {
             state.tweets = [];
             state.hasMoreUserTweets = true;
@@ -133,7 +139,9 @@ export const {
     FEED_TWEETS_FETCH_SUCCESS,
     POSTING_TWEET_REPLY_SUCCESS,
     CLEAR_FEED_TWEETS,
-    CLEAR_USER_TWEETS
+    CLEAR_USER_TWEETS,
+    CLEAR_LIKED_TWEETS,
+    CLEAR_MEDIA_TWEETS
 } = feedSlice.actions;
 export default feedSlice.reducer;
 
