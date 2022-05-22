@@ -31,6 +31,7 @@ export default function TweetSections() {
   const [fetching, setFetching] = useState(true);
   const [fetchingMoreTweets, setFetchingMoreTweets] = useState(false);
   const { width } = useWindowSize();
+  const [searchQuery,setSearchQuery] = useState('')
   useEffect(() => {
     document.title = `Home / Twitter`;
   }, []);
@@ -107,7 +108,7 @@ export default function TweetSections() {
         </div>
         <div className="col2 sidebar searchbar-news-sections ">
           <div className="searchbar-news-sections-wrap">
-            <Searchbar />
+            <Searchbar input={searchQuery}  setInput={(value)=>setSearchQuery(value)}/>
             <News />
             <WhoToFollow />
           </div>

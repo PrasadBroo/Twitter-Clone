@@ -58,7 +58,7 @@ export default function User() {
   const [backgroundImageLoaded, SetBackgroundImageLoaded] = useState(false);
   const [profileImageLoaded, SetProfileImageLoaded] = useState(false);
   const [followingText, setFollowingText] = useState("Following");
-
+  const [searchQuery,setSearchQuery] = useState('')
   useEffect(()=>{
     document.title = `${currentUser.fullName} (@${currentUser.username}) / Twitter`
   },[currentUser.fullName,currentUser.username])
@@ -255,7 +255,7 @@ export default function User() {
         {usernotFound && !isFetching && <NotFound/>}
       </div>
       <div className="col2 follow-news-suggetions">
-        <Searchbar />
+        <Searchbar input={searchQuery} setInput={(value)=>setSearchQuery(value)}/>
         <WhoToFollow />
         <News />
       </div>

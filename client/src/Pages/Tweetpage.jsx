@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import SimpleSpinner from "../components/Loader/SimpleSpinner";
@@ -17,7 +17,7 @@ export default function Tweetpage() {
   const tweet = useSelector((state) => state.feed.tweet);
   const fetching = useSelector((state) => state.feed.fetchingTweet);
   const fetchingError = useSelector(state=>state.feed.fetchingTweetError)
-
+  const [searchQuery,setSearchQuery] = useState('')
   useEffect(() => {
     dispatch(fetchTweet(tweetid));
   }, [tweetid, dispatch]);
@@ -80,7 +80,7 @@ export default function Tweetpage() {
         </div>
         <div className="col2 tweet-sugg-news-container">
           <div className="tweet-sugg-news-wrap">
-            <Searchbar />
+            <Searchbar input={searchQuery} setInput={(value)=>setSearchQuery(value)}/>
             <News />
             <WhoToFollow />
           </div>

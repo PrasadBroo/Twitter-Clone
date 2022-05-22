@@ -14,10 +14,13 @@ export default function SearchPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [componentToRender, setComponentToRender] = useState(null);
+  const [searchQuery,setSearchQuery] = useState('')
+
 
   useEffect(() => {
     if (!searchParams.get("q")) return navigate("/explore");
     setComponentToRender(searchParams.get("c"));
+    setSearchQuery(searchParams.get("q"))
   }, [searchParams, navigate]);
   const handelRenderComp = () => {
     switch (componentToRender) {
@@ -35,12 +38,13 @@ export default function SearchPage() {
         return <SearchTop />;
     }
   };
+
   return (
     <>
       <div className="explorepage two-flex-col-container searchpage">
         <div className="col1 explorepage-col1">
           <div className="top-header">
-            <Searchbar className="explorepage-searchbar" searchtext={searchParams.get("q")}/>
+            <Searchbar className="explorepage-searchbar" input={searchQuery}  setInput={(value)=>setSearchQuery(value)}/>
             <div className="icon-conatiner">
               <i className="far fa-gear"></i>
             </div>

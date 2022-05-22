@@ -16,6 +16,7 @@
     "linkify-plugin-mention": "^3.0.4",
     "linkify-react": "^3.0.4",
     "linkifyjs": "^3.0.5",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "query-string": "^7.0.1",
     "react": "^17.0.2",
@@ -26,6 +27,7 @@
     "react-router-dom": "^6.1.1",
     "react-scripts": "4.0.3",
     "redux": "^4.1.2",
+    "use-debounce": "^8.0.1",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

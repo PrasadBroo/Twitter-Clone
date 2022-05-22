@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import News from "../components/News/News";
 import Searchbar from "../components/Searchbar/Searchbar";
 import WhoToFollow from "../components/WhoToFollow/WhoToFollow";
 
 export default function BookmarksPage() {
+  const [searchQuery,setSearchQuery] = useState('')
   return (
     <>
       <div className="bookmarkspage two-flex-col-container">
@@ -26,7 +27,7 @@ export default function BookmarksPage() {
           className="col2 follow-sugg-news-container"
         >
           <div className="follow-sugg-news-wrap">
-            <Searchbar />
+            <Searchbar input={searchQuery} setInput={(value)=>setSearchQuery(value)}/>
             <News />
             <WhoToFollow />
           </div>
