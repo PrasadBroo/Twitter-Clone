@@ -3,6 +3,7 @@ const Hashtags = require('../models/Hashtags');
 const Mentions = require('../models/Mentions');
 const TweetLike = require('../models/TweetLikes');
 const Retweet = require('../models/Retweet');
+const Notification = require('../models/Notification');
 const User = require('../models/User')
 const linkify = require('linkifyjs');
 require('linkify-plugin-hashtag');
@@ -14,7 +15,9 @@ const {
 const {
     retriveComments
 } = require('../utils/controllerUtils');
-const {isAdultContent} = require('../services/moderatecontent');
+const {
+    isAdultContent
+} = require('../services/moderatecontent');
 
 module.exports.postTweet = async (req, res, next) => {
     const currentUser = res.locals.user;
@@ -44,6 +47,17 @@ module.exports.postTweet = async (req, res, next) => {
             caption,
             in_reply_to_status_id: tweetid ? isTweetIdExist._id : null
         });
+        if(isTweetIdExist){
+            Notification.create({
+                sender: currentUser._id,
+                receiver: isTweetIdExist.user,
+                notificationType: 'comment',
+                date: Date.now(),
+                data: {
+                    tweetid:tweet._id
+                }
+            })
+        }
         if (pic) {
             const tweetPicResponse = await cloudinary.uploader.upload(pic, {
                 upload_presset: 'tweet_images',
@@ -51,8 +65,8 @@ module.exports.postTweet = async (req, res, next) => {
                 public_id: tweet._id
             })
             const picShouldBeRemoved = await isAdultContent(tweetPicResponse.secure_url)
-            if(picShouldBeRemoved) cloudinary.uploader.destroy(`tweet_images/${tweet._id}`) //
-            
+            if (picShouldBeRemoved) cloudinary.uploader.destroy(`tweet_images/${tweet._id}`) //
+
             await Tweet.updateOne({
                 _id: tweet._id
             }, {
@@ -112,6 +126,17 @@ module.exports.postTweet = async (req, res, next) => {
             upsert: true
         });
         // send notification for mentioned user
+        mentionedUsers.forEach(user => {
+              Notification.create({
+                sender: currentUser._id,
+                receiver: user.user,
+                notificationType: 'mention',
+                date: Date.now(),
+                data: {
+                    tweetid:tweet._id
+                }
+            })
+        })
         res.status(201).send(tweet)
     } catch (error) {
         next(error)
@@ -127,6 +152,10 @@ module.exports.likeTweet = async (req, res, next) => {
                 error: 'please provide tweetid to like!'
             })
         }
+        const tweet = await Tweet.findOne({_id:tweetid})
+        if(!tweet){
+            return res.status(404).send({error:'Tweet does not exist'});
+        }
         const tweetLikeUpdate = await TweetLike.updateOne({
             tweet: tweetid,
             'likedBy.user': {
@@ -141,6 +170,16 @@ module.exports.likeTweet = async (req, res, next) => {
         }, {
             upsert: true
         });
+        
+        Notification.create({
+            sender: currentUser._id,
+            receiver: tweet.user,
+            notificationType: 'like',
+            date: Date.now(),
+            data: {
+                tweetid:tweet._id
+            }
+        })
         res.status(200).send('success');
     } catch (error) {
         next(error)
@@ -462,8 +501,8 @@ module.exports.fetchTweet = async (req, res, next) => {
                             $project: {
                                 tweetLikes: 0,
                                 tweetReplies: 0,
-                                retweets:0,
-                                'hasParentTweet.retweets':0,
+                                retweets: 0,
+                                'hasParentTweet.retweets': 0,
                                 'hasParentTweet.tweetReplies': 0,
                                 'hasParentTweet.tweetLikes': 0,
                                 __v: 0,
@@ -548,7 +587,15 @@ module.exports.postRetweet = async (req, res, next) => {
         }, {
             upsert: true
         });
-
+        Notification.create({
+            sender: currentUser._id,
+            receiver: tweet.user,
+            notificationType: 'retweet',
+            date: Date.now(),
+            data: {
+                tweetid
+            }
+        })
         res.status(201).send('Success')
     } catch (error) {
         next(error)
@@ -740,7 +787,7 @@ module.exports.deleteRetweet = async (req, res, next) => {
                     user: currentUser._id
                 }
             }
-        },);
+        }, );
         res.status(200).send('Success')
     } catch (error) {
         next(error)

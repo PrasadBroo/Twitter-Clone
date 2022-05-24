@@ -3,6 +3,7 @@ const Followers = require("../models/Followers");
 const Followings = require("../models/Followings");
 const Tweet = require('../models/Tweet')
 const Retweet = require('../models/Retweet')
+const Notification = require('../models/Notification')
 const TweetLike = require('../models/TweetLikes');
 const {
     cloudinary
@@ -257,7 +258,15 @@ module.exports.followUser = async (req, res, next) => {
             })
         }
 
-
+        Notification.create({
+            sender: currentUser._id,
+            receiver: userToFollow._id,
+            notificationType: 'follow',
+            date: Date.now(),
+            data: {
+                username:currentUser.username
+            }
+        })
         return res.status(200).send('success')
 
     } catch (error) {

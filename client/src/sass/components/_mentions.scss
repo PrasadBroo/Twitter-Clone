@@ -1,0 +1,12 @@
+.mentions-notifications{
+    position: relative;
+    .mention-tweet{
+        transition: all 200ms ease-in-out;
+        background-color:rgba($color: $color-secondary-light, $alpha: 0.1) ;
+    }
+    .error-text{
+        padding: 1rem;
+        text-align: center;
+        color: $color-red;
+    }
+}

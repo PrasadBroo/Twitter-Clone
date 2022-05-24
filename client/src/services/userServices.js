@@ -169,3 +169,29 @@ export const searchUsers = async (text) => {
       throw new Error(error.response.data.error);
   }
 }
+
+export const getNotifications = async (offset=0) => {
+  try {
+      const response = await axios.post(`/api/user/notifications`, {offset}, {
+          headers: {
+              authorization: localStorage.getItem('token'),
+          },
+      });
+      return response.data;
+  } catch (error) {
+      throw new Error(error.response.data.error);
+  }
+}
+
+export const getMentionsNotifications = async (offset=0) => {
+  try {
+      const response = await axios.post(`/api/user/notifications/mentions`, {offset}, {
+          headers: {
+              authorization: localStorage.getItem('token'),
+          },
+      });
+      return response.data;
+  } catch (error) {
+      throw new Error(error.response.data.error);
+  }
+}

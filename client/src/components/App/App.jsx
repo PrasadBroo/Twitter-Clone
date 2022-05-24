@@ -30,6 +30,8 @@ import Tweetpage from "../../Pages/Tweetpage";
 import ExploreForYou from "../../subcomponents/ExploreForYou";
 import SearchPage from "../../Pages/SearchPage";
 import Tweets from "../Tweet/Tweets";
+import Mentions from "../Notification/Mentions";
+import All from "../Notification/All";
 
 function App() {
   const state = useSelector((state) => state);
@@ -87,8 +89,8 @@ function App() {
           </Route>
           <Route path="notifications" element={<HomepageLayout />}>
             <Route element={<NotificationsPage />}>
-              <Route index element={<h1>All</h1>} />
-              <Route path="mentions" element={<h1>Mentions</h1>} />
+              <Route index element={<All/>} />
+              <Route path="mentions" element={<Mentions />} />
             </Route>
           </Route>
           <Route path="/:username/*" element={<HomepageLayout />}>

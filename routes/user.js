@@ -17,6 +17,7 @@ const userRouter = express.Router();
 const {
     requireAuth
 } = require('../controllers/authController');
+const { retrieveNotifications,retrieveMentonsNotifications } = require('../controllers/notificationController');
 
 userRouter.put('/update/profile', requireAuth, updateProfile)
 
@@ -31,5 +32,7 @@ userRouter.post('/:userid/tweets/media', requireAuth, getUserMediaTweets)
 userRouter.post('/:userid/tweets/feed', requireAuth, getUserFeedTweets)
 userRouter.post('/users_suggestions', requireAuth, getUsersSuggetions)
 userRouter.post('/search/users', requireAuth, searchUsers)
+userRouter.post('/notifications',requireAuth,retrieveNotifications)
+userRouter.post('/notifications/mentions',requireAuth,retrieveMentonsNotifications)
 
 module.exports = userRouter;

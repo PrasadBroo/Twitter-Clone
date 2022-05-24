@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Outlet, NavLink } from "react-router-dom";
 import News from "../components/News/News";
 import Searchbar from "../components/Searchbar/Searchbar";
 import WhoToFollow from "../components/WhoToFollow/WhoToFollow";
+import { fetchNotifications,fetchMentionsNotifications } from "../store/notification/notificationsActions";
 
 export default function NotificationsPage() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchNotifications());
+    dispatch(fetchMentionsNotifications())
+  }, [dispatch]);
+
   return (
     <>
       <div className="notificationspage two-flex-col-container">
@@ -17,7 +26,7 @@ export default function NotificationsPage() {
           </div>
           <div className="notifications-links">
             <NavLink
-            to=''
+              to=""
               className={({ isActive }) =>
                 "user-notification-link" +
                 (isActive ? " active-user-notification-link" : "")
@@ -36,7 +45,7 @@ export default function NotificationsPage() {
             </NavLink>
           </div>
           <div className="user-notifications-content">
-              <Outlet/>
+            <Outlet />
           </div>
         </div>
         <div className="col2 follow-sugg-news-container">
