@@ -90,6 +90,7 @@ function App() {
           <Route path="notifications" element={<HomepageLayout />}>
             <Route element={<NotificationsPage />}>
               <Route index element={<All/>} />
+              <Route path="" element={<All />} />
               <Route path="mentions" element={<Mentions />} />
             </Route>
           </Route>

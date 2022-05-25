@@ -1,3 +1,23 @@
 .notification{
-    
+    padding: 10px;
+    @include flexCenter;
+    .wrap-avatar{
+        @include flexCenter;
+        margin-right: 0.5rem;
+        .user-avatar{
+            max-width: 40px;
+            max-height: 40px;
+            border-radius: 50%;
+        }
+        .user-username{
+            margin-left: 0.5rem;
+        }
+    }
+    .noti-wrap{
+        .noti-time{
+            font-size: 0.8rem;
+            margin-left: 0.2rem;
+            text-decoration: underline;
+        }
+    }
 }

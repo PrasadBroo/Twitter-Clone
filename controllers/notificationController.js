@@ -11,14 +11,15 @@ module.exports.retrieveNotifications = async (req, res, next) => {
   try {
     const notifications = await Notification.aggregate([{
         $match: {
-          receiver: ObjectId(currentUser._id)
+          receiver: ObjectId(currentUser._id),
+          notificationType:{$ne:'mention'}
         },
       },
       {
         $skip: offset
       },
       {
-        $limit: 5
+        $limit: 20
       },
       {
         $sort: {
@@ -88,7 +89,7 @@ module.exports.retrieveMentonsNotifications = async (req, res, next) => {
         $skip: offset
       },
       {
-        $limit: 5
+        $limit: 20
       },
       {
         $sort: {

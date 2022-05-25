@@ -52,7 +52,7 @@ module.exports.postTweet = async (req, res, next) => {
                 sender: currentUser._id,
                 receiver: isTweetIdExist.user,
                 notificationType: 'comment',
-                date: Date.now(),
+                createdAt: Date.now(),
                 data: {
                     tweetid:tweet._id
                 }
@@ -131,7 +131,7 @@ module.exports.postTweet = async (req, res, next) => {
                 sender: currentUser._id,
                 receiver: user.user,
                 notificationType: 'mention',
-                date: Date.now(),
+                createdAt: Date.now(),
                 data: {
                     tweetid:tweet._id
                 }
@@ -175,7 +175,7 @@ module.exports.likeTweet = async (req, res, next) => {
             sender: currentUser._id,
             receiver: tweet.user,
             notificationType: 'like',
-            date: Date.now(),
+            createdAt: Date.now(),
             data: {
                 tweetid:tweet._id
             }
@@ -591,7 +591,7 @@ module.exports.postRetweet = async (req, res, next) => {
             sender: currentUser._id,
             receiver: tweet.user,
             notificationType: 'retweet',
-            date: Date.now(),
+            createdAt: Date.now(),
             data: {
                 tweetid
             }

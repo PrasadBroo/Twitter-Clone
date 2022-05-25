@@ -262,7 +262,7 @@ module.exports.followUser = async (req, res, next) => {
             sender: currentUser._id,
             receiver: userToFollow._id,
             notificationType: 'follow',
-            date: Date.now(),
+            createdAt: Date.now(),
             data: {
                 username:currentUser.username
             }

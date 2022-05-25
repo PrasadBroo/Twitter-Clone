@@ -39,7 +39,20 @@
         }
         .active-user-notification-link{
             font-weight: 700;
-            border-bottom: 3px solid $color-secondary-light;
+            position: relative;
+            .custom-border-bottom{
+                position: absolute ;
+                bottom: 0;
+                left: 50%;
+                right: 50%;
+                transform: translate(-50%);
+                display: block;
+                width: 50px;
+                height: 4px;
+                // margin-top: 0.5rem;
+                background-color: $color-secondary-light;
+                border-radius: 10px;
+            }
         }
     }
     .follow-sugg-news-container{

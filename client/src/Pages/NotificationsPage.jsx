@@ -33,6 +33,7 @@ export default function NotificationsPage() {
               }
             >
               All
+              <span className="custom-border-bottom"></span>
             </NavLink>
             <NavLink
               to="mentions"
@@ -42,6 +43,7 @@ export default function NotificationsPage() {
               }
             >
               Mentions
+              <span className="custom-border-bottom"></span>
             </NavLink>
           </div>
           <div className="user-notifications-content">
