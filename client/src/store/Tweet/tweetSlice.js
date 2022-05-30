@@ -48,7 +48,19 @@ export const tweetSlice = createSlice({
         TWEET_RETWEETED_FAILED:(state)=>{
             state.tweet.isRetweeted = false;
             state.tweet.retweetCount-=1;
-        }
+        },
+        TWEET_USER_FOLLOW_SUCCESS:(state)=>{
+            state.tweet.isFollowing = true;
+        },
+        TWEET_USER_UNFOLLOW_SUCCESS:(state)=>{
+            state.tweet.isFollowing = false;
+        },
+        TWEET_USER_FOLLOW_FAILED:(state)=>{
+            state.tweet.isFollowing = false;
+        },
+        TWEET_USER_UNFOLLOW_FAILED:(state)=>{
+            state.tweet.isFollowing = true;
+        },
 
     },
 })
@@ -64,6 +76,10 @@ export const {
     TWEET_RETWEETED_SUCCESS,
     TWEET_UNLIKED_FAILED,
     TWEET_UNLIKED_SUCCESS,
+    TWEET_USER_FOLLOW_FAILED,
+    TWEET_USER_FOLLOW_SUCCESS,
+    TWEET_USER_UNFOLLOW_FAILED,
+    TWEET_USER_UNFOLLOW_SUCCESS,
 } = tweetSlice.actions;
 export {initialState};
 export default tweetSlice.reducer;

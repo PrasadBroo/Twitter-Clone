@@ -133,20 +133,22 @@
                     overflow-y: hidden;
                     .user-link{
                         position: relative;
-                        padding: 0.8rem;
+                        padding: 1rem;
                         transition: background-color 500ms ease-in-out;
                         flex: 1;
                         text-align: center;
                         white-space: nowrap;
+                        color: rgb(83, 100, 113);
                         
                         @include for-phone-only-500{
-                            font-size: 12px;
+                            font-size: 1rem;
                         }
                         &:hover{
                             background-color: $color-grey-2;
                         }
                     }
                     .active-other-link{
+                        color: $color-black;
                         font-weight: 600;
                         .custom-border-bottom{
                             position: absolute ;

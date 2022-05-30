@@ -5,8 +5,8 @@
         @include flexCenter;
         margin-right: 0.5rem;
         .user-avatar{
-            max-width: 40px;
-            max-height: 40px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
         }
         .user-username{

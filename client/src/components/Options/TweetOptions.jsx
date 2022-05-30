@@ -3,8 +3,11 @@ import classNames from "classnames";
 import TextButton from "./../Button/TextButton/TextButton";
 import { selectCurrentUser } from "../../store/user/userSelector";
 import {  useSelector } from "react-redux";
+import { TWEET_USER_FOLLOW_FAILED, TWEET_USER_FOLLOW_SUCCESS, TWEET_USER_UNFOLLOW_FAILED, TWEET_USER_UNFOLLOW_SUCCESS } from "../../store/Tweet/tweetSlice";
+import { unfollowUser,followUser } from "../../services/userServices";
+import cogoToast from "cogo-toast";
 
-export default function TweetOptions({ istweetOptions, tweet }) {
+export default function TweetOptions({ istweetOptions, tweet,dispatch }) {
   const tweetOptionsClassnames = classNames("tweet-options-model", {
     show: istweetOptions,
   });
@@ -14,6 +17,25 @@ export default function TweetOptions({ istweetOptions, tweet }) {
 
   const handelTweetDelete = async()=>{
     // dispatch(deleteTweet(tweet._id))
+  }
+  const handelUnfollow = async()=>{
+    try {
+      dispatch(TWEET_USER_UNFOLLOW_SUCCESS())
+      await unfollowUser(tweet.user._id)
+    } catch (error) {
+      dispatch(TWEET_USER_UNFOLLOW_FAILED())
+      cogoToast.error(error.message)
+    }
+  }
+  const handelFollow = async()=>{
+    try {
+      dispatch(TWEET_USER_FOLLOW_SUCCESS())
+      await followUser(tweet.user._id)
+    } catch (error) {
+      dispatch(TWEET_USER_FOLLOW_FAILED())
+      cogoToast.error(error.message)
+    }
+    
   }
   return (
     <ul className={tweetOptionsClassnames}>
@@ -43,10 +65,10 @@ export default function TweetOptions({ istweetOptions, tweet }) {
             <span className="tweet-options-model-icon">
               <i className="far fa-user-plus"></i>
             </span>
-            {!tweet.isFollowing && <TextButton className="tweet-options-model-btn">
+            {!tweet.isFollowing && <TextButton className="tweet-options-model-btn" onClick={handelFollow}>
               Follow @{tweet.user.username}
             </TextButton>}
-            {tweet.isFollowing && <TextButton className="tweet-options-model-btn">
+            {tweet.isFollowing && <TextButton className="tweet-options-model-btn" onClick={handelUnfollow}>
               Unfollow @{tweet.user.username}
             </TextButton>}
           </>

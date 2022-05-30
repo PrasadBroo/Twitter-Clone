@@ -302,6 +302,42 @@ module.exports.fetchTweet = async (req, res, next) => {
                         },
                         {
                             $lookup: {
+                                from: 'followers',
+                                localField: 'user._id',
+                                foreignField: 'user',
+                                as: 'userFollowers'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                userFollowers: {
+                                    $cond: [{
+                                            $eq: ["$userFollowers", []]
+                                        },
+                                        [{
+                                            followers: []
+                                        }], '$userFollowers'
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $unwind: '$userFollowers'
+                        },
+                        {
+                            $addFields: {
+                                userFollowers: '$userFollowers.followers'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                isFollowing: {
+                                    $in: [currentUser._id, '$userFollowers.user']
+                                }
+                            }
+                        },
+                        {
+                            $lookup: {
                                 from: 'retweets',
                                 localField: '_id',
                                 foreignField: 'tweet',
@@ -466,6 +502,42 @@ module.exports.fetchTweet = async (req, res, next) => {
                             }
                         },
                         {
+                            $lookup: {
+                                from: 'followers',
+                                localField: 'hasParentTweet.user._id',
+                                foreignField: 'user',
+                                as: 'hasParentTweet.userFollowers'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                'hasParentTweet.userFollowers': {
+                                    $cond: [{
+                                            $eq: ["$hasParentTweet.userFollowers", []]
+                                        },
+                                        [{
+                                            followers: []
+                                        }], '$hasParentTweet.userFollowers'
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $unwind: '$hasParentTweet.userFollowers'
+                        },
+                        {
+                            $addFields: {
+                                'hasParentTweet.userFollowers': '$hasParentTweet.userFollowers.followers'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                'hasParentTweet.isFollowing': {
+                                    $in: [currentUser._id, '$hasParentTweet.userFollowers.user']
+                                }
+                            }
+                        },
+                        {
                             $addFields: {
                                 'hasParentTweet.retweetCount': {
                                     $size: '$hasParentTweet.retweets.users'
@@ -502,6 +574,8 @@ module.exports.fetchTweet = async (req, res, next) => {
                                 tweetLikes: 0,
                                 tweetReplies: 0,
                                 retweets: 0,
+                                userFollowers:0,
+                                'hasParentTweet.userFollowers':0,
                                 'hasParentTweet.retweets': 0,
                                 'hasParentTweet.tweetReplies': 0,
                                 'hasParentTweet.tweetLikes': 0,

@@ -210,11 +210,11 @@ export default function Tweet({
                 className="tweet-options-btn"
               >
                 <span className="tweet-content-child tweet-options">
-                  <ThreeDotsIcon className="tweet-options-icon" />
+                  <ThreeDotsIcon className="tweet-options-icon"/>
                 </span>
               </TextButton>
 
-              <TweetOptions istweetOptions={istweetOptions} tweet={tweet} />
+              <TweetOptions istweetOptions={istweetOptions} tweet={tweet} dispatch={dispatch} />
             </div>
           </div>
           <div className="tweet-content-text">
