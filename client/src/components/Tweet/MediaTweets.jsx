@@ -1,7 +1,8 @@
 import cogoToast from "cogo-toast";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useDispatch, useSelector } from "react-redux";
+import { defaultOffset } from "../../CONSTANTS";
 import { fetchTheUserMediaTweets } from "../../services/userServices";
 import { fetchUserMediaTweets } from "../../store/feed/feedActions";
 import { selectUserMediaTweets } from "../../store/feed/feedSelector";
@@ -18,27 +19,27 @@ export default function MediaTweets() {
   const tweets = selectUserMediaTweets(state);
   const dispatch = useDispatch();
   const fetching = useSelector((state) => state.feed.mediaTweetsFetching);
-  const [fetchingMoreTweets, setFetchingMoreTweets] = useState(false);
+  const fetchingMoreTweets = useRef(false);
   useEffect(() => {
     dispatch(fetchUserMediaTweets(guestUser._id));
     return ()=>dispatch(CLEAR_MEDIA_TWEETS())
   }, [dispatch, guestUser._id]);
 
   useBottomScrollListener(async () => {
-    if (fetchingMoreTweets || fetching || !hasMore) return;
+    if (fetchingMoreTweets.current || fetching || !hasMore) return;
     try {
-      setFetchingMoreTweets(true);
+      fetchingMoreTweets.current = (true);
       const result = await fetchTheUserMediaTweets(
         guestUser._id,
         tweets.length
       );
       dispatch(MEDIA_TWEETS_FETCH_SUCCESS(result));
-      setFetchingMoreTweets(false);
+      fetchingMoreTweets.current = (false);
     } catch (error) {
-      setFetchingMoreTweets(false);
+      fetchingMoreTweets.current = (false);
       cogoToast.error(error.message);
     }
-  });
+  },{offset:defaultOffset});
 
   return (
     <>

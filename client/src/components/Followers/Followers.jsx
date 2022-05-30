@@ -1,7 +1,8 @@
 import cogoToast from "cogo-toast";
-import {  useState } from "react";
+import {  useRef } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import {  useDispatch, useSelector } from "react-redux";
+import { defaultOffset } from "../../CONSTANTS";
 import { getUserFollowers } from "../../services/userServices";
 
 import {
@@ -20,22 +21,22 @@ export default function Followers() {
   const fetching = selectIsFollowersFetching(state);
   let guestUser = selectGuestUser(state);
   const hasMore = useSelector(state => state.guestUser.hasMoreFollowers)
-  const [fetchingMoreTweets, setFetchingMoreTweets] = useState(false);
+  const fetchingMoreTweets = useRef(false);
 
 
   useBottomScrollListener(async () => {
-    if (fetchingMoreTweets || fetching  || !hasMore) return
+    if (fetchingMoreTweets.current || fetching  || !hasMore) return
       try {
-        setFetchingMoreTweets(true);
+        fetchingMoreTweets.current = (true);
         const result = await getUserFollowers(guestUser._id,followers.users.length);
         dispatch(FETCHING_FOLLOWERS_SUCCESS(result))
-        setFetchingMoreTweets(false);
+        fetchingMoreTweets.current = (false);
       } catch (error) {
-        setFetchingMoreTweets(false);
+        fetchingMoreTweets.current = (false);
         cogoToast.error(error.message);
       }
     
-  });
+  },{offset:defaultOffset});
 
   return !fetching ? (
     <div className="user-followers">

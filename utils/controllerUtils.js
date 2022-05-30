@@ -1,18 +1,11 @@
 const Mongoose = require("mongoose");
 const Tweet = require('../models/Tweet');
+
 module.exports.retriveComments = async (tweetid,currentUser,offset=0) => {
+    if (isNaN(offset)) {
+        offset = 0
+    }
     try {
-
-        if (!tweetid) return res.status(400).send({
-            error: 'Invalid tweetid'
-        })
-
-        const tweet = await Tweet.findOne({
-            _id: tweetid
-        });
-        if (!tweet) return res.status(404).send({
-            error: 'Tweet does not exist'
-        })
 
         const pipeline = [
             {
@@ -32,7 +25,10 @@ module.exports.retriveComments = async (tweetid,currentUser,offset=0) => {
                                     "$eq": ["$in_reply_to_status_id", "$$tweetId"]
                                 }
                             }
-                        }, {
+                        },{
+                            $skip:offset
+                        },
+                        {
                             $limit: 10
                         },
                         {

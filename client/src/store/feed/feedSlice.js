@@ -14,6 +14,7 @@ const initialState = {
     hasMoreUserTweets:true,
     hasMoreMediaTweets:true,
     hasMoreLikesTweets:true,
+    hasMoreTweetReplies:true,
     tweets: [],
     tweetsCount: null,
     tweetsFetching: true,
@@ -115,9 +116,14 @@ export const feedSlice = createSlice({
             state.fetchingTweetError = action.payload;
         },
         POSTING_TWEET_REPLY_SUCCESS:(state,action)=>{
-            state.tweet.replies.push(action.payload)
+            state.tweet.replies.splice(0,0,action.payload)
+        },
+        FETCHING_TWEET_REPLIES_SUCCESS:(state,action)=>{
+            if(action.payload.length < 10){
+                state.hasMoreTweetReplies = false;
+            }
+            state.tweet.replies = state.tweet.replies.concat(action.payload)
         }
-
 
     },
 })
@@ -141,7 +147,8 @@ export const {
     CLEAR_FEED_TWEETS,
     CLEAR_USER_TWEETS,
     CLEAR_LIKED_TWEETS,
-    CLEAR_MEDIA_TWEETS
+    CLEAR_MEDIA_TWEETS,
+    FETCHING_TWEET_REPLIES_SUCCESS
 } = feedSlice.actions;
 export default feedSlice.reducer;
 

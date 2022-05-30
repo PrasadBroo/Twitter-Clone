@@ -867,3 +867,27 @@ module.exports.deleteRetweet = async (req, res, next) => {
         next(error)
     }
 }
+
+module.exports.fetchTweetReplies = async(req,res,next)=>{
+    let {
+        offset
+    } = req.body;
+    const tweetid = req.params.tweetid;
+    const currentUser = res.locals.user;
+    try {
+        if (!tweetid) return res.status(400).send({
+            error: 'Invalid tweetid'
+        })
+
+        const tweet = await Tweet.findOne({
+            _id: tweetid
+        });
+        if (!tweet) return res.status(404).send({
+            error: 'Invalid tweetid'
+        })
+        const replies = await retriveComments(tweetid,currentUser,offset)
+        res.send(replies)
+    } catch (error) {
+        next(error)
+    }
+}

@@ -112,3 +112,18 @@ export const  searchTweets = async(query,filter)=>{
         throw new Error(error.response.data.error);
     }
 }
+
+export const  fetchReplies = async(offset=0,tweetid)=>{
+    try {
+        const response = await axios.post(`/api/tweet/${tweetid}/replies`,{
+            offset
+        } , {
+            headers: {
+                authorization: localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error);
+    }
+}

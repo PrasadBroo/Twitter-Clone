@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import cogoToast from "cogo-toast";
+import React, { useEffect, useRef, useState } from "react";
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import SimpleSpinner from "../components/Loader/SimpleSpinner";
@@ -9,7 +11,10 @@ import SendTweet from "../components/Tweet/SendTweet";
 import Tweet from "../components/Tweet/Tweet";
 import UserHeader from "../components/User/UserHeader";
 import WhoToFollow from "../components/WhoToFollow/WhoToFollow";
+import { defaultOffset } from "../CONSTANTS";
+import { fetchReplies } from "../services/tweetService";
 import { fetchTweet } from "../store/feed/feedActions";
+import { FETCHING_TWEET_REPLIES_SUCCESS } from "../store/feed/feedSlice";
 
 export default function Tweetpage() {
   const dispatch = useDispatch();
@@ -17,10 +22,27 @@ export default function Tweetpage() {
   const tweet = useSelector((state) => state.feed.tweet);
   const fetching = useSelector((state) => state.feed.fetchingTweet);
   const fetchingError = useSelector(state=>state.feed.fetchingTweetError)
+  const fetchingMoreTweets = useRef(false);
+  const hasMore = useSelector((state) => state.feed.hasMoreTweetReplies);
   const [searchQuery,setSearchQuery] = useState('')
   useEffect(() => {
     dispatch(fetchTweet(tweetid));
   }, [tweetid, dispatch]);
+
+
+  useBottomScrollListener(async () => {
+    if (!fetchingMoreTweets.current && !fetching && hasMore) {
+      try {
+        fetchingMoreTweets.current = (true);
+        const replies = await fetchReplies(tweet.replies.length,tweet._id);
+        dispatch(FETCHING_TWEET_REPLIES_SUCCESS(replies));
+        fetchingMoreTweets.current = (false);
+      } catch (error) {
+        fetchingMoreTweets.current = (false);
+        cogoToast.error(error.message);
+      }
+    }
+  },{offset:defaultOffset});
   return (
     <>
       <div className="tweetpage two-flex-col-container">

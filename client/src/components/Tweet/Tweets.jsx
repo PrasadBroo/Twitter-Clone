@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Tweet from "./Tweet";
 import { fetchUserTweets } from "../../store/feed/feedActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,7 @@ import cogoToast from "cogo-toast";
 import { fetchTheUserTweets } from "../../services/userServices";
 import { CLEAR_USER_TWEETS, TWEETS_FETCH_SUCCESS } from "../../store/feed/feedSlice";
 import AllCaughtUp from "../AllCaughtUp/AllCaughtUp";
+import { defaultOffset } from "../../CONSTANTS";
 
 export default function Tweets() {
   const state = useSelector((state) => state);
@@ -20,7 +21,7 @@ export default function Tweets() {
   let guestUser = selectGuestUser(state);
   const tweets = selectUserTweets(state);
   const fetching = selectIsTweetsFetching(state);
-  const [fetchingMoreTweets, setFetchingMoreTweets] = useState(false);
+  const fetchingMoreTweets = useRef(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,18 +32,18 @@ export default function Tweets() {
 
 
   useBottomScrollListener(async () => {
-    if (fetchingMoreTweets || fetching  || !hasMore) return
+    if (fetchingMoreTweets.current || fetching  || !hasMore) return
       try {
-        setFetchingMoreTweets(true);
+        fetchingMoreTweets.current = (true);
         const result = await fetchTheUserTweets(guestUser._id,tweets.length);
         dispatch(TWEETS_FETCH_SUCCESS(result))
-        setFetchingMoreTweets(false);
+        fetchingMoreTweets.current = (false);
       } catch (error) {
-        setFetchingMoreTweets(false);
+        fetchingMoreTweets.current = (false);
         cogoToast.error(error.message);
       }
     
-  });
+  },{offset:defaultOffset});
   return (
     <>
       <div className="tweets-wrap" style={{ position: "relative" }}>
