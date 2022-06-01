@@ -5,6 +5,7 @@ import userReducer from './user/userSlice'
 import guestReducer from './guest/guestSlice'
 import modelReducer from './model/modelSlice'
 import feedReducer from './feed/feedSlice'
+import bookmarksReducer from './bookmarks/bookmarksSlice'
 import notificationReducer from './notification/notificationsSlice';
 import suggUsersReducer  from './suggestedUsers/suggestedUsersSlice'
 export default combineReducers({
@@ -12,6 +13,7 @@ export default combineReducers({
     guestUser: guestReducer,
     model: modelReducer,
     feed: feedReducer,
+    bookmarks:bookmarksReducer,
     suggestedUsers:suggUsersReducer,
     notifications:notificationReducer,
 })

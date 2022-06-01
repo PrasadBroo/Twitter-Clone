@@ -960,7 +960,6 @@ module.exports.bookmarkTweet = async (req, res, next) => {
     }
 }
 
-
 module.exports.removeBookmarkedTweet = async (req, res, next) => {
     const {
         tweetid
@@ -985,6 +984,235 @@ module.exports.removeBookmarkedTweet = async (req, res, next) => {
             tweet: tweet._id
         })
         res.status(200).send('success')
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.fetchBookmarks = async(req,res,next)=>{
+    let {
+        offset
+    } = req.body;
+    const currentUser = res.locals.user;
+    try {
+        if (isNaN(offset)) {
+            offset = 0
+        }
+
+        const pipeline = [
+            {
+              '$match': {
+                'user': currentUser._id
+              }
+            }, 
+            {
+                $skip:offset
+            },
+            {
+                $limit:10
+            },
+            {
+              '$lookup': {
+                'from': 'tweets', 
+                'localField': 'tweet', 
+                'foreignField': '_id', 
+                'as': 'tweet'
+              }
+            }, {
+              '$unwind': {
+                'path': '$tweet', 
+                'preserveNullAndEmptyArrays': true
+              }
+            }, {
+              '$replaceRoot': {
+                'newRoot': '$tweet'
+              }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'user',
+                    foreignField: '_id',
+                    as: 'user',
+
+                }
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $lookup: {
+                    from: 'followers',
+                    localField: 'user._id',
+                    foreignField: 'user',
+                    as: 'userFollowers'
+                }
+            },
+            {
+                $addFields: {
+                    userFollowers: {
+                        $cond: [{
+                                $eq: ["$userFollowers", []]
+                            },
+                            [{
+                                followers: []
+                            }], '$userFollowers'
+                        ]
+                    }
+                }
+            },
+            {
+                $unwind: '$userFollowers'
+            },
+            {
+                $addFields: {
+                    userFollowers: '$userFollowers.followers'
+                }
+            },
+            {
+                $addFields: {
+                    isFollowing: {
+                        $in: [currentUser._id, '$userFollowers.user']
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'bookmarks', 
+                    localField: '_id', 
+                    foreignField: 'tweet', 
+                    as: 'bookmarks'
+                }
+            }, {
+                $addFields: {
+                    isBookmarked: {
+                        $in: [
+                            Mongoose.Types.ObjectId(currentUser._id), '$bookmarks.user'
+                        ]
+                    }
+                }
+            },
+            {
+                $project:{
+                    bookmarks:0
+                }
+            },
+            {
+                $lookup: {
+                    from: 'tweetlikes',
+                    localField: '_id',
+                    foreignField: 'tweet',
+                    as: 'likes'
+                }
+            },
+            {
+                $addFields: {
+                    likes: {
+                        $cond: [{
+                                $eq: ["$likes", []]
+                            },
+                            [{
+                                likedBy: []
+                            }], '$likes'
+                        ]
+                    }
+                }
+            },
+
+            {
+                $unwind: '$likes'
+            },
+            {
+                $addFields: {
+                    isLiked: {
+                        $in: [Mongoose.Types.ObjectId(currentUser._id), '$likes.likedBy.user']
+                    }
+                }
+            },
+            {
+                $addFields: {
+                    likesCount: {
+                        $size: '$likes.likedBy'
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'tweets',
+                    localField: '_id',
+                    foreignField: 'in_reply_to_status_id',
+                    as: 'tweetReplies'
+                }
+            },
+            {
+                $addFields: {
+                    replyCount: {
+                        $size: '$tweetReplies'
+                    }
+                }
+            },
+
+            {
+                $lookup: {
+                    from: 'retweets',
+                    localField: '_id',
+                    foreignField: 'tweet',
+                    as: 'retweets'
+                }
+            },
+            {
+                $addFields: {
+                    retweets: {
+                        $cond: [{
+                                $eq: ["$retweets", []]
+                            },
+                            [{
+                                users: []
+                            }], '$retweets'
+                        ]
+                    }
+                }
+            },
+            {
+                $unwind: {
+                    path: '$retweets',
+                    preserveNullAndEmptyArrays: true,
+                }
+            },
+            {
+                $addFields: {
+                    retweetCount: {
+                        $size: '$retweets.users'
+                    }
+                }
+            },
+            {
+                $addFields: {
+                    isRetweeted: {
+                        $in: [Mongoose.Types.ObjectId(currentUser._id), '$retweets.users.user']
+                    }
+                }
+            },
+
+            {
+                $project: {
+                    __v: 0,
+                    'user.password': 0,
+                    'user.bio': 0,
+                    'user.email': 0,
+                    'user.website': 0,
+                    'user.location': 0,
+                    'user.backgroundImage': 0,
+                    'user,__v': 0,
+                    likes: 0,
+                    tweetReplies: 0,
+                    retweets: 0,
+                    userFollowers: 0,
+                }
+            }
+          ]
+        const bookmarks = await Bookmark.aggregate(pipeline)
+        res.status(200).send(bookmarks)
     } catch (error) {
         next(error)
     }

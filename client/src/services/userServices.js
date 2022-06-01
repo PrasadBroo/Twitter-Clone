@@ -195,3 +195,16 @@ export const getMentionsNotifications = async (offset=0) => {
       throw new Error(error.response.data.error);
   }
 }
+
+export const  fetchBookmarks = async(offset=0)=>{
+  try {
+      const response = await axios.post(`/api/user/bookmarks`,{offset} , {
+          headers: {
+              authorization: localStorage.getItem('token'),
+          },
+      });
+      return response.data;
+  } catch (error) {
+      throw new Error(error.response.data.error);
+  }
+}

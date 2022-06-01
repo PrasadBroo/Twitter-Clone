@@ -18,6 +18,7 @@ const {
     requireAuth
 } = require('../controllers/authController');
 const { retrieveNotifications,retrieveMentonsNotifications } = require('../controllers/notificationController');
+const { fetchBookmarks } = require('../controllers/tweetController');
 
 userRouter.put('/update/profile', requireAuth, updateProfile)
 
@@ -33,6 +34,7 @@ userRouter.post('/:userid/tweets/feed', requireAuth, getUserFeedTweets)
 userRouter.post('/users_suggestions', requireAuth, getUsersSuggetions)
 userRouter.post('/search/users', requireAuth, searchUsers)
 userRouter.post('/notifications',requireAuth,retrieveNotifications)
+userRouter.post('/bookmarks',requireAuth,fetchBookmarks)
 userRouter.post('/notifications/mentions',requireAuth,retrieveMentonsNotifications)
 
 module.exports = userRouter;
