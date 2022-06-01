@@ -684,6 +684,27 @@ module.exports.getUserTweets = async (req, res, next) => {
                     },
                     {
                         $lookup: {
+                            from: 'bookmarks', 
+                            localField: '_id', 
+                            foreignField: 'tweet', 
+                            as: 'bookmarks'
+                        }
+                    }, {
+                        $addFields: {
+                            isBookmarked: {
+                                $in: [
+                                    Mongoose.Types.ObjectId(currentUser._id), '$bookmarks.user'
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        $project:{
+                            bookmarks:0
+                        }
+                    },
+                    {
+                        $lookup: {
                             from: 'tweetlikes',
                             localField: '_id',
                             foreignField: 'tweet',
@@ -921,6 +942,27 @@ module.exports.getUserTweets = async (req, res, next) => {
             },
             {
                 $lookup: {
+                    from: 'bookmarks', 
+                    localField: '_id', 
+                    foreignField: 'tweet', 
+                    as: 'bookmarks'
+                }
+            }, {
+                $addFields: {
+                    isBookmarked: {
+                        $in: [
+                            Mongoose.Types.ObjectId(currentUser._id), '$bookmarks.user'
+                        ]
+                    }
+                }
+            },
+            {
+                $project:{
+                    bookmarks:0
+                }
+            },
+            {
+                $lookup: {
                     from: 'tweetlikes',
                     localField: '_id',
                     foreignField: 'tweet',
@@ -1132,6 +1174,27 @@ module.exports.getUserLikedTweets = async (req, res, next) => {
                         },
                         {
                             $lookup: {
+                                from: 'bookmarks', 
+                                localField: '_id', 
+                                foreignField: 'tweet', 
+                                as: 'bookmarks'
+                            }
+                        }, {
+                            $addFields: {
+                                isBookmarked: {
+                                    $in: [
+                                        Mongoose.Types.ObjectId(currentUser._id), '$bookmarks.user'
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $project:{
+                                bookmarks:0
+                            }
+                        },
+                        {
+                            $lookup: {
                                 from: 'retweets',
                                 localField: '_id',
                                 foreignField: 'tweet',
@@ -1323,6 +1386,27 @@ module.exports.getUserMediaTweets = async (req, res, next) => {
                                 isLiked: {
                                     $in: [Mongoose.Types.ObjectId(currentUser._id), '$tweetLikes.user']
                                 }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'bookmarks', 
+                                localField: '_id', 
+                                foreignField: 'tweet', 
+                                as: 'bookmarks'
+                            }
+                        }, {
+                            $addFields: {
+                                isBookmarked: {
+                                    $in: [
+                                        Mongoose.Types.ObjectId(currentUser._id), '$bookmarks.user'
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $project:{
+                                bookmarks:0
                             }
                         },
                         {
@@ -1578,6 +1662,27 @@ module.exports.getUserFeedTweets = async (req, res, next) => {
                     isLiked: {
                         $in: [Mongoose.Types.ObjectId(currentUser._id), '$likes.likedBy.user']
                     }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'bookmarks', 
+                    localField: '_id', 
+                    foreignField: 'tweet', 
+                    as: 'bookmarks'
+                }
+            }, {
+                $addFields: {
+                    isBookmarked: {
+                        $in: [
+                            Mongoose.Types.ObjectId(currentUser._id), '$bookmarks.user'
+                        ]
+                    }
+                }
+            },
+            {
+                $project:{
+                    bookmarks:0
                 }
             },
             {

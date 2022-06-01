@@ -18,7 +18,8 @@ export default function TweetOptions({ istweetOptions, tweet,dispatch }) {
   const handelTweetDelete = async()=>{
     // dispatch(deleteTweet(tweet._id))
   }
-  const handelUnfollow = async()=>{
+  const handelUnfollow = async(e)=>{
+    e.stopPropagation()
     try {
       dispatch(TWEET_USER_UNFOLLOW_SUCCESS())
       await unfollowUser(tweet.user._id)
@@ -27,7 +28,8 @@ export default function TweetOptions({ istweetOptions, tweet,dispatch }) {
       cogoToast.error(error.message)
     }
   }
-  const handelFollow = async()=>{
+  const handelFollow = async(e)=>{
+    e.stopPropagation()
     try {
       dispatch(TWEET_USER_FOLLOW_SUCCESS())
       await followUser(tweet.user._id)

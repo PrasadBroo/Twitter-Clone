@@ -61,6 +61,18 @@ export const tweetSlice = createSlice({
         TWEET_USER_UNFOLLOW_FAILED:(state)=>{
             state.tweet.isFollowing = true;
         },
+        TWEET_BOOKMARK_FAILED:(state)=>{
+            state.tweet.isBookmarked = false;
+        },
+        TWEET_BOOKMARK_SUCCESS:(state)=>{
+            state.tweet.isBookmarked = true;
+        },
+        TWEET_REMOVEBOOKMARK_FAILED:(state)=>{
+            state.tweet.isBookmarked = true;
+        },
+        TWEET_REMOVEBOOKMARK_SUCCESS:(state)=>{
+            state.tweet.isBookmarked = false;
+        },
 
     },
 })
@@ -80,6 +92,10 @@ export const {
     TWEET_USER_FOLLOW_SUCCESS,
     TWEET_USER_UNFOLLOW_FAILED,
     TWEET_USER_UNFOLLOW_SUCCESS,
+    TWEET_BOOKMARK_FAILED,
+    TWEET_BOOKMARK_SUCCESS,
+    TWEET_REMOVEBOOKMARK_FAILED,
+    TWEET_REMOVEBOOKMARK_SUCCESS
 } = tweetSlice.actions;
 export {initialState};
 export default tweetSlice.reducer;

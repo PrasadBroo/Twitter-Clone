@@ -127,3 +127,29 @@ export const  fetchReplies = async(offset=0,tweetid)=>{
         throw new Error(error.response.data.error);
     }
 }
+
+export const  bookmarkTweet = async(tweetid)=>{
+    try {
+        const response = await axios.post(`/api/tweet/${tweetid}/bookmark`,null , {
+            headers: {
+                authorization: localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error);
+    }
+}
+
+export const  removeBookmarkTweet = async(tweetid)=>{
+    try {
+        const response = await axios.delete(`/api/tweet/${tweetid}/bookmark` , {
+            headers: {
+                authorization: localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error);
+    }
+}

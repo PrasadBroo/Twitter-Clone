@@ -3,6 +3,7 @@ const Hashtags = require('../models/Hashtags');
 const Mentions = require('../models/Mentions');
 const TweetLike = require('../models/TweetLikes');
 const Retweet = require('../models/Retweet');
+const Bookmark = require('../models/Bookmark');
 const Notification = require('../models/Notification');
 const User = require('../models/User')
 const linkify = require('linkifyjs');
@@ -47,14 +48,14 @@ module.exports.postTweet = async (req, res, next) => {
             caption,
             in_reply_to_status_id: tweetid ? isTweetIdExist._id : null
         });
-        if(isTweetIdExist){
+        if (isTweetIdExist) {
             Notification.create({
                 sender: currentUser._id,
                 receiver: isTweetIdExist.user,
                 notificationType: 'comment',
                 createdAt: Date.now(),
                 data: {
-                    tweetid:tweet._id
+                    tweetid: tweet._id
                 }
             })
         }
@@ -127,13 +128,13 @@ module.exports.postTweet = async (req, res, next) => {
         });
         // send notification for mentioned user
         mentionedUsers.forEach(user => {
-              Notification.create({
+            Notification.create({
                 sender: currentUser._id,
                 receiver: user.user,
                 notificationType: 'mention',
                 createdAt: Date.now(),
                 data: {
-                    tweetid:tweet._id
+                    tweetid: tweet._id
                 }
             })
         })
@@ -152,9 +153,13 @@ module.exports.likeTweet = async (req, res, next) => {
                 error: 'please provide tweetid to like!'
             })
         }
-        const tweet = await Tweet.findOne({_id:tweetid})
-        if(!tweet){
-            return res.status(404).send({error:'Tweet does not exist'});
+        const tweet = await Tweet.findOne({
+            _id: tweetid
+        })
+        if (!tweet) {
+            return res.status(404).send({
+                error: 'Tweet does not exist'
+            });
         }
         const tweetLikeUpdate = await TweetLike.updateOne({
             tweet: tweetid,
@@ -170,14 +175,14 @@ module.exports.likeTweet = async (req, res, next) => {
         }, {
             upsert: true
         });
-        
+
         Notification.create({
             sender: currentUser._id,
             receiver: tweet.user,
             notificationType: 'like',
             createdAt: Date.now(),
             data: {
-                tweetid:tweet._id
+                tweetid: tweet._id
             }
         })
         res.status(200).send('success');
@@ -297,6 +302,22 @@ module.exports.fetchTweet = async (req, res, next) => {
                             $addFields: {
                                 likesCount: {
                                     $size: '$tweetLikes'
+                                }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'bookmarks', 
+                                localField: '_id', 
+                                foreignField: 'tweet', 
+                                as: 'bookmarks'
+                            }
+                        }, {
+                            $addFields: {
+                                isBookmarked: {
+                                    $in: [
+                                        Mongoose.Types.ObjectId(currentUser._id), '$bookmarks.user'
+                                    ]
                                 }
                             }
                         },
@@ -445,6 +466,22 @@ module.exports.fetchTweet = async (req, res, next) => {
                         },
                         {
                             $lookup: {
+                                from: 'bookmarks', 
+                                localField: 'hasParentTweet._id', 
+                                foreignField: 'tweet', 
+                                as: 'hasParentTweet.bookmarks'
+                            }
+                        }, {
+                            $addFields: {
+                                'hasParentTweet.isBookmarked': {
+                                    $in: [
+                                        Mongoose.Types.ObjectId(currentUser._id), '$hasParentTweet.bookmarks.user'
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $lookup: {
                                 from: 'tweetlikes',
                                 localField: 'hasParentTweet._id',
                                 foreignField: 'tweet',
@@ -574,8 +611,9 @@ module.exports.fetchTweet = async (req, res, next) => {
                                 tweetLikes: 0,
                                 tweetReplies: 0,
                                 retweets: 0,
-                                userFollowers:0,
-                                'hasParentTweet.userFollowers':0,
+                                userFollowers: 0,
+                                bookmarks:0,
+                                'hasParentTweet.userFollowers': 0,
                                 'hasParentTweet.retweets': 0,
                                 'hasParentTweet.tweetReplies': 0,
                                 'hasParentTweet.tweetLikes': 0,
@@ -587,6 +625,7 @@ module.exports.fetchTweet = async (req, res, next) => {
                                 'hasParentTweet.user.location': 0,
                                 'hasParentTweet.user.backgroundImage': 0,
                                 'hasParentTweet.user.__v': 0,
+                                'hasParentTweet.bookmarks':0
                             }
                         }
 
@@ -868,7 +907,7 @@ module.exports.deleteRetweet = async (req, res, next) => {
     }
 }
 
-module.exports.fetchTweetReplies = async(req,res,next)=>{
+module.exports.fetchTweetReplies = async (req, res, next) => {
     let {
         offset
     } = req.body;
@@ -885,8 +924,67 @@ module.exports.fetchTweetReplies = async(req,res,next)=>{
         if (!tweet) return res.status(404).send({
             error: 'Invalid tweetid'
         })
-        const replies = await retriveComments(tweetid,currentUser,offset)
+        const replies = await retriveComments(tweetid, currentUser, offset)
         res.send(replies)
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.bookmarkTweet = async (req, res, next) => {
+    const {
+        tweetid
+    } = req.params;
+    const currentUser = res.locals.user;
+    try {
+        if (!tweetid) return res.status(400).send({
+            error: 'Invalid tweetid'
+        })
+
+        const tweet = await Tweet.findOne({
+            _id: tweetid
+        });
+        if (!tweet) return res.status(404).send({
+            error: 'Tweet does not exist'
+        })
+
+        const isAlreadyBookmarked = await Bookmark.findOne({user:currentUser._id,tweet:tweet._id});
+        if(isAlreadyBookmarked)return res.status(400).send({error:'Tweet already bookmarked'})
+        await Bookmark.create({
+            user: currentUser._id,
+            tweet: tweet._id
+        })
+        res.status(200).send('success')
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+module.exports.removeBookmarkedTweet = async (req, res, next) => {
+    const {
+        tweetid
+    } = req.params;
+    const currentUser = res.locals.user;
+    try {
+        if (!tweetid) return res.status(400).send({
+            error: 'Invalid tweetid'
+        })
+
+        const tweet = await Tweet.findOne({
+            _id: tweetid
+        });
+        if (!tweet) return res.status(404).send({
+            error: 'Tweet does not exist'
+        })
+
+        const isBookmarked = await Bookmark.findOne({user:currentUser._id,tweet:tweet._id});
+        if(!isBookmarked)return res.status(400).send({error:'Bookmark tweet fisrt'})
+        await Bookmark.deleteOne({
+            user: currentUser._id,
+            tweet: tweet._id
+        })
+        res.status(200).send('success')
     } catch (error) {
         next(error)
     }
