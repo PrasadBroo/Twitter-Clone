@@ -15,9 +15,8 @@ export const verifyEmail = (email) => {
 }
 export const verifyUsername = (username) => {
     const is_valid_username = String(username)
-        .toLowerCase()
         .match(
-            /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/
+            /^[a-zA-Z0-9_-]{3,16}$/
         );
     if (!is_valid_username) throw new Error('Invalid username provided')
 }
