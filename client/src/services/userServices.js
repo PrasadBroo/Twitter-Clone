@@ -157,9 +157,9 @@ export const fetchSuggstedUsers = async () => {
   }
 }
 
-export const searchUsers = async (text) => {
+export const searchUsers = async (text,offset=0) => {
   try {
-      const response = await axios.post(`/api/user/search/users`, {term:text}, {
+      const response = await axios.post(`/api/user/search/users`, {term:text,offset}, {
           headers: {
               authorization: localStorage.getItem('token'),
           },

@@ -4,13 +4,15 @@ import CustomSearch from "../../subcomponents/CustomSearch";
 import FollowUser from "../FollowUser/FollowUser";
 import SimpleSpinner from "../Loader/SimpleSpinner";
 import useComponentVisible from "./../../CustomHooks/useComponentVisible";
-import { useDebounce } from 'use-debounce';
+import { useDebounce } from "use-debounce";
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 function Searchbar({ className, input, setInput }) {
   const [users, setUsers] = useState([]);
   const [fetching, setFetching] = useState(false);
   const [isError, setIsError] = useState(null);
   const [value] = useDebounce(input, 1000);
+  const [hasMore, setHasMore] = useState(true);
   const {
     ref: searchbarRef,
     isVisible: isResultVisible,
@@ -22,10 +24,11 @@ function Searchbar({ className, input, setInput }) {
         setFetching(true);
         setResultVisible(true);
         const users = await searchUsers(value);
+        if (users.length < 10) setHasMore(false);
         setUsers(users);
         setFetching(false);
       }
-      
+
       setTimeout(() => {
         if (value) fetchUsers();
       }, 1000);
@@ -35,6 +38,15 @@ function Searchbar({ className, input, setInput }) {
     }
   }, [value, setResultVisible]);
 
+  const scrollRef = useBottomScrollListener(async () => {
+    if (!fetching && hasMore) {
+      setFetching(true);
+      const next_users = await searchUsers(value, users.length);
+      if (next_users.length < 10) setHasMore(false);
+      setUsers((prevState) => prevState.concat(next_users));
+      setFetching(false);
+    }
+  });
   return (
     <div className={"searchbar " + className}>
       <label htmlFor="search-input" className="search-input-label">
@@ -53,7 +65,7 @@ function Searchbar({ className, input, setInput }) {
             placeholder="Search Twitter Clone"
           />
           {input && isResultVisible && (
-            <div className="users-list">
+            <div className="users-list" ref={scrollRef}>
               <span className="close-btn" onClick={() => setInput("")}>
                 <i className="fas fa-xmark"></i>
               </span>
@@ -63,10 +75,9 @@ function Searchbar({ className, input, setInput }) {
                 </>
               )}
 
-              {!fetching &&
-                users &&
+              {users &&
                 users.map((user) => <FollowUser user={user} key={user._id} />)}
-              {fetching && <SimpleSpinner topCenter />}
+              {fetching && users.length === 0 && <SimpleSpinner topCenter />}
               {!isError && users.length === 0 && !fetching && (
                 <span className="no-users-found">No users found &#128528;</span>
               )}

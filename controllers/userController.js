@@ -1865,7 +1865,7 @@ module.exports.searchUsers = async (req, res, next) => {
                 $skip:offset
             },
             {
-                $limit: 4
+                $limit: 10
             },
             {
                 $project: {
@@ -1914,6 +1914,11 @@ module.exports.searchUsers = async (req, res, next) => {
                     }
                 }
             },
+            {
+                $project:{
+                    followers:0
+                }
+            }
         ]
         const result = await User.aggregate(pipeline);
         return res.send(result)

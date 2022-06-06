@@ -31,6 +31,7 @@ export const guestSlice = createSlice({
         FETCHING_GUEST_SUCCESS:(state,action)=>{
             state.guestUser = action.payload;
             state.fetching = false;
+            state.fetchingError = null;
         },
         FETCHING_GUEST_FAIL:(state,action)=>{
             state.fetchingError = action.payload;
