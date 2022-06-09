@@ -8,6 +8,8 @@ import feedReducer from './feed/feedSlice'
 import bookmarksReducer from './bookmarks/bookmarksSlice'
 import notificationReducer from './notification/notificationsSlice';
 import suggUsersReducer  from './suggestedUsers/suggestedUsersSlice'
+import navigationReducer from './navigation/navigationSlice';
+
 export default combineReducers({
     user: userReducer,
     guestUser: guestReducer,
@@ -16,4 +18,5 @@ export default combineReducers({
     bookmarks:bookmarksReducer,
     suggestedUsers:suggUsersReducer,
     notifications:notificationReducer,
+    navigation:navigationReducer,
 })

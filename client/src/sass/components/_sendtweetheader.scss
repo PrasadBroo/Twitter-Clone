@@ -16,16 +16,14 @@
             @include flexCenter;
             .profile-pic {
                 display: none;
-                height: 32px;
-                width: 32px;
                 margin-right: 0.7rem;
                 @include for-phone-only-500 {
                     display: block;
                 }
                 img{
-                    height: auto;
-                    width: 100%;
                     border-radius: 100%;
+                    height: 32px;
+                    width: 32px;
                 }
             }
 
