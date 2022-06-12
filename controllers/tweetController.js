@@ -307,9 +307,9 @@ module.exports.fetchTweet = async (req, res, next) => {
                         },
                         {
                             $lookup: {
-                                from: 'bookmarks', 
-                                localField: '_id', 
-                                foreignField: 'tweet', 
+                                from: 'bookmarks',
+                                localField: '_id',
+                                foreignField: 'tweet',
                                 as: 'bookmarks'
                             }
                         }, {
@@ -466,9 +466,9 @@ module.exports.fetchTweet = async (req, res, next) => {
                         },
                         {
                             $lookup: {
-                                from: 'bookmarks', 
-                                localField: 'hasParentTweet._id', 
-                                foreignField: 'tweet', 
+                                from: 'bookmarks',
+                                localField: 'hasParentTweet._id',
+                                foreignField: 'tweet',
                                 as: 'hasParentTweet.bookmarks'
                             }
                         }, {
@@ -612,7 +612,7 @@ module.exports.fetchTweet = async (req, res, next) => {
                                 tweetReplies: 0,
                                 retweets: 0,
                                 userFollowers: 0,
-                                bookmarks:0,
+                                bookmarks: 0,
                                 'hasParentTweet.userFollowers': 0,
                                 'hasParentTweet.retweets': 0,
                                 'hasParentTweet.tweetReplies': 0,
@@ -625,7 +625,7 @@ module.exports.fetchTweet = async (req, res, next) => {
                                 'hasParentTweet.user.location': 0,
                                 'hasParentTweet.user.backgroundImage': 0,
                                 'hasParentTweet.user.__v': 0,
-                                'hasParentTweet.bookmarks':0
+                                'hasParentTweet.bookmarks': 0
                             }
                         }
 
@@ -948,8 +948,13 @@ module.exports.bookmarkTweet = async (req, res, next) => {
             error: 'Tweet does not exist'
         })
 
-        const isAlreadyBookmarked = await Bookmark.findOne({user:currentUser._id,tweet:tweet._id});
-        if(isAlreadyBookmarked)return res.status(400).send({error:'Tweet already bookmarked'})
+        const isAlreadyBookmarked = await Bookmark.findOne({
+            user: currentUser._id,
+            tweet: tweet._id
+        });
+        if (isAlreadyBookmarked) return res.status(400).send({
+            error: 'Tweet already bookmarked'
+        })
         await Bookmark.create({
             user: currentUser._id,
             tweet: tweet._id
@@ -977,8 +982,13 @@ module.exports.removeBookmarkedTweet = async (req, res, next) => {
             error: 'Tweet does not exist'
         })
 
-        const isBookmarked = await Bookmark.findOne({user:currentUser._id,tweet:tweet._id});
-        if(!isBookmarked)return res.status(400).send({error:'Bookmark tweet fisrt'})
+        const isBookmarked = await Bookmark.findOne({
+            user: currentUser._id,
+            tweet: tweet._id
+        });
+        if (!isBookmarked) return res.status(400).send({
+            error: 'Bookmark tweet fisrt'
+        })
         await Bookmark.deleteOne({
             user: currentUser._id,
             tweet: tweet._id
@@ -989,7 +999,7 @@ module.exports.removeBookmarkedTweet = async (req, res, next) => {
     }
 }
 
-module.exports.fetchBookmarks = async(req,res,next)=>{
+module.exports.fetchBookmarks = async (req, res, next) => {
     let {
         offset
     } = req.body;
@@ -999,34 +1009,33 @@ module.exports.fetchBookmarks = async(req,res,next)=>{
             offset = 0
         }
 
-        const pipeline = [
-            {
-              '$match': {
-                'user': currentUser._id
-              }
-            }, 
-            {
-                $skip:offset
+        const pipeline = [{
+                '$match': {
+                    'user': currentUser._id
+                }
             },
             {
-                $limit:10
+                $skip: offset
             },
             {
-              '$lookup': {
-                'from': 'tweets', 
-                'localField': 'tweet', 
-                'foreignField': '_id', 
-                'as': 'tweet'
-              }
+                $limit: 10
+            },
+            {
+                '$lookup': {
+                    'from': 'tweets',
+                    'localField': 'tweet',
+                    'foreignField': '_id',
+                    'as': 'tweet'
+                }
             }, {
-              '$unwind': {
-                'path': '$tweet', 
-                'preserveNullAndEmptyArrays': true
-              }
+                '$unwind': {
+                    'path': '$tweet',
+                    'preserveNullAndEmptyArrays': true
+                }
             }, {
-              '$replaceRoot': {
-                'newRoot': '$tweet'
-              }
+                '$replaceRoot': {
+                    'newRoot': '$tweet'
+                }
             },
             {
                 $lookup: {
@@ -1078,9 +1087,9 @@ module.exports.fetchBookmarks = async(req,res,next)=>{
             },
             {
                 $lookup: {
-                    from: 'bookmarks', 
-                    localField: '_id', 
-                    foreignField: 'tweet', 
+                    from: 'bookmarks',
+                    localField: '_id',
+                    foreignField: 'tweet',
                     as: 'bookmarks'
                 }
             }, {
@@ -1093,8 +1102,8 @@ module.exports.fetchBookmarks = async(req,res,next)=>{
                 }
             },
             {
-                $project:{
-                    bookmarks:0
+                $project: {
+                    bookmarks: 0
                 }
             },
             {
@@ -1210,9 +1219,211 @@ module.exports.fetchBookmarks = async(req,res,next)=>{
                     userFollowers: 0,
                 }
             }
-          ]
+        ]
         const bookmarks = await Bookmark.aggregate(pipeline)
         res.status(200).send(bookmarks)
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.fetchRandomTweets = async (req, res, next) => {
+    const currentUser = res.locals.user;
+
+    try {
+        const pipeline = [{
+                $sample: {
+                    size: 10
+                },
+
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'user',
+                    foreignField: '_id',
+                    as: 'user',
+
+                }
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $lookup: {
+                    from: 'followers',
+                    localField: 'user._id',
+                    foreignField: 'user',
+                    as: 'userFollowers'
+                }
+            },
+            {
+                $addFields: {
+                    userFollowers: {
+                        $cond: [{
+                                $eq: ["$userFollowers", []]
+                            },
+                            [{
+                                followers: []
+                            }], '$userFollowers'
+                        ]
+                    }
+                }
+            },
+            {
+                $unwind: '$userFollowers'
+            },
+            {
+                $addFields: {
+                    userFollowers: '$userFollowers.followers'
+                }
+            },
+            {
+                $addFields: {
+                    isFollowing: {
+                        $in: [currentUser._id, '$userFollowers.user']
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'bookmarks',
+                    localField: '_id',
+                    foreignField: 'tweet',
+                    as: 'bookmarks'
+                }
+            }, {
+                $addFields: {
+                    isBookmarked: {
+                        $in: [
+                            Mongoose.Types.ObjectId(currentUser._id), '$bookmarks.user'
+                        ]
+                    }
+                }
+            },
+            {
+                $project: {
+                    bookmarks: 0
+                }
+            },
+            {
+                $lookup: {
+                    from: 'tweetlikes',
+                    localField: '_id',
+                    foreignField: 'tweet',
+                    as: 'likes'
+                }
+            },
+            {
+                $addFields: {
+                    likes: {
+                        $cond: [{
+                                $eq: ["$likes", []]
+                            },
+                            [{
+                                likedBy: []
+                            }], '$likes'
+                        ]
+                    }
+                }
+            },
+
+            {
+                $unwind: '$likes'
+            },
+            {
+                $addFields: {
+                    isLiked: {
+                        $in: [Mongoose.Types.ObjectId(currentUser._id), '$likes.likedBy.user']
+                    }
+                }
+            },
+            {
+                $addFields: {
+                    likesCount: {
+                        $size: '$likes.likedBy'
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'tweets',
+                    localField: '_id',
+                    foreignField: 'in_reply_to_status_id',
+                    as: 'tweetReplies'
+                }
+            },
+            {
+                $addFields: {
+                    replyCount: {
+                        $size: '$tweetReplies'
+                    }
+                }
+            },
+
+            {
+                $lookup: {
+                    from: 'retweets',
+                    localField: '_id',
+                    foreignField: 'tweet',
+                    as: 'retweets'
+                }
+            },
+            {
+                $addFields: {
+                    retweets: {
+                        $cond: [{
+                                $eq: ["$retweets", []]
+                            },
+                            [{
+                                users: []
+                            }], '$retweets'
+                        ]
+                    }
+                }
+            },
+            {
+                $unwind: {
+                    path: '$retweets',
+                    preserveNullAndEmptyArrays: true,
+                }
+            },
+            {
+                $addFields: {
+                    retweetCount: {
+                        $size: '$retweets.users'
+                    }
+                }
+            },
+            {
+                $addFields: {
+                    isRetweeted: {
+                        $in: [Mongoose.Types.ObjectId(currentUser._id), '$retweets.users.user']
+                    }
+                }
+            },
+
+            {
+                $project: {
+                    __v: 0,
+                    'user.password': 0,
+                    'user.bio': 0,
+                    'user.email': 0,
+                    'user.website': 0,
+                    'user.location': 0,
+                    'user.backgroundImage': 0,
+                    'user,__v': 0,
+                    likes: 0,
+                    tweetReplies: 0,
+                    retweets: 0,
+                    userFollowers: 0,
+                }
+            }
+        ]
+
+
+        const data = await Tweet.aggregate(pipeline)
+        res.send(data)
     } catch (error) {
         next(error)
     }

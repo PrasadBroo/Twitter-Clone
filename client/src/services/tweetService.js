@@ -153,3 +153,16 @@ export const  removeBookmarkTweet = async(tweetid)=>{
         throw new Error(error.response.data.error);
     }
 }
+// random/tweets
+export const  getRandomTweets = async()=>{
+    try {
+        const response = await axios.post(`/api/tweet/random/tweets`,{offset:0} , {
+            headers: {
+                authorization: localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error);
+    }
+}

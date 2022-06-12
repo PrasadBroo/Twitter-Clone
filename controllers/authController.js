@@ -446,6 +446,6 @@ module.exports.requireAuth = async(req,res,next)=>{
             res.status(404).send({error:"User doesn't exist"})
         }
     } catch (error) {
-        
+        next(error)
     }
 }

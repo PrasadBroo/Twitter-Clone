@@ -32,6 +32,11 @@ import SearchPage from "../../Pages/SearchPage";
 import Tweets from "../Tweet/Tweets";
 import Mentions from "../Notification/Mentions";
 import All from "../Notification/All";
+import ExploreCovid20 from './../../subcomponents/ExploreCovid20';
+import ExploreTrending from './../../subcomponents/ExploreTrending';
+import ExploreNews from './../../subcomponents/ExploreNews';
+import ExploreSports from './../../subcomponents/ExploreSports';
+import ExploreEntertainment from './../../subcomponents/ExploreEntertainment';
 
 function App() {
   const state = useSelector((state) => state);
@@ -76,6 +81,11 @@ function App() {
             <Route path="" element={<ExplorePage />}>
               <Route index element={<ExploreForYou />} />
               <Route path="for-you" element={<ExploreForYou />} />
+              <Route path="covid20" element={<ExploreCovid20 />} />
+              <Route path="trending" element={<ExploreTrending />} />
+              <Route path="news" element={<ExploreNews />} />
+              <Route path="sports" element={<ExploreSports />} />
+              <Route path="entertainment" element={<ExploreEntertainment />} />
             </Route>
           </Route>
           <Route path="search/*" element={<HomepageLayout />}>

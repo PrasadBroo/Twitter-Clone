@@ -35,11 +35,20 @@
                 white-space: nowrap;
                 padding: 0.7rem;
                 @include flexJustifyCenter;
-                .custom-border-bottom{
-                    position: absolute ;
+            }
+
+            .active-header-link {
+                color: $color-black;
+                font-weight: 600;
+
+                .custom-border-bottom {
+                    position: absolute;
                     bottom: 0;
+                    left: 50%;
+                    right: 50%;
+                    transform: translate(-50%);
                     display: block;
-                    width: 40px;
+                    width: 50px;
                     height: 4px;
                     // margin-top: 0.5rem;
                     background-color: $color-secondary-light;
@@ -47,17 +56,18 @@
                 }
             }
 
-            .active-header-link{
-                border-bottom: 4px solid #0056B3;
-            }
-            .header-link:hover{
-                background-color: rgba($color: $color-grey-2, $alpha: 0.2) ;
+            .header-link:hover {
+                background-color: rgba($color: $color-grey-2, $alpha: 0.2);
             }
         }
-        .nav-links::-webkit-scrollbar{
+
+        .nav-links::-webkit-scrollbar {
             display: none;
         }
     }
 
+    .explore-content {
+        position: relative;
+    }
 
 }

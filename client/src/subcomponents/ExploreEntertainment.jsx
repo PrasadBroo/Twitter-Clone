@@ -4,8 +4,8 @@ import SimpleSpinner from '../components/Loader/SimpleSpinner'
 import Tweet from '../components/Tweet/Tweet'
 import { getRandomTweets } from '../services/tweetService'
 
-export default function ExploreForYou() {
-  const {isLoading,data,error} = useQuery('for-you-tweets',getRandomTweets)
+export default function ExploreEntertainment() {
+  const {isLoading,data,error} = useQuery('entertainment-tweets',getRandomTweets)
   
   return (
     <>
