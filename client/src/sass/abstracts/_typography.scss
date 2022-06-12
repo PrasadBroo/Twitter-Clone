@@ -1,59 +1,69 @@
 .heading-1 {
-    font-size: 2rem;
-    cursor: pointer;
+  font-size: 2rem;
+  cursor: pointer;
+  color: $color-secondary;
+
+  a {
+    text-decoration: none;
     color: $color-secondary;
-    a{
-      text-decoration: none;
-      color: $color-secondary;
-    }
   }
-  
-  .heading-2 {
-    font-size: 3rem;
-  }
-  
-  .heading-3 {
-    font-size: 1.5rem;
-    letter-spacing: 0.5px;
-  }
-  
-  .heading-4 {
-    font-size: 1.4rem;
-  }
+}
 
-  .default-link{
-    text-decoration: none;
-    color: $color-secondary-light;
-  }
+.heading-2 {
+  font-size: 3rem;
+}
 
-  .standard-link{
-    text-decoration: none;
-    color: $color-black-secondary;
-    &:hover{
-      text-decoration: underline;
-    }
-  }
+.heading-3 {
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+}
 
-  .default-logo{
-    color: $color-secondary-light;
-  }
+.heading-4 {
+  font-size: 1.4rem;
+}
 
-  .default-btn{
-    background-color: transparent;
-    outline: 0;
-    border: 0;
-    padding: 0.5rem 0.8rem;
-    color: $color-secondary-light;
-    cursor: pointer;
+.default-link {
+  text-decoration: none;
+  color: $color-secondary-light;
+}
+
+.standard-link {
+  text-decoration: none;
+  color: $color-black-secondary;
+
+  &:hover {
+    text-decoration: underline;
   }
-  
-  .btn-disabled{
-    opacity: 0.5;
-    pointer-events: none;
-  }
-  .mtp-1{
-    margin: 1rem 0;
-  }
-  .error-text{
-    color: $color-red;
-  }
+}
+
+.default-logo {
+  color: $color-secondary-light;
+}
+
+.default-btn {
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  padding: 0.5rem 0.8rem;
+  color: $color-secondary-light;
+  cursor: pointer;
+}
+
+.btn-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.mtp-1 {
+  margin: 1rem 0;
+}
+
+.error-text {
+  color: $color-red;
+}
+
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
