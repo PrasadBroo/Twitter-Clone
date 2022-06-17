@@ -1,18 +1,15 @@
 import "../../sass/main.scss";
+import React,{ Suspense,lazy, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import LoginPage from "./../../Pages/Auth/LoginPage";
-import GoogleAuthPage from "../../Pages/Auth/GoogleAuthPage";
-import GithubAuthPage from "./../../Pages/Auth/GithubAuthPage";
 import RequireAuth from "../RequireAuth/RequireAuth";
 import SignupFlowPage from "../../Pages/Auth/SignupFlowPage";
 import NotRequireAuth from "../NotRequireAuth/NotRequireAuth";
-import { useEffect } from "react";
 import { signInStart } from "../../store/user/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFetching } from "../../store/user/userSelector";
 import DefaultLoading from "../DefaultLoading/DefaultLoading";
 import LoginFlowPage from "../../Pages/Auth/LoginFlowPage";
-import HomepageLayout from "../../Pages/HomepageLayout";
+
 import BookmarksPage from "../../Pages/BookmarksPage";
 import ExplorePage from "./../../Pages/ExplorePage";
 import TweetSections from "../Tweet/TweetSections";
@@ -38,6 +35,12 @@ import ExploreNews from './../../subcomponents/ExploreNews';
 import ExploreSports from './../../subcomponents/ExploreSports';
 import ExploreEntertainment from './../../subcomponents/ExploreEntertainment';
 
+const LoginPage = lazy(() => import('./../../Pages/Auth/LoginPage'));
+const HomepageLayout =  lazy(() => import("../../Pages/HomepageLayout"));
+const GoogleAuthPage =  lazy(() => import( "../../Pages/Auth/GoogleAuthPage"));
+const GithubAuthPage = lazy(() => import( "./../../Pages/Auth/GithubAuthPage"));
+
+
 function App() {
   const state = useSelector((state) => state);
   const is_fetching = selectFetching(state);
@@ -47,9 +50,11 @@ function App() {
     if (token) dispatch(signInStart());
   }, [dispatch, token]);
 
-  return !is_fetching ? (
+  if(is_fetching)return <DefaultLoading/>
+  return (
     <div className="App">
-      <Routes>
+      <Suspense fallback={<h1>Loading...</h1>}>
+        <Routes>
         <Route element={<NotRequireAuth />}>
           <Route path="/" element={<LoginPage />}>
             <Route path="flow/signup" element={<SignupFlowPage />} />
@@ -124,10 +129,10 @@ function App() {
         </Route>
         <Route path="*" element={<h1>404 Page Not Found</h1>} />
       </Routes>
+      </Suspense>
+      
     </div>
-  ) : (
-    <DefaultLoading />
-  );
+  )
 }
 
 export default App;
