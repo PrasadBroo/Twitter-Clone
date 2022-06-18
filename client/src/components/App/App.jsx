@@ -34,12 +34,13 @@ import ExploreTrending from './../../subcomponents/ExploreTrending';
 import ExploreNews from './../../subcomponents/ExploreNews';
 import ExploreSports from './../../subcomponents/ExploreSports';
 import ExploreEntertainment from './../../subcomponents/ExploreEntertainment';
+import { QueryClientProvider,QueryClient } from "react-query";
 
 const LoginPage = lazy(() => import('./../../Pages/Auth/LoginPage'));
 const HomepageLayout =  lazy(() => import("../../Pages/HomepageLayout"));
 const GoogleAuthPage =  lazy(() => import( "../../Pages/Auth/GoogleAuthPage"));
 const GithubAuthPage = lazy(() => import( "./../../Pages/Auth/GithubAuthPage"));
-
+const queryClient = new QueryClient()
 
 function App() {
   const state = useSelector((state) => state);
@@ -52,7 +53,8 @@ function App() {
 
   if(is_fetching)return <DefaultLoading/>
   return (
-    <div className="App">
+    <QueryClientProvider client={queryClient}>
+      <div className="App">
       <Suspense fallback={<h1>Loading...</h1>}>
         <Routes>
         <Route element={<NotRequireAuth />}>
@@ -132,6 +134,8 @@ function App() {
       </Suspense>
       
     </div>
+    </QueryClientProvider>
+    
   )
 }
 

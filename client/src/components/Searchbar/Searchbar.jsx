@@ -39,7 +39,7 @@ function Searchbar({ className, input, setInput }) {
   }, [value, setResultVisible]);
 
   const scrollRef = useBottomScrollListener(async () => {
-    if (!fetching && hasMore) {
+    if (!fetching && hasMore && value) {
       setFetching(true);
       const next_users = await searchUsers(value, users.length);
       if (next_users.length < 10) setHasMore(false);

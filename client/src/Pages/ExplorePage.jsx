@@ -1,16 +1,13 @@
 import React, { useState } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import Searchbar from "../components/Searchbar/Searchbar";
 import WhoToFollow from "../components/WhoToFollow/WhoToFollow";
 
-const queryClient = new QueryClient();
 export default function ExplorePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const {pathname} = useLocation();
   return (
     <>
-      <QueryClientProvider client={queryClient}>
         <div className="explorepage two-flex-col-container">
           <div className="col1 explorepage-col1">
             <div className="top-header">
@@ -91,7 +88,6 @@ export default function ExplorePage() {
             <WhoToFollow />
           </div>
         </div>
-      </QueryClientProvider>
     </>
   );
 }
