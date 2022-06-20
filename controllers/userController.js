@@ -162,6 +162,7 @@ module.exports.fethUser = async (req, res, next) => {
                 $project: {
                     'password': 0,
                     '__v': 0,
+                    email:0,
                     userFollowers: 0,
                     userFollowings: 0,
                 }

@@ -6,14 +6,8 @@ import SendTweet from "./SendTweet";
 import WhoToFollow from "./../WhoToFollow/WhoToFollow";
 import SendTweetHeader from "./SendTweetHeader";
 import { fetchUserFeedTweets } from "../../services/userServices";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/userSelector";
-import {
-  FEED_TWEETS_FETCH_SUCCESS,
-  FEED_TWEETS_FETCHING_STARTED,
-  FEED_TWEETS_FETCH_FAILED,
-  CLEAR_FEED_TWEETS,
-} from "../../store/feed/feedSlice";
 import Tweet from "./Tweet";
 import SimpleSpinner from "../Loader/SimpleSpinner";
 import useWindowSize from "../../CustomHooks/useWindowSize";
@@ -21,63 +15,47 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import cogoToast from "cogo-toast";
 import AllCaughtUp from "../AllCaughtUp/AllCaughtUp";
 import { defaultOffset } from "../../CONSTANTS";
+import { useInfiniteQuery } from "react-query";
 
 export default function TweetSections() {
-  const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const hasMore = useSelector((state) => state.feed.hasMoreFeedTweets);
   const currentUser = selectCurrentUser(state);
-  const feedTweets = useSelector((state) => state.feed.feedTweets);
-  const [fetching, setFetching] = useState(true);
-  const [fetchingMoreTweets, setFetchingMoreTweets] = useState(false);
   const { width } = useWindowSize();
-  const [searchQuery,setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const {
+    data: feedTweets,
+    fetchNextPage,
+    hasNextPage,
+    isFetching: fetching,
+    isFetchingNextPage,
+    error
+  } = useInfiniteQuery(
+    "feed-tweets",
+    ({ pageParam }) => fetchUserFeedTweets(currentUser._id, pageParam),
+    {
+      getNextPageParam: (lastPage, pages) => {
+        if (lastPage.length >= 5) {
+          return pages.length * 5;
+        }
+        return undefined;
+      },
+    }
+  );
+
   useEffect(() => {
     document.title = `Home / Twitter`;
+    window.scrollTo(0,0)
   }, []);
-  useEffect(() => {
-    const controller = new AbortController();
-    const fetchData = async () => {
-      try {
-        setFetching(true);
-        dispatch(FEED_TWEETS_FETCHING_STARTED());
-        const tweets = await fetchUserFeedTweets(
-          currentUser._id,
-          0,
-          controller.signal
-        );
-        dispatch(FEED_TWEETS_FETCH_SUCCESS(tweets));
-        setFetching(false);
-      } catch (error) {
-        dispatch(FEED_TWEETS_FETCH_FAILED(error.message));
-        setFetching(false);
-      }
-    };
-    fetchData();
 
-    return () => {
-      controller.abort();
-      dispatch(CLEAR_FEED_TWEETS());
-    };
-  }, [currentUser._id, dispatch]);
-
-  useBottomScrollListener(async () => {
-    if (!fetchingMoreTweets && hasMore) {
-      try {
-        setFetchingMoreTweets(true);
-        dispatch(FEED_TWEETS_FETCHING_STARTED());
-        const tweets = await fetchUserFeedTweets(
-          currentUser._id,
-          feedTweets.length
-        );
-        dispatch(FEED_TWEETS_FETCH_SUCCESS(tweets));
-        setFetchingMoreTweets(false);
-      } catch (error) {
-        setFetchingMoreTweets(false);
-        cogoToast.error(error.message);
+  useBottomScrollListener(
+    async () => {
+      if (!isFetchingNextPage && hasNextPage) {
+        fetchNextPage();
       }
-    }
-  },{offset:defaultOffset});
+    },
+    { offset: defaultOffset }
+  );
   return (
     <>
       <div className="tweets-search-news-sections two-flex-col-container">
@@ -88,27 +66,31 @@ export default function TweetSections() {
           </div>
           {/* all magic happens here */}
           <div className="tweets">
-            {!fetching &&
+            {feedTweets &&
               feedTweets.length !== 0 &&
-              feedTweets.map((tweet) => (
-                <Tweet tweet={tweet} key={tweet._id} />
-              ))}
+              feedTweets.pages.map((page) =>
+                page.map((tweet) => <Tweet tweet={tweet} key={tweet._id} />)
+              )}
             {!fetching && feedTweets.length === 0 && (
               <WhoToFollow headerText="Suggestion" />
             )}
-            {fetching && <SimpleSpinner topCenter />}
+            {fetching && !feedTweets && <SimpleSpinner topCenter />}
 
-            {fetchingMoreTweets && (
+            {isFetchingNextPage && (
               <div className="loading-more-tweets">
-                <SimpleSpinner topCenter/>
+                <SimpleSpinner topCenter />
               </div>
             )}
-            {!hasMore && !fetching && <AllCaughtUp />}
+            {!hasNextPage && !fetching && <AllCaughtUp />}
+            {error && cogoToast.error(error)}
           </div>
         </div>
         <div className="col2 sidebar searchbar-news-sections ">
           <div className="searchbar-news-sections-wrap">
-            <Searchbar input={searchQuery}  setInput={(value)=>setSearchQuery(value)}/>
+            <Searchbar
+              input={searchQuery}
+              setInput={(value) => setSearchQuery(value)}
+            />
             <News />
             <WhoToFollow />
           </div>

@@ -1,46 +1,60 @@
 import React, { useEffect } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
-import { useDispatch, useSelector } from "react-redux";
+import { useInfiniteQuery } from "react-query";
+import {  useSelector } from "react-redux";
 
-import { fetchUserMediaTweets } from "../../store/feed/feedActions";
-import { selectUserMediaTweets } from "../../store/feed/feedSelector";
-import {
-  CLEAR_MEDIA_TWEETS,
-} from "../../store/feed/feedSlice";
+
 import { selectGuestUser } from "../../store/guest/guestSelector";
 import AllCaughtUp from "../AllCaughtUp/AllCaughtUp";
 import SimpleSpinner from "../Loader/SimpleSpinner";
 import Tweet from "./Tweet";
+import { fetchTheUserMediaTweets } from './../../services/userServices';
+import { defaultOffset } from "../../CONSTANTS";
 
 export default function MediaTweets() {
   const state = useSelector((state) => state);
   let guestUser = selectGuestUser(state);
-  const hasMore = useSelector((state) => state.feed.hasMoreMediaTweets);
-  const tweets = selectUserMediaTweets(state);
-  const dispatch = useDispatch();
-  const fetching = useSelector((state) => state.feed.mediaTweetsFetching);
 
-  useEffect(() => {
-    dispatch(fetchUserMediaTweets(guestUser._id));
-    return () => dispatch(CLEAR_MEDIA_TWEETS());
-  }, [dispatch, guestUser._id]);
+  const {
+    data: tweets,
+    fetchNextPage,
+    hasNextPage:hasMore,
+    isFetching: fetching,
+    error
+  } = useInfiniteQuery(
+    "user-tweets",
+    ({ pageParam }) => fetchTheUserMediaTweets(guestUser._id, pageParam),
+    {
+      getNextPageParam: (lastPage, pages) => {
+        if (lastPage.tweets.length >= 5) {
+          return pages.length * 5;
+        }
+        return undefined;
+      },
+    }
+  );
+
+  useEffect(()=>{
+    window.scrollTo(0,0)
+  },[])
 
   useBottomScrollListener(async () => {
     if (!fetching && hasMore) {
-      dispatch(fetchUserMediaTweets(guestUser._id, tweets.length));
+      fetchNextPage()
     }
-  });
+  },{offset:defaultOffset});
 
   return (
     <>
       <div className="tweets-wrap" style={{ position: "relative" }}>
-        {fetching && tweets.length === 0 && <SimpleSpinner topCenter />}
-        {tweets &&
-          tweets.map((tweet) => <Tweet tweet={tweet} key={tweet._id} />)}
-        {!hasMore && !fetching && tweets.length !== 0 && <AllCaughtUp />}
-        {!fetching && tweets.length === 0 && (
+      {fetching && !tweets  && <SimpleSpinner topCenter/>}
+        {tweets && tweets.pages.map(page => page.tweets.map(tweet=><Tweet tweet={tweet} key={tweet._id} />) )}
+
+        {!hasMore && !fetching && tweets.pages[0].tweets.length !== 0 && <AllCaughtUp />}
+        {!fetching && tweets.pages[0].tweets.length === 0 && (
           <h2>@{guestUser.username} dont have any tweets :(</h2>
         )}
+        {error && <h3 className="error-text">{error}</h3>}
       </div>
     </>
   );

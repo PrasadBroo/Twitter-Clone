@@ -1,1 +1,1 @@
-export const defaultOffset = 500;
+export const defaultOffset = 800;

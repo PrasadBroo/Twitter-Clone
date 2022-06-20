@@ -1,13 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { selectSuggestedUsers } from "../../store/suggestedUsers/suggUsersSelector";
+import { useQuery } from "react-query";
+import { fetchSuggstedUsers } from "../../services/userServices";
 import FollowUser from "../FollowUser/FollowUser";
 import SimpleSpinner from "../Loader/SimpleSpinner";
 
 export default function WhoToFollow({headerText}) {
-  const state = useSelector((state) => state);
-  const users = selectSuggestedUsers(state);
-  const fetching = useSelector((state) => state.suggestedUsers.fetching);
+  const {data:users,isLoading:fetching,error} = useQuery('suggested-users',fetchSuggstedUsers)
   return (
     <div className="who-to-follow-suggestions">
       {!fetching ? (
@@ -18,6 +16,7 @@ export default function WhoToFollow({headerText}) {
           {users &&
             users.map((user) => <FollowUser user={user} key={user._id} type='suggUsers'/>)}
           {!users && <h5>No users suggestions</h5>}
+          {error && <h3 className="error-text">{error}</h3>}
         </>
       ) : (
         <SimpleSpinner topCenter />

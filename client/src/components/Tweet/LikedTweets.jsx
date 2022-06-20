@@ -1,51 +1,59 @@
 import React, { useEffect } from "react";
 import Tweet from "./Tweet";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { selectGuestUser } from "../../store/guest/guestSelector";
-
 import SimpleSpinner from "../Loader/SimpleSpinner";
-import { fetchUserLikedTweets } from "../../store/feed/feedActions";
-import {
-  selectIsLikedTweetsFetching,
-  selectUserLikedTweets,
-} from "../../store/feed/feedSelector";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
-
-import {
-  CLEAR_LIKED_TWEETS,
-} from "../../store/feed/feedSlice";
 import AllCaughtUp from "../AllCaughtUp/AllCaughtUp";
+import { useInfiniteQuery } from "react-query";
+import { fetchTheUserLikedTweets } from "../../services/userServices";
+import { defaultOffset } from "../../CONSTANTS";
 
 
 export default function LikedTweets() {
   const state = useSelector((state) => state);
   let guestUser = selectGuestUser(state);
-  const tweets = selectUserLikedTweets(state);
-  const fetching = selectIsLikedTweetsFetching(state);
-  const hasMore = useSelector((state) => state.feed.hasMoreLikesTweets);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    // dispatch fetch tweets action
-    dispatch(fetchUserLikedTweets(guestUser._id));
-    return () => dispatch(CLEAR_LIKED_TWEETS());
-  }, [dispatch, guestUser._id]);
+  
+  const {
+    data: tweets,
+    fetchNextPage,
+    hasNextPage:hasMore,
+    isFetching: fetching,
+    error
+  } = useInfiniteQuery(
+    "user-tweets",
+    ({ pageParam }) => fetchTheUserLikedTweets(guestUser._id, pageParam),
+    {
+      getNextPageParam: (lastPage, pages) => {
+        if (lastPage.tweets.length >= 5) {
+          return pages.length * 5;
+        }
+        return undefined;
+      },
+    }
+  );
+
+  useEffect(()=>{
+    window.scrollTo(0,0)
+  },[])
 
   useBottomScrollListener(async () => {
     if (!fetching && hasMore) {
-      dispatch(fetchUserLikedTweets(guestUser._id, tweets.length));
+      fetchNextPage()
     }
-  });
+  },{offset:defaultOffset});
 
   return (
     <>
       <div className="tweets-wrap" style={{ position: "relative" }}>
-        {fetching && tweets.length === 0 && <SimpleSpinner topCenter />}
-        {tweets &&
-          tweets.map((tweet) => <Tweet tweet={tweet} key={tweet._id} />)}
-        {!hasMore && !fetching && tweets.length !== 0 && <AllCaughtUp />}
-        {!fetching && tweets.length === 0 && (
+      {fetching && !tweets  && <SimpleSpinner topCenter/>}
+        {tweets && tweets.pages.map(page => page.tweets.map(tweet=><Tweet tweet={tweet} key={tweet._id} />) )}
+
+        {!hasMore && !fetching && tweets.pages[0].tweets.length !== 0 && <AllCaughtUp />}
+        {!fetching && tweets.pages[0].tweets.length === 0 && (
           <h2>@{guestUser.username} dont have any tweets :(</h2>
         )}
+        {error && <h3 className="error-text">{error}</h3>}
       </div>
     </>
   );

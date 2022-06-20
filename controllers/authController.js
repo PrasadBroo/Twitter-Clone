@@ -68,7 +68,6 @@ module.exports.googleLoginAuthentication = async (req, res, next) => {
             const createNewUser = await User.create(userDetails)
             // now send jwt
             const userDetailsClient = {
-                email: userinfo.email,
                 fullName: userinfo.name,
                 username: 'test',
                 avatar: userinfo.picture,
@@ -158,7 +157,8 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
                 avatar: userinfo.avatar_url,
                 githubId: userinfo.id,
                 bio:userinfo.bio,
-                location:userinfo.location
+                location:userinfo.location,
+                isVerified:true
             }
 
             const createNewUser = await User.create(userDetails)
