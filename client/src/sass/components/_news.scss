@@ -1,11 +1,11 @@
 .news-section {
-    min-height: 500px;
+    min-height: 300px;
     background-color: $color-grey-5;
     width: 100%;
     margin-top: 1.5rem;
     border-radius: 20px;
     overflow: hidden;
-
+    position: relative;
     .news-heading-main {
         margin-left: 0.5rem;
         margin-top: 0.5rem;

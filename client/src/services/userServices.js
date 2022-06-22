@@ -208,3 +208,12 @@ export const  fetchBookmarks = async(offset=0)=>{
       throw new Error(error.response.data.error);
   }
 }
+
+export const  fetchNews = async()=>{
+  try {
+      const response = await axios.get('https://newsdata.io/api/1/news?apikey=pub_8595b1f504c4cc286b5e935c16322e731698&country=us,gb');
+      return response.data;
+  } catch (error) {
+      throw new Error(error);
+  }
+}

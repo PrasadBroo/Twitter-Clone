@@ -5,7 +5,7 @@ import { selectGuestUser } from "../../store/guest/guestSelector";
 
 export default function UserHeader({ customHeader }) {
   const state = useSelector((state) => state);
-  const tweetCount = useSelector((state) => state.feed.tweetsCount) || 20;
+  const tweetCount = useSelector((state) => state.feed.tweetsCount) || 0;
   let guestUser = selectGuestUser(state);
   const navigate = useNavigate();
   return (

@@ -123,6 +123,9 @@ export const feedSlice = createSlice({
                 state.hasMoreTweetReplies = false;
             }
             state.tweet.replies = state.tweet.replies.concat(action.payload)
+        },
+        SET_TWEET_COUNT:(state,action)=>{
+            state.tweetsCount = action.payload;
         }
 
     },
@@ -148,7 +151,8 @@ export const {
     CLEAR_USER_TWEETS,
     CLEAR_LIKED_TWEETS,
     CLEAR_MEDIA_TWEETS,
-    FETCHING_TWEET_REPLIES_SUCCESS
+    FETCHING_TWEET_REPLIES_SUCCESS,
+    SET_TWEET_COUNT
 } = feedSlice.actions;
 export default feedSlice.reducer;
 

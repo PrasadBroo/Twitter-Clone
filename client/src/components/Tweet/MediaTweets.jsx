@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useInfiniteQuery } from "react-query";
-import {  useSelector } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
 
 
 import { selectGuestUser } from "../../store/guest/guestSelector";
@@ -10,8 +10,10 @@ import SimpleSpinner from "../Loader/SimpleSpinner";
 import Tweet from "./Tweet";
 import { fetchTheUserMediaTweets } from './../../services/userServices';
 import { defaultOffset } from "../../CONSTANTS";
+import { SET_TWEET_COUNT } from "../../store/feed/feedSlice";
 
 export default function MediaTweets() {
+  const dispatch = useDispatch()
   const state = useSelector((state) => state);
   let guestUser = selectGuestUser(state);
 
@@ -31,6 +33,9 @@ export default function MediaTweets() {
         }
         return undefined;
       },
+      onSuccess:(data)=>{
+        dispatch(SET_TWEET_COUNT(data.pages[0].count))
+      }
     }
   );
 
