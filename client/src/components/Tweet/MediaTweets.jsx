@@ -24,7 +24,7 @@ export default function MediaTweets() {
     isFetching: fetching,
     error
   } = useInfiniteQuery(
-    "user-tweets",
+    "media-tweets",
     ({ pageParam }) => fetchTheUserMediaTweets(guestUser._id, pageParam),
     {
       getNextPageParam: (lastPage, pages) => {

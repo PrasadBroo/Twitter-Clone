@@ -630,6 +630,9 @@ module.exports.getUserTweets = async (req, res, next) => {
 
                     },
                     {
+                        $sort:{createdAt:-1}
+                    },
+                    {
                         $lookup: {
                             from: 'users',
                             localField: 'user',
@@ -1124,7 +1127,8 @@ module.exports.getUserLikedTweets = async (req, res, next) => {
                             $unwind: {
                                 path: '$tweet'
                             }
-                        }, {
+                        },
+                         {
                             $lookup: {
                                 from: 'users',
                                 localField: 'tweet.user',
@@ -1311,6 +1315,9 @@ module.exports.getUserMediaTweets = async (req, res, next) => {
                         },
                         {
                             $skip:offset
+                        },
+                        {
+                            $sort:{createdAt:-1}
                         },
                         {
                             $limit: 5

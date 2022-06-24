@@ -23,7 +23,7 @@ export default function LikedTweets() {
     isFetching: fetching,
     error
   } = useInfiniteQuery(
-    "user-tweets",
+    "liked-tweets",
     ({ pageParam }) => fetchTheUserLikedTweets(guestUser._id, pageParam),
     {
       getNextPageParam: (lastPage, pages) => {
