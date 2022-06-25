@@ -562,7 +562,7 @@ export default function Tweet({
                     <span className="tweet-options-model-icon">
                       <i className="far fa-share"></i>
                     </span>
-                    <TextButton className="tweet-options-model-btn">
+                    <TextButton className="tweet-options-model-btn" onClick={handelShareTweet}>
                       Sharet tweet via
                     </TextButton>
                   </li>
