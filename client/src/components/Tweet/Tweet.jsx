@@ -191,6 +191,19 @@ export default function Tweet({
       dispatch(TWEET_REMOVEBOOKMARK_FAILED())
     }
   };
+  const handelShareTweet = (e)=>{
+    e.preventDefault();
+    e.stopPropagation()
+    if(!navigator.canShare){
+     return cogoToast.error('Sharing not supported!')
+    }
+    const data = {
+      title: 'Tweet',
+      text: tweet.caption,
+      url: `https://elon-musk-twitter.netlify.app/${tweet.user.username}/status/${tweet._id}`
+    }
+    navigator.share(data)
+  }
   return !fetching ? (
     <div
       onClick={() =>
@@ -415,8 +428,8 @@ export default function Tweet({
                       <span className="tweet-options-model-icon">
                         <i className="far fa-share"></i>
                       </span>
-                      <TextButton className="tweet-options-model-btn">
-                        Sharet tweet via
+                      <TextButton className="tweet-options-model-btn" onClick={handelShareTweet}>
+                        Share tweet via
                       </TextButton>
                     </li>
                   </ul>
