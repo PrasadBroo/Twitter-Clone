@@ -202,7 +202,9 @@ export default function Tweet({
     const blob = await fetch(tweet.pic).then(r=>r.blob())
     const data = {
       title: 'Tweet',
-      files:[blob],
+      files:[new File([blob], 'file.png', {
+        type: blob.type,
+      }),],
       text: tweet.caption,
       url: `https://elon-musk-twitter.netlify.app/${tweet.user.username}/status/${tweet._id}`
     }
