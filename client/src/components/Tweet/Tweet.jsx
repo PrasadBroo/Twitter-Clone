@@ -191,14 +191,18 @@ export default function Tweet({
       dispatch(TWEET_REMOVEBOOKMARK_FAILED())
     }
   };
-  const handelShareTweet = (e)=>{
+  const handelShareTweet = async(e)=>{
     e.preventDefault();
     e.stopPropagation()
+
     if(!navigator.canShare){
      return cogoToast.error('Sharing not supported!')
     }
+
+    const blob = await fetch(tweet.pic).then(r=>r.blob())
     const data = {
       title: 'Tweet',
+      files:[blob],
       text: tweet.caption,
       url: `https://elon-musk-twitter.netlify.app/${tweet.user.username}/status/${tweet._id}`
     }
