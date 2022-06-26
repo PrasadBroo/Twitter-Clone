@@ -172,7 +172,7 @@ export default function User() {
                           <i className="fas fa-link"></i>
                         </span>
                         <a
-                          href={guestUser.website}
+                          href={'https://'+guestUser.website}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="default-link"
