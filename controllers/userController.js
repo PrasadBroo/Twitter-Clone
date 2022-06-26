@@ -1630,6 +1630,9 @@ module.exports.getUserFeedTweets = async (req, res, next) => {
                 }
             },
             {
+                $sort:{createdAt:-1}
+            },
+            {
                 $skip: offset
             },
             {

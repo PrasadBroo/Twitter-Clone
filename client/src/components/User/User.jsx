@@ -45,12 +45,23 @@ const options = {
     email: null,
   },
 };
+
+const external_link_options = {
+  className: () => "default-link",
+  format: {
+    url: (value) => (value.length > 20 ? value.slice(0, 20) + "…" : value),
+  },
+  target: {
+    url: "__blank",
+    email: null,
+  },
+};
 export default function User() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   let currentUser = selectCurrentUser(state);
   let guestUser = selectGuestUser(state);
-  const usernotFound = useSelector(state=>state.guestUser.fetchingError)
+  const usernotFound = useSelector((state) => state.guestUser.fetchingError);
   const isFetching = selectGuestFetching(state);
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -58,10 +69,10 @@ export default function User() {
   const [backgroundImageLoaded, SetBackgroundImageLoaded] = useState(false);
   const [profileImageLoaded, SetProfileImageLoaded] = useState(false);
   const [followingText, setFollowingText] = useState("Following");
-  const [searchQuery,setSearchQuery] = useState('')
-  useEffect(()=>{
-    document.title = `${currentUser.fullName} (@${currentUser.username}) / Twitter`
-  },[currentUser.fullName,currentUser.username])
+  const [searchQuery, setSearchQuery] = useState("");
+  useEffect(() => {
+    document.title = `${currentUser.fullName} (@${currentUser.username}) / Twitter`;
+  }, [currentUser.fullName, currentUser.username]);
   useEffect(() => {
     const retriveUser = (username) => {
       dispatch(fetchUser(username));
@@ -69,7 +80,7 @@ export default function User() {
       // handel success fail
     };
     retriveUser(username);
-    return ()=> dispatch(CLEAR_GUEST_USER())
+    return () => dispatch(CLEAR_GUEST_USER());
   }, [username, dispatch]);
 
   return (
@@ -131,8 +142,10 @@ export default function User() {
                     onClick={() =>
                       dispatch(
                         SHOW_UNFOLLOW_MODEL({
-                          user:{username: guestUser.username,
-                          _id: guestUser._id,},
+                          user: {
+                            username: guestUser.username,
+                            _id: guestUser._id,
+                          },
                           type: "profile",
                         })
                       )
@@ -146,9 +159,11 @@ export default function User() {
                 <div className="user-fullname-container container">
                   <span className="user-fullname">
                     {guestUser.fullName}{" "}
-                    {guestUser.isVerified &&<span className="verfied-icon">
-                      <i className="fas fa-badge-check"></i>
-                    </span>}{" "}
+                    {guestUser.isVerified && (
+                      <span className="verfied-icon">
+                        <i className="fas fa-badge-check"></i>
+                      </span>
+                    )}{" "}
                   </span>
                   <span className="user-username">@{guestUser.username}</span>
                 </div>
@@ -171,16 +186,9 @@ export default function User() {
                         <span className="icon-container link-icon">
                           <i className="fas fa-link"></i>
                         </span>
-                        <a
-                          href={'https://'+guestUser.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="default-link"
-                        >
-                          {guestUser.website.length > 20
-                            ? guestUser.website.slice(0, 20) + "..."
-                            : guestUser.website}
-                        </a>
+                        <Linkify options={external_link_options}>
+                          {guestUser.website}
+                        </Linkify>
                       </>
                     )}
                   </div>
@@ -250,12 +258,15 @@ export default function User() {
             </div>
           </>
         ) : (
-           !usernotFound && <SimpleSpinner topCenter/>
+          !usernotFound && <SimpleSpinner topCenter />
         )}
-        {usernotFound && !isFetching && <NotFound/>}
+        {usernotFound && !isFetching && <NotFound />}
       </div>
       <div className="col2 follow-news-suggetions">
-        <Searchbar input={searchQuery} setInput={(value)=>setSearchQuery(value)}/>
+        <Searchbar
+          input={searchQuery}
+          setInput={(value) => setSearchQuery(value)}
+        />
         <WhoToFollow />
         <News />
       </div>
