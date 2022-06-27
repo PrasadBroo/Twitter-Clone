@@ -1,9 +1,11 @@
+import cogoToast from "cogo-toast";
 import React from "react";
 import { useState } from "react";
+import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { followUser } from "../../services/userServices";
 import { SHOW_UNFOLLOW_MODEL } from "../../store/model/modelSlice";
-import { followTheUser } from "../../store/user/userActions";
 import { selectCurrentUser } from "../../store/user/userSelector";
 import TextButton from "../Button/TextButton/TextButton";
 
@@ -12,6 +14,18 @@ export default function FollowUser({ user, type }) {
   const state = useSelector((state) => state);
   const currentUser = selectCurrentUser(state);
   const [followingText, setFollowingText] = useState("Following");
+  const [following,setIsFollowing] = useState(user.isFollowing);
+
+
+  const mutation = useMutation(followUser, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      setIsFollowing(true)
+    },
+    onError:(error)=>{
+      cogoToast.error(error.message)
+    }
+  })
   return (
     <div className="follow-user">
       <div className="wrap-user">
@@ -32,11 +46,12 @@ export default function FollowUser({ user, type }) {
       </div>
 
       <div className="follow-btn-container">
-        {!user.isFollowing ? (
+        {!following ? (
           user._id !== currentUser._id && (
             <TextButton
+              disabled={mutation.isLoading}
               className="follow-btn"
-              onClick={() => dispatch(followTheUser(user._id, type))}
+              onClick={() => mutation.mutate(user._id)}
             >
               Follow
             </TextButton>

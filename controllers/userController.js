@@ -254,7 +254,7 @@ module.exports.followUser = async (req, res, next) => {
             });
 
         } else {
-            return res.status(200).send({
+            return res.status(400).send({
                 error: 'You are already following this user'
             })
         }
@@ -332,7 +332,7 @@ module.exports.unfollowUser = async (req, res, next) => {
             });
 
         } else {
-            return res.status(200).send({
+            return res.status(400).send({
                 error: 'You are already unfollowing this user'
             })
         }

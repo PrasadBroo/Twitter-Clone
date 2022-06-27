@@ -1,9 +1,11 @@
+import cogoToast from "cogo-toast";
 import React from "react";
+import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import TextButton from "../../components/Button/TextButton/TextButton";
+import { unfollowUser } from "../../services/userServices";
 import { selectUnfollowModel } from "../../store/model/modelSelector";
 import { HIDE_UNFOLLOW_MODEL } from "../../store/model/modelSlice";
-import { unfollowTheUser } from "../../store/user/userActions";
 import RootModel from "../RootModel/RootModel";
 
 export default function UnfollowModel() {
@@ -14,6 +16,14 @@ export default function UnfollowModel() {
   const closeModel = () => {
     dispatch(HIDE_UNFOLLOW_MODEL());
   };
+  const mutation = useMutation(unfollowUser, {
+    onSuccess: () => {
+      closeModel()
+    },
+    onError:(error)=>{
+      cogoToast.error(error.message)
+    }
+  })
   return (
     <RootModel hideHeader className="unfollow-model">
       <div className="unfollow-model-wrap">
@@ -30,10 +40,11 @@ export default function UnfollowModel() {
         </div>
         <div className="unfollow-btns-wrap">
           <TextButton
+          disabled={mutation.isLoading}
             rounded
             className="unfollow-btn unfollowbtn"
             onClick={() =>
-              dispatch(unfollowTheUser(model.userToUnfollow._id, model.type))
+              mutation.mutate(model.userToUnfollow._id)
             }
           >
             Unfollow
