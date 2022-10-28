@@ -3,18 +3,10 @@
         position: relative;
     }
     .nav-links-wrapper {
-        overflow: hidden;
 
         .nav-links {
-            margin-top: 1rem;
-            overflow-x: auto;
-            overflow-y: hidden;
-            @include flexCenter;
-            border-bottom: 1px solid $color-grey-2;
 
             .header-link {
-                color: $color-black;
-                font-weight: 600;
 
                 .custom-border-bottom {
                     position: absolute;
