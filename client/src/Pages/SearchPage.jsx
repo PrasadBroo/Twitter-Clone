@@ -53,38 +53,38 @@ export default function SearchPage() {
             <div className="nav-links">
               <Link
                 to={location.search.replace(componentToRender, "trend")}
-                className={"header-link "}
+                className={"header-link ".concat( componentToRender === "trend" ? "active-header-link":null)  }
               >
                 Top
-                {componentToRender === 'trend' &&<span className="custom-border-bottom"></span>}
+                <span className="custom-border-bottom"></span>
               </Link>
               <Link
                 to={location.search.replace(componentToRender, "live")}
-                className={"header-link "}
+                className={"header-link ".concat( componentToRender === "live" ? "active-header-link":null)  }
               >
                 Latest
-                {componentToRender === 'live' &&<span className="custom-border-bottom"></span>}
+                <span className="custom-border-bottom"></span>
               </Link>
               <Link
                 to={location.search.replace(componentToRender, "users")}
-                className={"header-link "}
+                className={"header-link ".concat( componentToRender === "users" ? "active-header-link":null)  }
               >
                 People
-                {componentToRender === 'users' &&<span className="custom-border-bottom"></span>}
+                <span className="custom-border-bottom"></span>
               </Link>
               <Link
                 to={location.search.replace(componentToRender, "images")}
-                className={"header-link "}
+                className={"header-link ".concat( componentToRender === "images" ? "active-header-link":null)  }
               >
                 Photos
-                {componentToRender === 'images' &&<span className="custom-border-bottom"></span>}
+                <span className="custom-border-bottom"></span>
               </Link>
               <Link
                 to={location.search.replace(componentToRender, "videos")}
-                className={"header-link "}
+                className={"header-link ".concat( componentToRender === "videos" ? "active-header-link":null)  }
               >
                 Videos
-                {componentToRender === 'videos' &&<span className="custom-border-bottom"></span>}
+                <span className="custom-border-bottom"></span>
               </Link>
             </div>
           </div>
