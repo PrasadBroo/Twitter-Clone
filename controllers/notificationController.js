@@ -23,7 +23,7 @@ module.exports.retrieveNotifications = async (req, res, next) => {
       },
       {
         $sort: {
-          date: -1
+          createdAt: -1
         },
       },
       {
