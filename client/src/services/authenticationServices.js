@@ -94,3 +94,18 @@ export const loginWithEmail = async (email, password) => {
     }
 
 }
+
+export const verifyEmailToken = async (token) => {
+    try {
+        const response = await axios.post('/api/auth/confirm/email', {
+            token
+        },{
+            headers: {
+                authorization: localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.error)
+    }
+}

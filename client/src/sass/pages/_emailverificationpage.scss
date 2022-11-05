@@ -1,0 +1,9 @@
+.email-verification-page{
+    @include flexJustifyCenter;
+    font-size: 1.4rem;
+    height: inherit;
+    letter-spacing: 3px;
+    .success{
+        color: lightgreen;
+    }
+}

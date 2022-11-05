@@ -4,6 +4,8 @@ const {
     getGoogleUserInfo,
 } = require("../services/googleAuthService");
 const bcrypt = require('bcrypt');
+const crypto = require('crypto')
+const {sendVerificationEmail} = require('../services/emailService')
 const Mongoose = require("mongoose");
 const User = require('../models/User')
 const jwt = require('jsonwebtoken');
@@ -14,6 +16,7 @@ const {
 const { verifyAll } = require('../utils/validations');
 const Followers =  require('../models/Followers')
 const Followings =  require('../models/Followings')
+const ConfirmToken = require('../models/ConfirmToken')
 
 
 
@@ -215,6 +218,9 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
 module.exports.signupUserWithEmail = async(req,res,next)=>{
     const saltRounds = 10;
     const daysInExpires = 7;
+    const rbytes = crypto.randomBytes(20).toString('hex')
+    const vlink = `https://elon-musk-twitter.netlify.app/confirm/${rbytes}` 
+            
     // get details
 
     const {name,email,username,password,confPassword} = req.body;
@@ -275,12 +281,15 @@ module.exports.signupUserWithEmail = async(req,res,next)=>{
                 }
             ]
             const myuser = await User.aggregate(pipeline);
+            const user_confirm_token = await ConfirmToken.create({user:user._id,token:rbytes})
+            sendVerificationEmail(email,name,vlink)
             return res.send({
                 user:myuser[0],
                 token: jwt.sign({
                     id: user._id
                 }, process.env.JWT_TOKEN_SECRET,{expiresIn:86400*daysInExpires}),
             });
+
         }
     } catch (error) {
         next(error)
@@ -445,6 +454,25 @@ module.exports.requireAuth = async(req,res,next)=>{
         else{
             res.status(404).send({error:"User doesn't exist"})
         }
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports.verifyEmail = async(req,res,next)=>{
+    const {token} = req.body;
+    const currentUser = res.locals.user;
+    try {
+        if(!token){
+            return  res.status(400).send({error:'Please provide token'})
+          }
+          const isValidtoken = await ConfirmToken.findOne({token,user:currentUser._id})
+          if(!isValidtoken){
+            return res.status(404).send({error:'Token not found'})
+          }
+          await ConfirmToken.deleteOne({token,user:currentUser._id})
+          await User.updateOne({_id:currentUser._id},{isVerified:true})
+          return res.status(200).send('success')
+
     } catch (error) {
         next(error)
     }

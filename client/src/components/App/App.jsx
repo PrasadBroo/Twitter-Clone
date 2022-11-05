@@ -26,6 +26,7 @@ import ComposeTweetPage from "./../../Pages/ComposeTweetPage";
 import Tweetpage from "../../Pages/Tweetpage";
 import ExploreForYou from "../../subcomponents/ExploreForYou";
 import SearchPage from "../../Pages/SearchPage";
+import EmailVerificationPage from "../../Pages/Auth/EmailVerificationPage";
 import Tweets from "../Tweet/Tweets";
 import Mentions from "../Notification/Mentions";
 import All from "../Notification/All";
@@ -128,6 +129,7 @@ function App() {
               <Route path="notifications" element={<h1>Notifications</h1>} />
             </Route>
           </Route>
+          <Route path="confirm/:verificationtoken" element={<EmailVerificationPage/>}/>
         </Route>
         <Route path="*" element={<h1>404 Page Not Found</h1>} />
       </Routes>
