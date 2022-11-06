@@ -2,18 +2,19 @@
 
 ### Todo
 
-- [ ] Add send email verification feature.
+
 - [ ]  Add tweet & replies tab.
 
 ### In Progress
 
-- [ ] null
+- [ ] Null
 
 ### Done ✓
 
 - [x] Make clone mobile friendly.
 - [x] Add hashtag,users in explore page. 
 - [x] Work on notifications eg.tweet like,mentioned.
+- [x] Add send email verification feature.
 
 
 # Getting Started with Create React App
