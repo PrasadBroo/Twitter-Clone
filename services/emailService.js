@@ -22,5 +22,5 @@ module.exports.sendVerificationEmail = async (email, fullname, v_link) => {
       text: "Verify your email", // plain text body
       html: emailTemplate.sendverificationlink(v_link, fullname), // html body
     });
-  } catch (error) {}
+  } catch (error) {console.log(error)}
 };
