@@ -12,7 +12,7 @@ module.exports.getGoogleAccessTokenFromCode = async (code) => {
             data: {
                 client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
                 client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
-                redirect_uri: 'http://localhost:3000/authenticate/google',
+                redirect_uri: `${process.env.HOME_URL}/authenticate/google`,
                 grant_type: 'authorization_code',
                 code,
             },

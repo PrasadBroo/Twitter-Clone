@@ -219,7 +219,7 @@ module.exports.signupUserWithEmail = async(req,res,next)=>{
     const saltRounds = 10;
     const daysInExpires = 7;
     const rbytes = crypto.randomBytes(20).toString('hex')
-    const vlink = `https://elon-musk-twitter.netlify.app/confirm/${rbytes}` 
+    const vlink = `${process.env.HOME_URL}/confirm/${rbytes}` 
             
     // get details
 

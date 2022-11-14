@@ -13,7 +13,7 @@ module.exports.getGithubAccessTokenFromCode = async (code) => {
             params: {
                 client_id: process.env.GITHUB_CLIENT_ID,
                 client_secret: process.env.GITHUB_OAUTH_CLIENT_SECRET,
-                redirect_uri: 'https://elon-musk-twitter.netlify.app/authenticate/github',
+                redirect_uri: `${process.env.HOME_URL}/authenticate/github`,
                 code,
             },
         });
