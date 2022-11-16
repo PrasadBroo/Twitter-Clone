@@ -54,7 +54,6 @@ function App() {
 
   useEffect(() => {
     if (token) dispatch(signInStart());
-    console.log('token changed')
   }, [dispatch, token]);
 
   useEffect(()=>{
