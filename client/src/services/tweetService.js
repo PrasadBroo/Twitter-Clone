@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./axios";
 
 export const postTheTweet = async (caption, pic,tweetid) => {
     try {

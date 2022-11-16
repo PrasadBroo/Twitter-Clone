@@ -1,6 +1,6 @@
 import "../../sass/main.scss";
 import React,{ Suspense,lazy, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import RequireAuth from "../RequireAuth/RequireAuth";
 import SignupFlowPage from "../../Pages/Auth/SignupFlowPage";
 import NotRequireAuth from "../NotRequireAuth/NotRequireAuth";
@@ -36,6 +36,8 @@ import ExploreNews from './../../subcomponents/ExploreNews';
 import ExploreSports from './../../subcomponents/ExploreSports';
 import ExploreEntertainment from './../../subcomponents/ExploreEntertainment';
 import { QueryClientProvider,QueryClient } from "react-query";
+import { setupInterceptors } from "../../services/axios";
+
 
 const LoginPage = lazy(() => import('./../../Pages/Auth/LoginPage'));
 const HomepageLayout =  lazy(() => import("../../Pages/HomepageLayout"));
@@ -44,13 +46,20 @@ const GithubAuthPage = lazy(() => import( "./../../Pages/Auth/GithubAuthPage"));
 const queryClient = new QueryClient()
 
 function App() {
+  const navigate = useNavigate();
   const state = useSelector((state) => state);
   const is_fetching = selectFetching(state);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
+
   useEffect(() => {
     if (token) dispatch(signInStart());
+    console.log('token changed')
   }, [dispatch, token]);
+
+  useEffect(()=>{
+    setupInterceptors(navigate)
+  },[navigate])
 
   if(is_fetching)return <DefaultLoading/>
   return (

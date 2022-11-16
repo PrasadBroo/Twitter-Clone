@@ -1845,6 +1845,7 @@ module.exports.getUsersSuggetions = async (req, res, next) => {
         const users = await User.aggregate(pipeline)
         res.send(users)
     } catch (error) {
+        console.log(error)
         next(error)
     }
 }

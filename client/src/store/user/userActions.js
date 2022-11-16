@@ -118,7 +118,6 @@ export const signInStart = () => async (dispatch) => {
         dispatch(FETCHING_FINISHED())
     } catch (error) {
         dispatch(FETCHING_FINISHED())
-        dispatch(SIGN_IN_FAIL(error.message))
         dispatch(logout())
     }
 }
