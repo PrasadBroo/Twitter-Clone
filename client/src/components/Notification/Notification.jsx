@@ -90,6 +90,36 @@ export default function Notification({ data }) {
                 </div>
               </>
             )
+      case "comment":
+        return (
+          <>
+            <div className="wrap-avatar">
+              <img
+                src={data.sender.avatar}
+                className="user-avatar"
+                alt="avatar"
+                title={data.sender.fullName}
+              />
+            </div>
+            <div className="noti-wrap">
+              <span className="noti-msg">
+                <Link
+                  to={"/" + data.sender.username}
+                  className="user-username default-link"
+                >
+                  {"@" + data.sender.username}
+                </Link>{" "}
+                dropped comment on your <Link
+                  to={"/" + data.sender.username+'/status/'+data.data.tweetid}
+                  className="user-username default-link"
+                >
+                  post 
+                </Link>
+              </span>
+              <span className="noti-time">{moment(data.createdAt).fromNow()}</span>
+            </div>
+          </>
+        )
       default:
         return null;
     }
