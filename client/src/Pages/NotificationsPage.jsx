@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, NavLink } from "react-router-dom";
 import News from "../components/News/News";
@@ -8,7 +9,7 @@ import { fetchNotifications,fetchMentionsNotifications } from "../store/notifica
 
 export default function NotificationsPage() {
   const dispatch = useDispatch();
-
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
     dispatch(fetchNotifications());
     dispatch(fetchMentionsNotifications())
@@ -52,7 +53,8 @@ export default function NotificationsPage() {
         </div>
         <div className="col2 follow-sugg-news-container">
           <div className="follow-sugg-news-wrap">
-            <Searchbar />
+            <Searchbar input={searchQuery}
+              setInput={(value) => setSearchQuery(value)}/>
             <News />
             <WhoToFollow />
           </div>

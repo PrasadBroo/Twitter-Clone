@@ -28,10 +28,8 @@ function Searchbar({ className, input, setInput }) {
         setUsers(users);
         setFetching(false);
       }
-
-      setTimeout(() => {
         if (value) fetchUsers();
-      }, 1000);
+
     } catch (error) {
       setIsError(error.message);
       setFetching(false);
