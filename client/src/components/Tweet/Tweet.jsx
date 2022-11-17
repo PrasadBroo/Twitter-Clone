@@ -125,9 +125,9 @@ export default function Tweet({
     }
   };
   const handelTweetReply = (e) => {
+    console.log('hmm')
     e.stopPropagation();
-    // OR
-    e.preventDefault();
+
     dispatch(
       SET_TWEET_TYPE({ type: "tweetReply", retweet: null, tweet: tweet })
     );

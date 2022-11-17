@@ -57,8 +57,8 @@ function App() {
   }, [dispatch, token]);
 
   useEffect(()=>{
-    setupInterceptors(navigate)
-  },[navigate])
+    setupInterceptors(navigate,dispatch)
+  },[navigate,dispatch])
 
   if(is_fetching)return <DefaultLoading/>
   return (

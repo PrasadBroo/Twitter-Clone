@@ -166,7 +166,7 @@ export default function SendTweet({ className,placeholder,tweet=null }) {
               </div>
               <div className="send-tweet-btn-container">
                 <TextButton bcBlue rounded className="send-tweet-btn" disabled={!tweetText} onClick={handelSubmit}>
-                  { placeholder ? 'Reply' : 'Tweet'}
+                  { tweet ? 'Reply' : 'Tweet'}
                 </TextButton>
               </div>
             </div>

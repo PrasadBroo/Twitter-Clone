@@ -16,7 +16,7 @@ export default function WhoToFollow({headerText}) {
           {users &&
             users.map((user) => <FollowUser user={user} key={user._id} type='suggUsers'/>)}
           {!users && <h5>No users suggestions</h5>}
-          {error && <h3 className="error-text">{error}</h3>}
+          {error && <h3 className="error-text">{error.message}</h3>}
         </>
       ) : (
         <SimpleSpinner topCenter />
