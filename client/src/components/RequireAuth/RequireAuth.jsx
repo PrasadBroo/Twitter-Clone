@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { useLocation, Outlet, Navigate } from "react-router-dom";
-import { selectCurrentUser } from "../../store/user/userSelector";
+
 export default function RequireAuth() {
-  const state = useSelector(state=>state)
+
   let user = localStorage.getItem('token');
   let location = useLocation();
 
