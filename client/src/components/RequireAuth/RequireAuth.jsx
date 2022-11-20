@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import { useLocation, Outlet, Navigate } from "react-router-dom";
 
 export default function RequireAuth() {
