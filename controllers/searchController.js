@@ -14,7 +14,7 @@ module.exports.searchTweets = async (req, res, next) => {
             offset = 0
         }
         if (!query || !filter) {
-            return res.status(400).json({
+            return res.status(500).json({
                 error: 'Provide require params'
             })
         }

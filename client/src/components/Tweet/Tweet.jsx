@@ -41,7 +41,7 @@ import cogoToast from "cogo-toast";
 const options = {
   className: () => "default-link",
   formatHref: {
-    hashtag: (href) => "/explore?hashtag=" + href.substr(1),
+    hashtag: (href) => "/search?c=trend&q=" + href.substr(1),
     mention: (href) => "/" + href.substr(1),
   },
   format: {
@@ -125,7 +125,6 @@ export default function Tweet({
     }
   };
   const handelTweetReply = (e) => {
-    console.log('hmm')
     e.stopPropagation();
 
     dispatch(
@@ -287,7 +286,7 @@ export default function Tweet({
             </p>
           </div>
           <div className="tweet-content-image-container">
-            {tweet.pic && (
+            {tweet.media_type === 1 && tweet.pic && (
               <img
                 src={tweet.pic}
                 alt="tweet-pic"

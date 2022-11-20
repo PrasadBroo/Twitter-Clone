@@ -23,6 +23,14 @@ const TweetSchema = new Schema({
     in_reply_to_status_id:{
         type:Schema.Types.ObjectId,
         default:null
+    },
+    media_type:{
+        type:Number,
+        default:null,
+    },
+    video_src:{
+        type:String,
+        default:null,
     }
 
 })
