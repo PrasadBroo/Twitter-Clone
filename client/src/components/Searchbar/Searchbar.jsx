@@ -13,6 +13,7 @@ function Searchbar({ className, input, setInput }) {
   const [isError, setIsError] = useState(null);
   const [value] = useDebounce(input, 1000);
   const [hasMore, setHasMore] = useState(true);
+  const [isFocused,setIsFocused] = useState(false)
   const {
     ref: searchbarRef,
     isVisible: isResultVisible,
@@ -45,6 +46,7 @@ function Searchbar({ className, input, setInput }) {
       setFetching(false);
     }
   });
+
   return (
     <div className={"searchbar " + className}>
       <label htmlFor="search-input" className="search-input-label">
@@ -61,8 +63,9 @@ function Searchbar({ className, input, setInput }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Search Twitter Clone"
+            onFocus={()=>{setIsFocused(true);setResultVisible(true)}}
           />
-          {input && isResultVisible && (
+          {input && isResultVisible && isFocused && (
             <div className="users-list" ref={scrollRef}>
               <span className="close-btn" onClick={() => setInput("")}>
                 <i className="fas fa-xmark"></i>
