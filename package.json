@@ -7,7 +7,6 @@
     "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.28.1",
-    "cogo-toast": "^4.2.3",
     "concurrently": "^6.4.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
