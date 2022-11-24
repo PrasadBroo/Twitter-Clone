@@ -37,6 +37,7 @@ import tweetReducer, {
   TWEET_REMOVEBOOKMARK_FAILED,
 } from "../../store/Tweet/tweetSlice";
 import cogoToast from "cogo-toast";
+import Video from "../../subcomponents/Video";
 
 const options = {
   className: () => "default-link",
@@ -171,44 +172,46 @@ export default function Tweet({
   const handelTweetBookmark = async (e) => {
     e.stopPropagation();
     try {
-      dispatch(TWEET_BOOKMARK_SUCCESS())
+      dispatch(TWEET_BOOKMARK_SUCCESS());
       await bookmarkTweet(tweet._id);
       cogoToast.success("Bookmarked successfully!");
     } catch (error) {
       cogoToast.error(error.message);
-      dispatch(TWEET_BOOKMARK_FAILED())
+      dispatch(TWEET_BOOKMARK_FAILED());
     }
   };
-  const handelTweetRemoveBookmark = async(e) => {
+  const handelTweetRemoveBookmark = async (e) => {
     e.stopPropagation();
     try {
-      dispatch(TWEET_REMOVEBOOKMARK_SUCCESS())
+      dispatch(TWEET_REMOVEBOOKMARK_SUCCESS());
       await removeBookmarkTweet(tweet._id);
       cogoToast.success("Bookmark removed successfully!");
     } catch (error) {
       cogoToast.error(error.message);
-      dispatch(TWEET_REMOVEBOOKMARK_FAILED())
+      dispatch(TWEET_REMOVEBOOKMARK_FAILED());
     }
   };
-  const handelShareTweet = async(e)=>{
+  const handelShareTweet = async (e) => {
     e.preventDefault();
-    e.stopPropagation()
+    e.stopPropagation();
 
-    if(!navigator.canShare){
-     return cogoToast.error('Sharing not supported!')
+    if (!navigator.canShare) {
+      return cogoToast.error("Sharing not supported!");
     }
 
-    const blob = await fetch(tweet.pic).then(r=>r.blob())
+    const blob = await fetch(tweet.pic).then((r) => r.blob());
     const data = {
-      title: 'Tweet',
-      files:[new File([blob], 'file.png', {
-        type: blob.type,
-      }),],
+      title: "Tweet",
+      files: [
+        new File([blob], "file.png", {
+          type: blob.type,
+        }),
+      ],
       text: tweet.caption,
-      url: `https://elon-musk-twitter.netlify.app/${tweet.user.username}/status/${tweet._id}`
-    }
-    navigator.share(data)
-  }
+      url: `https://zwitter.netlify.app/${tweet.user.username}/status/${tweet._id}`,
+    };
+    navigator.share(data);
+  };
   return !fetching ? (
     <div
       onClick={() =>
@@ -292,6 +295,9 @@ export default function Tweet({
                 alt="tweet-pic"
                 className="tweet-content-image"
               />
+            )}
+            {tweet.media_type === 2 && (
+              <Video src={tweet.video_src}/>
             )}
           </div>
           {!newlook && (
@@ -433,7 +439,10 @@ export default function Tweet({
                       <span className="tweet-options-model-icon">
                         <i className="far fa-share"></i>
                       </span>
-                      <TextButton className="tweet-options-model-btn" onClick={handelShareTweet}>
+                      <TextButton
+                        className="tweet-options-model-btn"
+                        onClick={handelShareTweet}
+                      >
                         Share tweet via
                       </TextButton>
                     </li>
@@ -524,31 +533,31 @@ export default function Tweet({
                 </TextButton>
 
                 <ul className={savetweetOptionsClassnames}>
-                {!tweet.isBookmarked ? (
-                      <li className="tweet-options-model-item">
-                        <span className="tweet-options-model-icon">
-                          <i className="far fa-bookmark"></i>
-                        </span>
-                        <TextButton
-                          className="tweet-options-model-btn"
-                          onClick={handelTweetBookmark}
-                        >
-                          Bookmark
-                        </TextButton>
-                      </li>
-                    ) : (
-                      <li className="tweet-options-model-item">
-                        <span className="tweet-options-model-icon">
-                          <i className="fas fa-bookmark"></i>
-                        </span>
-                        <TextButton
-                          className="tweet-options-model-btn"
-                          onClick={handelTweetRemoveBookmark}
-                        >
-                          Remove Bookmark
-                        </TextButton>
-                      </li>
-                    )}
+                  {!tweet.isBookmarked ? (
+                    <li className="tweet-options-model-item">
+                      <span className="tweet-options-model-icon">
+                        <i className="far fa-bookmark"></i>
+                      </span>
+                      <TextButton
+                        className="tweet-options-model-btn"
+                        onClick={handelTweetBookmark}
+                      >
+                        Bookmark
+                      </TextButton>
+                    </li>
+                  ) : (
+                    <li className="tweet-options-model-item">
+                      <span className="tweet-options-model-icon">
+                        <i className="fas fa-bookmark"></i>
+                      </span>
+                      <TextButton
+                        className="tweet-options-model-btn"
+                        onClick={handelTweetRemoveBookmark}
+                      >
+                        Remove Bookmark
+                      </TextButton>
+                    </li>
+                  )}
                   <li className="tweet-options-model-item">
                     <span className="tweet-options-model-icon">
                       <i className="far fa-link"></i>
@@ -561,7 +570,10 @@ export default function Tweet({
                     <span className="tweet-options-model-icon">
                       <i className="far fa-share"></i>
                     </span>
-                    <TextButton className="tweet-options-model-btn" onClick={handelShareTweet}>
+                    <TextButton
+                      className="tweet-options-model-btn"
+                      onClick={handelShareTweet}
+                    >
                       Sharet tweet via
                     </TextButton>
                   </li>
