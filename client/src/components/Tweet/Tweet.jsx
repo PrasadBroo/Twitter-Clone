@@ -39,10 +39,16 @@ import tweetReducer, {
 import cogoToast from "cogo-toast";
 import Video from "../../subcomponents/Video";
 
+const linkProps = {
+  onClick: (event) => {
+    console.log(1)
+    event.stopPropagation()
+  }
+};
 const options = {
   className: () => "default-link",
   formatHref: {
-    hashtag: (href) => "/search?c=trend&q=" + href.substr(1),
+    hashtag: (href) => "/search?c=trend&q=" + encodeURIComponent(href),
     mention: (href) => "/" + href.substr(1),
   },
   format: {
@@ -54,6 +60,7 @@ const options = {
     url: "__blank",
     email: null,
   },
+  attributes:linkProps
 };
 
 export default function Tweet({
