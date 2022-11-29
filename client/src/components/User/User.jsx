@@ -32,7 +32,7 @@ import { CLEAR_GUEST_USER } from "../../store/guest/guestSlice";
 const options = {
   className: () => "default-link",
   formatHref: {
-    hashtag: (href) => "/explore?hashtag=" + href.substr(1),
+    hashtag: (href) => "/search?c=trend&q=" + encodeURIComponent(href),
     mention: (href) => "/" + href.substr(1),
   },
   format: {
