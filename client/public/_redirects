@@ -1,2 +1,2 @@
-/api/* https://musk-twitter.herokuapp.com/api/:splat 200
+/api/* https://zwitter.onrender.com/api/:splat 200
 /*  /index.html  200
