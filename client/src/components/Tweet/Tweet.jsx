@@ -38,7 +38,7 @@ import tweetReducer, {
 } from "../../store/Tweet/tweetSlice";
 import cogoToast from "cogo-toast";
 import Video from "../../subcomponents/Video";
-
+import {motion} from 'framer-motion'
 const linkProps = {
   onClick: (event) => {
     console.log(1)
@@ -220,7 +220,9 @@ export default function Tweet({
     navigator.share(data);
   };
   return !fetching ? (
-    <div
+    <motion.div
+      initial={{opacity:0}}
+      animate={{opacity:1}}
       onClick={() =>
         navigate("/" + tweet.user.username + "/status/" + tweet._id)
       }
@@ -590,6 +592,6 @@ export default function Tweet({
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   ) : null;
 }

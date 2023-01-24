@@ -28,7 +28,7 @@ import "linkify-plugin-hashtag";
 import "linkify-plugin-mention";
 import NotFound from "../NotFound/NotFound";
 import { CLEAR_GUEST_USER } from "../../store/guest/guestSlice";
-
+import {motion} from 'framer-motion'
 const options = {
   className: () => "default-link",
   formatHref: {
@@ -85,9 +85,10 @@ export default function User() {
 
   return (
     <div className="two-flex-col-container userpage">
-      <div className="col1 user-section">
+      <motion.div  className="col1 user-section">
         {!isFetching && !usernotFound ? (
-          <>
+          <motion initial={{opacity:0}}
+          animate={{opacity:1}}>
             <UserHeader />
             <div className="bc-image-container">
               <img
@@ -103,7 +104,7 @@ export default function User() {
               />
               {!backgroundImageLoaded && <SimpleSpinner />}
             </div>
-            <div className="user-details">
+            <motion.div className="user-details">
               <div className="profile-pic-container-two">
                 <img
                   src={guestUser.avatar}
@@ -255,13 +256,13 @@ export default function User() {
               <div className="user-links-content">
                 <Outlet />
               </div>
-            </div>
-          </>
+            </motion.div>
+          </motion>
         ) : (
           !usernotFound && <SimpleSpinner topCenter />
         )}
         {usernotFound && !isFetching && <NotFound />}
-      </div>
+      </motion.div>
       <div className="col2 follow-news-suggetions">
         <Searchbar
           input={searchQuery}

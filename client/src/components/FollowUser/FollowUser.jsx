@@ -1,4 +1,5 @@
 import cogoToast from "cogo-toast";
+import { motion } from "framer-motion";
 import React from "react";
 import { useState } from "react";
 import { useMutation } from "react-query";
@@ -14,20 +15,24 @@ export default function FollowUser({ user, type }) {
   const state = useSelector((state) => state);
   const currentUser = selectCurrentUser(state);
   const [followingText, setFollowingText] = useState("Following");
-  const [following,setIsFollowing] = useState(user.isFollowing);
-
+  const [following, setIsFollowing] = useState(user.isFollowing);
 
   const mutation = useMutation(followUser, {
     onSuccess: () => {
       // Invalidate and refetch
-      setIsFollowing(true)
+      setIsFollowing(true);
     },
-    onError:(error)=>{
-      cogoToast.error(error.message)
-    }
-  })
+    onError: (error) => {
+      cogoToast.error(error.message);
+    },
+  });
+
   return (
-    <div className="follow-user">
+    <motion.div
+      className="follow-user"
+      initial={{ opacity: 0.5 }}
+      animate={{ opacity: 1 }}
+    >
       <div className="wrap-user">
         <div className="profile-pic-container">
           <img src={user.avatar} alt="profile-pic" className="profile-pic" />
@@ -75,6 +80,6 @@ export default function FollowUser({ user, type }) {
           </TextButton>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
