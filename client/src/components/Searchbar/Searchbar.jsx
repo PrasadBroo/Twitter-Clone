@@ -6,6 +6,7 @@ import SimpleSpinner from "../Loader/SimpleSpinner";
 import useComponentVisible from "./../../CustomHooks/useComponentVisible";
 import { useDebounce } from "use-debounce";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { AnimatePresence, motion } from "framer-motion";
 
 function Searchbar({ className, input, setInput }) {
   const [users, setUsers] = useState([]);
@@ -13,7 +14,7 @@ function Searchbar({ className, input, setInput }) {
   const [isError, setIsError] = useState(null);
   const [value] = useDebounce(input, 1000);
   const [hasMore, setHasMore] = useState(true);
-  const [isFocused,setIsFocused] = useState(false)
+  const [isFocused, setIsFocused] = useState(false);
   const {
     ref: searchbarRef,
     isVisible: isResultVisible,
@@ -29,8 +30,7 @@ function Searchbar({ className, input, setInput }) {
         setUsers(users);
         setFetching(false);
       }
-        if (value) fetchUsers();
-
+      if (value) fetchUsers();
     } catch (error) {
       setIsError(error.message);
       setFetching(false);
@@ -63,27 +63,42 @@ function Searchbar({ className, input, setInput }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Search Twitter Clone"
-            onFocus={()=>{setIsFocused(true);setResultVisible(true)}}
+            onFocus={() => {
+              setIsFocused(true);
+              setResultVisible(true);
+            }}
           />
-          {input && isResultVisible && isFocused && (
-            <div className="users-list" ref={scrollRef}>
-              <span className="close-btn" onClick={() => setInput("")}>
-                <i className="fas fa-xmark"></i>
-              </span>
-              {!fetching && (
-                <>
-                  <CustomSearch q={input} />
-                </>
-              )}
+          <AnimatePresence>
+            {input && isResultVisible && isFocused && (
+              <motion.div
+                className="users-list"
+                ref={scrollRef}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ y: 50, opacity: 0 }}
+              >
+                <span className="close-btn" onClick={() => setInput("")}>
+                  <i className="fas fa-xmark"></i>
+                </span>
+                {!fetching && (
+                  <>
+                    <CustomSearch q={input} />
+                  </>
+                )}
 
-              {users &&
-                users.map((user) => <FollowUser user={user} key={user._id} />)}
-              {fetching && users.length === 0 && <SimpleSpinner topCenter />}
-              {!isError && users.length === 0 && !fetching && (
-                <span className="no-users-found">No users found &#128528;</span>
-              )}
-            </div>
-          )}
+                {users &&
+                  users.map((user) => (
+                    <FollowUser user={user} key={user._id} />
+                  ))}
+                {fetching && users.length === 0 && <SimpleSpinner topCenter />}
+                {!isError && users.length === 0 && !fetching && (
+                  <span className="no-users-found">
+                    No users found &#128528;
+                  </span>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </label>
     </div>

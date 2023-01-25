@@ -38,12 +38,12 @@ import tweetReducer, {
 } from "../../store/Tweet/tweetSlice";
 import cogoToast from "cogo-toast";
 import Video from "../../subcomponents/Video";
-import {motion} from 'framer-motion'
+import { AnimatePresence, motion } from "framer-motion";
 const linkProps = {
   onClick: (event) => {
-    console.log(1)
-    event.stopPropagation()
-  }
+    console.log(1);
+    event.stopPropagation();
+  },
 };
 const options = {
   className: () => "default-link",
@@ -60,7 +60,7 @@ const options = {
     url: "__blank",
     email: null,
   },
-  attributes:linkProps
+  attributes: linkProps,
 };
 
 export default function Tweet({
@@ -221,8 +221,8 @@ export default function Tweet({
   };
   return !fetching ? (
     <motion.div
-      initial={{opacity:0}}
-      animate={{opacity:1}}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       onClick={() =>
         navigate("/" + tweet.user.username + "/status/" + tweet._id)
       }
@@ -305,9 +305,7 @@ export default function Tweet({
                 className="tweet-content-image"
               />
             )}
-            {tweet.media_type === 2 && (
-              <Video src={tweet.video_src}/>
-            )}
+            {tweet.media_type === 2 && <Video src={tweet.video_src} />}
           </div>
           {!newlook && (
             <div className="tweet-actions">
@@ -406,56 +404,64 @@ export default function Tweet({
                   >
                     <ShareIcon fill={"#536471"} height="18px" width="18px" />
                   </TextButton>
-
-                  <ul className={savetweetOptionsClassnames}>
-                    {!tweet.isBookmarked ? (
-                      <li className="tweet-options-model-item">
-                        <span className="tweet-options-model-icon">
-                          <i className="far fa-bookmark"></i>
-                        </span>
-                        <TextButton
-                          className="tweet-options-model-btn"
-                          onClick={handelTweetBookmark}
-                        >
-                          Bookmark
-                        </TextButton>
-                      </li>
-                    ) : (
-                      <li className="tweet-options-model-item">
-                        <span className="tweet-options-model-icon">
-                          <i className="fas fa-bookmark"></i>
-                        </span>
-                        <TextButton
-                          className="tweet-options-model-btn"
-                          onClick={handelTweetRemoveBookmark}
-                        >
-                          Remove Bookmark
-                        </TextButton>
-                      </li>
+                  <AnimatePresence>
+                    {saveOptonsVisible && (
+                      <motion.ul
+                        className={savetweetOptionsClassnames}
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ y: 50, opacity: 0 }}
+                      >
+                        {!tweet.isBookmarked ? (
+                          <li className="tweet-options-model-item">
+                            <span className="tweet-options-model-icon">
+                              <i className="far fa-bookmark"></i>
+                            </span>
+                            <TextButton
+                              className="tweet-options-model-btn"
+                              onClick={handelTweetBookmark}
+                            >
+                              Bookmark
+                            </TextButton>
+                          </li>
+                        ) : (
+                          <li className="tweet-options-model-item">
+                            <span className="tweet-options-model-icon">
+                              <i className="fas fa-bookmark"></i>
+                            </span>
+                            <TextButton
+                              className="tweet-options-model-btn"
+                              onClick={handelTweetRemoveBookmark}
+                            >
+                              Remove Bookmark
+                            </TextButton>
+                          </li>
+                        )}
+                        <li className="tweet-options-model-item">
+                          <span className="tweet-options-model-icon">
+                            <i className="far fa-link"></i>
+                          </span>
+                          <TextButton
+                            className="tweet-options-model-btn"
+                            onClick={handelLinkCopy}
+                          >
+                            Copy link to tweet
+                          </TextButton>
+                        </li>
+                        <li className="tweet-options-model-item">
+                          <span className="tweet-options-model-icon">
+                            <i className="far fa-share"></i>
+                          </span>
+                          <TextButton
+                            className="tweet-options-model-btn"
+                            onClick={handelShareTweet}
+                          >
+                            Share tweet via
+                          </TextButton>
+                        </li>
+                      </motion.ul>
                     )}
-                    <li className="tweet-options-model-item">
-                      <span className="tweet-options-model-icon">
-                        <i className="far fa-link"></i>
-                      </span>
-                      <TextButton
-                        className="tweet-options-model-btn"
-                        onClick={handelLinkCopy}
-                      >
-                        Copy link to tweet
-                      </TextButton>
-                    </li>
-                    <li className="tweet-options-model-item">
-                      <span className="tweet-options-model-icon">
-                        <i className="far fa-share"></i>
-                      </span>
-                      <TextButton
-                        className="tweet-options-model-btn"
-                        onClick={handelShareTweet}
-                      >
-                        Share tweet via
-                      </TextButton>
-                    </li>
-                  </ul>
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
@@ -540,53 +546,61 @@ export default function Tweet({
                 >
                   <ShareIcon fill={"#536471"} height="25px" width="25px" />
                 </TextButton>
-
-                <ul className={savetweetOptionsClassnames}>
-                  {!tweet.isBookmarked ? (
-                    <li className="tweet-options-model-item">
-                      <span className="tweet-options-model-icon">
-                        <i className="far fa-bookmark"></i>
-                      </span>
-                      <TextButton
-                        className="tweet-options-model-btn"
-                        onClick={handelTweetBookmark}
-                      >
-                        Bookmark
-                      </TextButton>
-                    </li>
-                  ) : (
-                    <li className="tweet-options-model-item">
-                      <span className="tweet-options-model-icon">
-                        <i className="fas fa-bookmark"></i>
-                      </span>
-                      <TextButton
-                        className="tweet-options-model-btn"
-                        onClick={handelTweetRemoveBookmark}
-                      >
-                        Remove Bookmark
-                      </TextButton>
-                    </li>
-                  )}
-                  <li className="tweet-options-model-item">
-                    <span className="tweet-options-model-icon">
-                      <i className="far fa-link"></i>
-                    </span>
-                    <TextButton className="tweet-options-model-btn">
-                      Copy link to tweet
-                    </TextButton>
-                  </li>
-                  <li className="tweet-options-model-item">
-                    <span className="tweet-options-model-icon">
-                      <i className="far fa-share"></i>
-                    </span>
-                    <TextButton
-                      className="tweet-options-model-btn"
-                      onClick={handelShareTweet}
+                <AnimatePresence>
+                  {saveOptonsVisible && (
+                    <motion.ul
+                      className={savetweetOptionsClassnames}
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ y: 50, opacity: 0 }}
                     >
-                      Sharet tweet via
-                    </TextButton>
-                  </li>
-                </ul>
+                      {!tweet.isBookmarked ? (
+                        <li className="tweet-options-model-item">
+                          <span className="tweet-options-model-icon">
+                            <i className="far fa-bookmark"></i>
+                          </span>
+                          <TextButton
+                            className="tweet-options-model-btn"
+                            onClick={handelTweetBookmark}
+                          >
+                            Bookmark
+                          </TextButton>
+                        </li>
+                      ) : (
+                        <li className="tweet-options-model-item">
+                          <span className="tweet-options-model-icon">
+                            <i className="fas fa-bookmark"></i>
+                          </span>
+                          <TextButton
+                            className="tweet-options-model-btn"
+                            onClick={handelTweetRemoveBookmark}
+                          >
+                            Remove Bookmark
+                          </TextButton>
+                        </li>
+                      )}
+                      <li className="tweet-options-model-item">
+                        <span className="tweet-options-model-icon">
+                          <i className="far fa-link"></i>
+                        </span>
+                        <TextButton className="tweet-options-model-btn">
+                          Copy link to tweet
+                        </TextButton>
+                      </li>
+                      <li className="tweet-options-model-item">
+                        <span className="tweet-options-model-icon">
+                          <i className="far fa-share"></i>
+                        </span>
+                        <TextButton
+                          className="tweet-options-model-btn"
+                          onClick={handelShareTweet}
+                        >
+                          Sharet tweet via
+                        </TextButton>
+                      </li>
+                    </motion.ul>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>

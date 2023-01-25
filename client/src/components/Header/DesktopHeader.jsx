@@ -17,9 +17,10 @@ import { logout } from "../../store/user/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/userSelector";
 import { SET_TWEET_TYPE } from "../../store/model/modelSlice";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function DesktopHeader() {
-  const state = useSelector(state=>state)
+  const state = useSelector((state) => state);
   let user = selectCurrentUser(state);
   const dispatch = useDispatch();
   const {
@@ -110,7 +111,7 @@ export default function DesktopHeader() {
           >
             <div className="header-link-icon-wrap">
               <span className="link-icon">
-              <i className="far fa-bookmark"></i>
+                <i className="far fa-bookmark"></i>
               </span>
               <span className="link-text">Bookmarks</span>
             </div>
@@ -129,7 +130,7 @@ export default function DesktopHeader() {
             </div>
           </NavLink>
           <NavLink
-            to={'/'+user.username}
+            to={"/" + user.username}
             className={({ isActive }) =>
               "header-link" + (isActive ? " active-header-link" : "")
             }
@@ -141,33 +142,48 @@ export default function DesktopHeader() {
               <span className="link-text">Profile</span>
             </div>
           </NavLink>
-          <div className='header-link more-options-container' ref={moreOptionsRef} >
-            <div className="header-link-icon-wrap"  onClick={()=>setMoreOptionsVisible(true)}>
+          <div
+            className="header-link more-options-container"
+            ref={moreOptionsRef}
+          >
+            <div
+              className="header-link-icon-wrap"
+              onClick={() => setMoreOptionsVisible(true)}
+            >
               <span className="link-icon">
                 <MoreIcon />
               </span>
               <span className="link-text">More</span>
             </div>
-            <ul className={moreOptionsClassnames}>
-              <Link to="/settings/account" className="more-options-link">
-                <span className="icon-container">
-                  <i className="far fa-cog"></i>
-                </span>
-                <span className="link-text-two">Settings and privacy</span>
-              </Link>
-              <Link to="/display" className="more-options-link">
-                <span className="icon-container">
-                <i className="far fa-edit"></i>
-                </span>
-                <span className="link-text-two">Display</span>
-              </Link>
-              <Link to="/help" className="more-options-link">
-                <span className="icon-container">
-                  <i className="far fa-question-circle"></i>
-                </span>
-                <span className="link-text-two">Help Center</span>
-              </Link>
-            </ul>
+            <AnimatePresence>
+              {isMoreOptionVisible && (
+                <motion.ul
+                  className={moreOptionsClassnames}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ y: -50, opacity: 0 }}
+                >
+                  <Link to="/settings/account" className="more-options-link">
+                    <span className="icon-container">
+                      <i className="far fa-cog"></i>
+                    </span>
+                    <span className="link-text-two">Settings and privacy</span>
+                  </Link>
+                  <Link to="/display" className="more-options-link">
+                    <span className="icon-container">
+                      <i className="far fa-edit"></i>
+                    </span>
+                    <span className="link-text-two">Display</span>
+                  </Link>
+                  <Link to="/help" className="more-options-link">
+                    <span className="icon-container">
+                      <i className="far fa-question-circle"></i>
+                    </span>
+                    <span className="link-text-two">Help Center</span>
+                  </Link>
+                </motion.ul>
+              )}
+            </AnimatePresence>
           </div>
         </ul>
         <div className="header-conatiner tweet-btn-container">
@@ -175,7 +191,11 @@ export default function DesktopHeader() {
             linkText="Tweet"
             href="/compose/tweet"
             className="tweet-btn"
-            onClick={()=>dispatch(SET_TWEET_TYPE({type:'tweet',retweet:null,tweet:null}))}
+            onClick={() =>
+              dispatch(
+                SET_TWEET_TYPE({ type: "tweet", retweet: null, tweet: null })
+              )
+            }
           />
           {/* <TextButton bcBlue rounded className="tweet-btn">
             Tweet
@@ -187,7 +207,11 @@ export default function DesktopHeader() {
             onClick={showLogoutOptions}
           >
             <div className="profile-pic-container">
-              <img src={user.avatar} alt="profile-pic" className="profile-pic" />
+              <img
+                src={user.avatar}
+                alt="profile-pic"
+                className="profile-pic"
+              />
             </div>
             <div className="profile-details">
               <p className="user-fullname">{user.fullName}</p>
@@ -219,7 +243,11 @@ export default function DesktopHeader() {
               </div>
             </div>
             <div className="logout-btn-container">
-              <TextButton cBlue className="logout-btn" onClick={()=>dispatch(logout())}>
+              <TextButton
+                cBlue
+                className="logout-btn"
+                onClick={() => dispatch(logout())}
+              >
                 Log out @{user.username}
               </TextButton>
             </div>
