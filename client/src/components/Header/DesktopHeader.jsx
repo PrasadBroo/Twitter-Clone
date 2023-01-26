@@ -223,35 +223,44 @@ export default function DesktopHeader() {
               </div>
             </div>
           </div>
-          <div className={logoutOptionsClassnames}>
-            <div className="profile-deatils-wrap header-profile">
-              <div className="profile-pic-container">
-                <img
-                  src={user.avatar}
-                  alt="profile-pic"
-                  className="profile-pic"
-                />
-              </div>
-              <div className="profile-details">
-                <p className="user-fullname">{user.fullName}</p>
-                <p className="user-username">@{user.username}</p>
-              </div>
-              <div className="profile-options">
-                <div className="icon-container">
-                  <RighttickIcon />
-                </div>
-              </div>
-            </div>
-            <div className="logout-btn-container">
-              <TextButton
-                cBlue
-                className="logout-btn"
-                onClick={() => dispatch(logout())}
+          <AnimatePresence>
+            {isLogoutVisible && (
+              <motion.div
+                className={logoutOptionsClassnames}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ y: -50, opacity: 0 }}
               >
-                Log out @{user.username}
-              </TextButton>
-            </div>
-          </div>
+                <div className="profile-deatils-wrap header-profile">
+                  <div className="profile-pic-container">
+                    <img
+                      src={user.avatar}
+                      alt="profile-pic"
+                      className="profile-pic"
+                    />
+                  </div>
+                  <div className="profile-details">
+                    <p className="user-fullname">{user.fullName}</p>
+                    <p className="user-username">@{user.username}</p>
+                  </div>
+                  <div className="profile-options">
+                    <div className="icon-container">
+                      <RighttickIcon />
+                    </div>
+                  </div>
+                </div>
+                <div className="logout-btn-container">
+                  <TextButton
+                    cBlue
+                    className="logout-btn"
+                    onClick={() => dispatch(logout())}
+                  >
+                    Log out @{user.username}
+                  </TextButton>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </header>
