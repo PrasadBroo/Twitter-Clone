@@ -1,136 +1,134 @@
 .wrap-mobile-header {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: $color-white;
-    z-index: 100;
-    padding: 0.5rem 0;
-    border-top: 1px solid $color-grey-2;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-white;
+  z-index: 100;
+  padding: 0.5rem 0;
+  border-top: 1px solid $color-grey-2;
 
-    .mobile-header {
-        // width: 80%;
-        margin: auto;
-        @include flexCenter;
-        // justify-content: space-between;
+  .mobile-header {
+    // width: 80%;
+    margin: auto;
+    @include flexCenter;
+    // justify-content: space-between;
 
-        .header-link-icon-wrap {
-            .link-icon {
-                font-size: 1.3rem;
-            }
-        }
-        .header-link{
-            flex: 1;
-            text-align: center;
-        }
-        .active-header-link {
-            font-weight: 700;
-            color: $color-secondary-light;
-            fill: $color-secondary-light;
-        }
+    .header-link-icon-wrap {
+      .link-icon {
+        font-size: 1.3rem;
+      }
     }
+    .header-link {
+      flex: 1;
+      text-align: center;
+    }
+    .active-header-link {
+      font-weight: 700;
+      color: $color-secondary-light;
+      fill: $color-secondary-light;
+    }
+  }
 }
 
 .nav-wrap {
-    transform: translateX(-100%);
-    transition: transform ease-in-out 200ms;
-    background-color: rgba($color: $color-black, $alpha: 0.4);
+  // transform: translateX(-100%);
+  // transition: transform ease-in-out 200ms;
+  background-color: rgba($color: $color-black, $alpha: 0.4);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  .mobile-nav {
     position: fixed;
     top: 0;
-    bottom: 0;
     left: 0;
-    right: 0;
-    z-index: 101;
-    .mobile-nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        background-color: $color-white;
-        z-index: 102;
-        right: 30%;
+    bottom: 0;
+    background-color: $color-white;
+    z-index: 102;
+    right: 30%;
 
-        .top-header {
-            margin-top: 1rem;
-            @include flexCenter;
-            justify-content: space-between;
-            padding: 0.5rem 1rem;
+    .top-header {
+      margin-top: 1rem;
+      @include flexCenter;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
 
-            .heading-text {
-                font-weight: 700;
-            }
+      .heading-text {
+        font-weight: 700;
+      }
 
-            .icon-container {
-                font-size: 1.2rem;
-            }
-        }
-
-        .user-profile {
-            margin-top: 1rem;
-            padding: 0.5rem 1rem;
-
-            img {
-                height: 40px;
-                width: 40px;
-                border-radius: 50%;
-            }
-
-            .username,
-            .fullname {
-                display: block;
-            }
-
-            .fullname {
-                font-weight: 700;
-            }
-
-            .username {
-                color: rgb(83, 100, 113);
-            }
-
-        }
-
-        .follow-info {
-            padding: 0.5rem 1rem;
-            @include flexCenter;
-
-            .follow-item {
-                color: rgb(83, 100, 113);
-                margin-right: 0.8rem;
-
-                b {
-                    margin-right: 0.2rem;
-                }
-            }
-        }
-        .m-nav-links{
-            @include flexCenter;
-            flex-direction: column;
-            .m-nav-link{
-                padding: 0.8rem;
-                width: 100%;
-
-                .icon-container{
-                    margin-right: 0.7rem;
-                    font-size: 1.1rem;
-                }
-            }
-            .logout-btn{
-                margin-top: 1rem;
-                padding:0.5rem 1.2rem;
-                justify-content: left;
-                background-color: transparent;
-            }
-            
-        }
-        .m-nav-link:nth-child(5){
-            border-top: 1px solid #DBDBDB;
-        }
-        .m-nav-link:nth-child(6){
-            border-bottom: 1px solid #DBDBDB;
-        }
+      .icon-container {
+        font-size: 1.2rem;
+      }
     }
+
+    .user-profile {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+
+      img {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+      }
+
+      .username,
+      .fullname {
+        display: block;
+      }
+
+      .fullname {
+        font-weight: 700;
+      }
+
+      .username {
+        color: rgb(83, 100, 113);
+      }
+    }
+
+    .follow-info {
+      padding: 0.5rem 1rem;
+      @include flexCenter;
+
+      .follow-item {
+        color: rgb(83, 100, 113);
+        margin-right: 0.8rem;
+
+        b {
+          margin-right: 0.2rem;
+        }
+      }
+    }
+    .m-nav-links {
+      @include flexCenter;
+      flex-direction: column;
+      .m-nav-link {
+        padding: 0.8rem;
+        width: 100%;
+
+        .icon-container {
+          margin-right: 0.7rem;
+          font-size: 1.1rem;
+        }
+      }
+      .logout-btn {
+        margin-top: 1rem;
+        padding: 0.5rem 1.2rem;
+        justify-content: left;
+        background-color: transparent;
+      }
+    }
+    .m-nav-link:nth-child(5) {
+      border-top: 1px solid #dbdbdb;
+    }
+    .m-nav-link:nth-child(6) {
+      border-bottom: 1px solid #dbdbdb;
+    }
+  }
 }
-.nav-active{
-    transform: translate(0);
-}
+// .nav-active{
+//     transform: translate(0);
+// }
