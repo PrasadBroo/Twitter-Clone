@@ -72,7 +72,8 @@ module.exports.postTweet = async (req, res, next) => {
                 _id: tweet._id
             }, {
                 $set: {
-                    pic: !picShouldBeRemoved ? tweetPicResponse.secure_url : null
+                    pic: !picShouldBeRemoved ? tweetPicResponse.secure_url : null,
+                    media_type:1
                 }
             })
         }
