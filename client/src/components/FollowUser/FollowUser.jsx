@@ -9,6 +9,7 @@ import { followUser } from "../../services/userServices";
 import { SHOW_UNFOLLOW_MODEL } from "../../store/model/modelSlice";
 import { selectCurrentUser } from "../../store/user/userSelector";
 import TextButton from "../Button/TextButton/TextButton";
+import verifiedBadge from "../../static/images/icons8-verified-account-30.png";
 
 export default function FollowUser({ user, type }) {
   const dispatch = useDispatch();
@@ -39,12 +40,17 @@ export default function FollowUser({ user, type }) {
         </div>
         <div className="profile-details">
           <Link to={"/" + user.username} className="user-fullname">
-            {user.fullName}
-            {user.isVerified && (
-              <span className="verfied-icon" title="Verified">
-                <i className="fas fa-badge-check"></i>
-              </span>
-            )}
+            <span className="warp-user-fullname">
+              {user.fullName}
+              {user.isVerified && (
+                <span className="verfied-icon" title="Verified">
+                  <img
+                    src={verifiedBadge}
+                    alt="verified"
+                  />
+                </span>
+              )}
+            </span>
           </Link>
           <span className="user-username">@{user.username}</span>
         </div>

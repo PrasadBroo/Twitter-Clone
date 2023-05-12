@@ -28,7 +28,8 @@ import "linkify-plugin-hashtag";
 import "linkify-plugin-mention";
 import NotFound from "../NotFound/NotFound";
 import { CLEAR_GUEST_USER } from "../../store/guest/guestSlice";
-import {motion} from 'framer-motion'
+import { motion } from "framer-motion";
+import verifiedBadge from "../../static/images/icons8-verified-account-30.png";
 const options = {
   className: () => "default-link",
   formatHref: {
@@ -85,10 +86,9 @@ export default function User() {
 
   return (
     <div className="two-flex-col-container userpage">
-      <motion.div  className="col1 user-section">
+      <motion.div className="col1 user-section">
         {!isFetching && !usernotFound ? (
-          <motion initial={{opacity:0}}
-          animate={{opacity:1}}>
+          <motion initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <UserHeader />
             <div className="bc-image-container">
               <img
@@ -159,10 +159,14 @@ export default function User() {
               <div className="user-other-details">
                 <div className="user-fullname-container container">
                   <span className="user-fullname">
-                    {guestUser.fullName}{" "}
+                    <span>{guestUser.fullName}</span>
                     {guestUser.isVerified && (
-                      <span className="verfied-icon">
-                        <i className="fas fa-badge-check"></i>
+                      <span className="verified-icon">
+                        <img
+                          src={verifiedBadge}
+                          alt="verified"
+                          className="verified-badge"
+                        />
                       </span>
                     )}{" "}
                   </span>

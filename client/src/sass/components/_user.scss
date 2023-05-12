@@ -76,6 +76,7 @@
                 }
                 .user-fullname-container {
                     .user-fullname {
+                        @include flexCenter;
                         font-weight: 700;
                         font-size: 20px;
                     }
@@ -83,6 +84,10 @@
                     .user-username {
                         display: block;
                         color: $color-grey-1;
+                    }
+                    .verified-icon{
+                        display: flex;
+                        margin-left: 0.5rem;
                     }
                 }
 

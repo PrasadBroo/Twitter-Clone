@@ -117,7 +117,7 @@ export default function TweetOptions({ istweetOptions, tweet, dispatch }) {
             {tweet.user._id !== currentUser._id && (
               <>
                 <span className="tweet-options-model-icon">
-                  <i className="far fa-ban"></i>
+                  <i className="fa-regular fa-ban"></i>
                 </span>
                 <TextButton className="tweet-options-model-btn" disabled>
                   Block @{tweet.user.username}

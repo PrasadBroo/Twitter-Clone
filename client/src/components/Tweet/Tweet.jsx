@@ -379,8 +379,13 @@ export default function Tweet({
                     >
                       <i
                         className={
-                          tweet.isLiked ? "fas fa-heart liked" : "fal fa-heart"
+                          tweet.isLiked
+                            ? "fas fa-heart liked"
+                            : "fa-regular fa-heart"
                         }
+                        style={{
+                          color: tweet.isLiked ? "light-red" : "#536471",
+                        }}
                       ></i>
                     </TextButton>
 
@@ -525,8 +530,11 @@ export default function Tweet({
                 >
                   <i
                     className={
-                      tweet.isLiked ? "fas fa-heart liked" : "fal fa-heart"
+                      tweet.isLiked
+                        ? "fas fa-heart liked"
+                        : "fa-regular fa-heart"
                     }
+                    style={{ color: "#536471" }}
                   ></i>
                 </TextButton>
 
